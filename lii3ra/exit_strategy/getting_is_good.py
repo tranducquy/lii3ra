@@ -1,0 +1,86 @@
+from lii3ra.ordertype import OrderType
+from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class GettingIsGood(ExitStrategy):
+    """
+    ポジションオープンから指定の回数連続して高値または安値を更新した場合、次のバーでExitする。
+    """
+
+    def __init__(self, title, ohlcv, num_of_bars_long=2, num_of_bars_short=2, losscut_ratio=0.03):
+        self.title = title
+        self.ohlcv = ohlcv
+        self.symbol = ohlcv.symbol
+        self.num_of_bars_long = num_of_bars_long
+        self.num_of_bars_short = num_of_bars_short
+        self.losscut_ratio = losscut_ratio
+
+    def check_exit_long(self, pos_price, idx, entry_idx):
+        if not self._is_valid(idx):
+            return OrderType.NONE_ORDER
+        exit_long = True
+        # 連騰チェック
+        for i in range(self.num_of_bars_long):
+            if entry_idx + self.num_of_bars_long <= idx:
+                current_price = self.ohlcv.values['close'][idx - i]
+                last_price = self.ohlcv.values['close'][idx - i - 1]
+                if current_price < last_price:
+                    exit_long = False
+                    break
+            else:
+                exit_long = False
+                break
+        if exit_long:
+            return OrderType.CLOSE_LONG_MARKET
+        else:
+            close = self.ohlcv.values['close'][idx]
+            losscut_price = pos_price - (pos_price * self.losscut_ratio)
+            # ロスカット
+            if close < losscut_price:
+                return OrderType.CLOSE_LONG_MARKET
+            else:
+                return OrderType.NONE_ORDER
+
+    def check_exit_short(self, pos_price, idx, entry_idx):
+        if not self._is_valid(idx):
+            return OrderType.NONE_ORDER
+        exit_short = True
+        # 続落チェック
+        for i in range(self.num_of_bars_short):
+            if entry_idx + self.num_of_bars_short <= idx:
+                current_price = self.ohlcv.values['close'][idx - i]
+                last_price = self.ohlcv.values['close'][idx - i - 1]
+                if current_price > last_price:
+                    exit_short = False
+                    break
+            else:
+                exit_short = False
+                break
+        if exit_short:
+            return OrderType.CLOSE_SHORT_MARKET
+        else:
+            close = self.ohlcv.values['close'][idx]
+            losscut_price = pos_price + (pos_price * self.losscut_ratio)
+            # ロスカット
+            if close > losscut_price:
+                return OrderType.CLOSE_SHORT_MARKET
+            else:
+                return OrderType.NONE_ORDER
+
+    def create_order_exit_long_stop_market(self, idx, entry_idx):
+        if not self._is_valid(idx):
+            return 0.00
+        # dummy
+        return 0.00
+
+    def create_order_exit_short_stop_market(self, idx, entry_idx):
+        if not self._is_valid(idx):
+            return 0.00
+        # dummy
+        return 0.00
+
+    def create_order_exit_long_market(self, idx, entry_idx):
+        return 0.00
+
+    def create_order_exit_short_market(self, idx, entry_idx):
+        return 0.00
