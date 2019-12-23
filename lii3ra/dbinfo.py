@@ -3,7 +3,7 @@
 
 class DbInfo:
     USER_NAME = 'postgres'
-    PASSWORD = 'dbpass'
+    PASSWORD = ''
     HOSTNAME = 'localhost'
     PORT = 5432
-    DATABASE = 'donkatsu'
+    DATABASE = ''
