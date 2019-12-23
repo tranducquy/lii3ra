@@ -1,3 +1,4 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.tick import Tick
 from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
@@ -6,27 +7,63 @@ from lii3ra.technical_indicator.bollingerband import Bollingerband
 
 
 class BreakoutSigma1Factory(EntryStrategyFactory):
+    params = {
+        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
+        "default": [3, 1.0, 3, 1.0]
+        , "^N225": [3, 1.0, 3, 1.0]
+    }
 
-    def create_strategy(self, ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio):
+    rough_params = [
+        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
+        [3, 1.0, 3, 1.0]
+        , [6, 1.0, 6, 1.0]
+        , [9, 1.0, 9, 1.0]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_bb_span = self.params[s][0]
+            long_bb_ratio = self.params[s][1]
+            short_bb_span = self.params[s][2]
+            short_bb_ratio = self.params[s][3]
+        else:
+            long_bb_span = self.params["default"][0]
+            long_bb_ratio = self.params["default"][1]
+            short_bb_span = self.params["default"][2]
+            short_bb_ratio = self.params["default"][3]
         return BreakoutSigma1(ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio)
 
     def optimization_rough(self, ohlcv):
         strategies = []
-        params = [
-            {"long_bb_span": 3, "long_bb_ratio": 1.0, "short_bb_span": 3, "short_bb_ratio": 1.0}
-            , {"long_bb_span": 6, "long_bb_ratio": 1.0, "short_bb_span": 6, "short_bb_ratio": 1.0}
-            , {"long_bb_span": 9, "long_bb_ratio": 1.0, "short_bb_span": 9, "short_bb_ratio": 1.0}
-        ]
-        for p in params:
+        for p in self.rough_params:
             strategies.append(BreakoutSigma1(ohlcv
-                                             , p["long_bb_span"]
-                                             , p["long_bb_ratio"]
-                                             , p["short_bb_span"]
-                                             , p["short_bb_ratio"]))
+                                             , p[0]
+                                             , p[1]
+                                             , p[2]
+                                             , p[3]))
         return strategies
 
-    def optimization(self):
+    def optimization(self, ohlcv):
         strategies = []
+        long_bb_span_range1 = 3
+        long_bb_span_range2 = 25
+        long_bb_span_step = 2
+        long_bb_ratio_range1 = 0.2
+        long_bb_ratio_range2 = 2.5
+        long_bb_ratio_step = 0.2
+        short_bb_span_range1 = 3
+        short_bb_span_range2 = 25
+        short_bb_span_step = 2
+        short_bb_ratio_range1 = 0.2
+        short_bb_ratio_range2 = 2.5
+        short_bb_ratio_step = 0.2
+        for long_span in range(long_bb_span_range1, long_bb_span_range2, long_bb_span_step):
+            for long_ratio in np.arange(long_bb_ratio_range1, long_bb_ratio_range2, long_bb_ratio_step):
+                strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))
+        for short_span in range(short_bb_span_range1, short_bb_span_range2, short_bb_span_step):
+            for short_ratio in np.arange(short_bb_ratio_range1, short_bb_ratio_range2, short_bb_ratio_step):
+                strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
         return strategies
 
 

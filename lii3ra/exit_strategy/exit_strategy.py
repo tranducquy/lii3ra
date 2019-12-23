@@ -3,13 +3,13 @@ import numpy
 
 class ExitStrategyFactory:
 
-    def create_strategy(self):
+    def create_strategy(self, ohlcv):
         raise NotImplementedError
 
-    def optimization_rough(self):
+    def optimization_rough(self, ohlcv):
         raise NotImplementedError
 
-    def optimization(self):
+    def optimization(self, ohlcv):
         raise NotImplementedError
 
 

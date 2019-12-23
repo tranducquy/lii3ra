@@ -14,7 +14,7 @@ setup(
     keywords='donkatsu',
     install_requires=[
         "pandas",
-        "numpy", 'dateutil'
+        "numpy"
         ],
 )
 
