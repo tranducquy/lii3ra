@@ -1,5 +1,71 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.average_directional_index import AverageDirectionalIndex
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class BreakoutWithTwistFactory(EntryStrategyFactory):
+    params = {
+        # long_lookback_span, long_adx_span, long_adx_value, short_lookback_span, short_adx_span, short_adx_value
+        "default": [10, 24, 0.3, 10, 6, 0.5]
+        , "^N225": [10, 24, 0.3, 10, 6, 0.5]
+    }
+
+    rough_params = [
+        [10, 24, 0.3, 10, 6, 0.5]
+        , [130, 26, 0.7, 130, 4, 0.7]
+        , [60, 14, 0.4, 60, 14, 0.4]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_lookback_span = self.params[s][0]
+            long_adx_span = self.params[s][1]
+            long_adx_value = self.params[s][2]
+            short_lookback_span = self.params[s][3]
+            short_adx_span = self.params[s][4]
+            short_adx_value = self.params[s][5]
+        else:
+            long_lookback_span = self.params["default"][0]
+            long_adx_span = self.params["default"][1]
+            long_adx_value = self.params["default"][2]
+            short_lookback_span = self.params["default"][3]
+            short_adx_span = self.params["default"][4]
+            short_adx_value = self.params["default"][5]
+        return BreakoutWithTwist(ohlcv, long_lookback_span, long_adx_span, long_adx_value
+                                 , short_lookback_span, short_adx_span, short_adx_value)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(BreakoutWithTwist(ohlcv
+                                                    , p[0]
+                                                    , p[1]
+                                                    , p[2]
+                                                    , p[3]
+                                                    , p[4]
+                                                    , p[5]))
+        else:
+            long_lookback_spans = [i for i in range(10, 250, 10)]
+            long_adx_spans = [i for i in range(5, 16, 3)]
+            long_adx_values = [i for i in np.arange(0.1, 0.9, 0.1)]
+            short_lookback_spans = [i for i in range(10, 250, 10)]
+            short_adx_spans = [i for i in range(5, 16, 3)]
+            short_adx_values = [i for i in np.arange(0.1, 0.9, 0.1)]
+            for long_lookback_span in long_lookback_spans:
+                for long_adx_span in long_adx_spans:
+                    for long_adx_value in long_adx_values:
+                        strategies.append(BreakoutWithTwist(ohlcv, long_lookback_span, long_adx_span, long_adx_value
+                                                            , 0, 0, 0))
+            for short_lookback_span in short_lookback_spans:
+                for short_adx_span in short_adx_spans:
+                    for short_adx_value in short_adx_values:
+                        strategies.append(BreakoutWithTwist(ohlcv, 0, 0, 0
+                                                            , short_lookback_span, short_adx_span, short_adx_value))
+        return strategies
 
 
 class BreakoutWithTwist(EntryStrategy):
@@ -8,23 +74,23 @@ class BreakoutWithTwist(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , long_lookback_span
+                 , long_adx_span
                  , long_adx_value
-                 , long_adx
                  , short_lookback_span
+                 , short_adx_span
                  , short_adx_value
-                 , short_adx
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"BreakoutTwist[{long_lookback_span:.0f},{long_adx_span:.0f},{long_adx_value:.2f}]"
+        self.title += f"[{short_lookback_span:.0f},{short_adx_span:.0f},{short_adx_value:.2f}]"
         self.ohlcv = ohlcv
         self.long_lookback_span = long_lookback_span
+        self.long_adx = AverageDirectionalIndex(ohlcv, long_adx_span)
         self.long_adx_value = long_adx_value
-        self.long_adx = long_adx
         self.short_lookback_span = short_lookback_span
+        self.short_adx = AverageDirectionalIndex(ohlcv, short_adx_span)
         self.short_adx_value = short_adx_value
-        self.short_adx = short_adx
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio
 
@@ -38,7 +104,9 @@ class BreakoutWithTwist(EntryStrategy):
             return True
 
     def check_entry_long(self, idx, last_exit_idx):
-        # 当日高値が指定バー数分の高値を更新した場合、次のバーで成行買
+        """
+        当日高値が指定バー数分の高値を更新した場合、次のバーで成行買
+        """
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
@@ -52,7 +120,9 @@ class BreakoutWithTwist(EntryStrategy):
             return OrderType.NONE_ORDER
 
     def check_entry_short(self, idx, last_exit_idx):
-        # 当日安値が指定バー数分の安値を更新した場合、次のバーで成行売
+        """
+        当日安値が指定バー数分の安値を更新した場合、次のバーで成行売
+        """
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
@@ -67,17 +137,17 @@ class BreakoutWithTwist(EntryStrategy):
 
     def create_order_entry_long_stop_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:
-            return (-1, -1)
+            return -1, -1
         price = self.create_order_entry_long_stop_market(idx, last_exit_idx)
         vol = self.get_order_vol(cash, idx, price, last_exit_idx)
-        return (price, vol)
+        return price, vol
 
     def create_order_entry_short_stop_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:
-            return (-1, -1)
+            return -1, -1
         price = self.create_order_entry_short_stop_market(idx, last_exit_idx)
         vol = self.get_order_vol(cash, idx, price, last_exit_idx)
-        return (price, vol * -1)
+        return price, vol * -1
 
     def create_order_entry_long_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
@@ -91,17 +161,17 @@ class BreakoutWithTwist(EntryStrategy):
 
     def create_order_entry_long_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:
-            return (-1, -1)
+            return -1, -1
         price = self.ohlcv.values['close'][idx]
         vol = self.get_order_vol(cash, idx, price, last_exit_idx)
-        return (price, vol)
+        return price, vol
 
     def create_order_entry_short_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:
-            return (-1, -1)
+            return -1, -1
         price = self.ohlcv.values['close'][idx]
         vol = self.get_order_vol(cash, idx, price, last_exit_idx)
-        return (price, vol * -1)
+        return price, vol * -1
 
     def get_indicators(self, idx, last_exit_idx):
         ind1 = self.long_adx.adx[idx]
@@ -111,4 +181,4 @@ class BreakoutWithTwist(EntryStrategy):
         ind5 = self.short_adx_value
         ind6 = self.short_lookback_span
         ind7 = None
-        return (ind1, ind2, ind3, ind4, ind5, ind6, ind7)
+        return ind1, ind2, ind3, ind4, ind5, ind6, ind7

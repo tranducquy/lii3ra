@@ -8,10 +8,7 @@ class EntryStrategyFactory:
     def create_strategy(self, ohlcv):
         raise NotImplementedError
 
-    def optimization_rough(self, ohlcv):
-        raise NotImplementedError
-
-    def optimization(self, ohlcv):
+    def optimization(self, ohlcv, rough=True):
         raise NotImplementedError
 
 

@@ -9,11 +9,7 @@ class NewvalueFactory(ExitStrategyFactory):
     def create_strategy(self, ohlcv):
         return Newvalue(ohlcv)
 
-    def optimization_rough(self, ohlcv):
-        strategies = [Newvalue(ohlcv)]
-        return strategies
-
-    def optimization(self, ohlcv):
+    def optimization(self, ohlcv, rough=True):
         strategies = [Newvalue(ohlcv)]
         return strategies
 

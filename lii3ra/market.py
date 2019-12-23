@@ -44,8 +44,7 @@ class Market:
                         or high is None
                         or numpy.isnan(open_price)
                         or numpy.isnan(low)
-                        or numpy.isnan(high)
-                ):
+                        or numpy.isnan(high)):
                     self.logger.warning('[%s][%d] ohlc is None or nan' % (symbol, idx))
                     continue
             except Exception as err:
@@ -89,6 +88,7 @@ class Market:
                     self.set_order_info(execution_order_info, p.order)
                 if p.order.order_type == OrderType.STOP_MARKET_LONG:
                     # 約定判定
+                    order_price = 0
                     if p.order.price == -1:
                         self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
@@ -337,7 +337,9 @@ class Market:
                 if long_order_type == OrderType.OCO or short_order_type == OrderType.OCO:
                     # create OCO order stop market/stop market
                     (margin_cash, _) = asset.get_margin_cash(symbol)
-                    (stop_market_price_long, vol_long) = entry_strategy.create_order_entry_long_stop_market_for_all_cash(
+                    (
+                        stop_market_price_long,
+                        vol_long) = entry_strategy.create_order_entry_long_stop_market_for_all_cash(
                         margin_cash, idx, p.last_exit_idx)
                     (stop_market_price_short, _) = entry_strategy.create_order_entry_short_stop_market_for_all_cash(
                         margin_cash, idx, p.last_exit_idx)

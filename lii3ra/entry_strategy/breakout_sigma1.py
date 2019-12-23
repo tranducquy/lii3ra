@@ -34,36 +34,26 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
             short_bb_ratio = self.params["default"][3]
         return BreakoutSigma1(ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio)
 
-    def optimization_rough(self, ohlcv):
+    def optimization(self, ohlcv, rough=True):
         strategies = []
-        for p in self.rough_params:
-            strategies.append(BreakoutSigma1(ohlcv
-                                             , p[0]
-                                             , p[1]
-                                             , p[2]
-                                             , p[3]))
-        return strategies
-
-    def optimization(self, ohlcv):
-        strategies = []
-        long_bb_span_range1 = 3
-        long_bb_span_range2 = 25
-        long_bb_span_step = 2
-        long_bb_ratio_range1 = 0.2
-        long_bb_ratio_range2 = 2.5
-        long_bb_ratio_step = 0.2
-        short_bb_span_range1 = 3
-        short_bb_span_range2 = 25
-        short_bb_span_step = 2
-        short_bb_ratio_range1 = 0.2
-        short_bb_ratio_range2 = 2.5
-        short_bb_ratio_step = 0.2
-        for long_span in range(long_bb_span_range1, long_bb_span_range2, long_bb_span_step):
-            for long_ratio in np.arange(long_bb_ratio_range1, long_bb_ratio_range2, long_bb_ratio_step):
-                strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))
-        for short_span in range(short_bb_span_range1, short_bb_span_range2, short_bb_span_step):
-            for short_ratio in np.arange(short_bb_ratio_range1, short_bb_ratio_range2, short_bb_ratio_step):
-                strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
+        if rough:
+            for p in self.rough_params:
+                strategies.append(BreakoutSigma1(ohlcv
+                                                 , p[0]
+                                                 , p[1]
+                                                 , p[2]
+                                                 , p[3]))
+        else:
+            long_spans = [i for i in range(3, 25, 2)]
+            long_ratios = [i for i in np.arange(0.2, 2.5, 0.2)]
+            short_spans = [i for i in range(3, 25, 2)]
+            short_ratios = [i for i in np.arange(0.2, 2.5, 0.2)]
+            for long_span in long_spans:
+                for long_ratio in long_ratios:
+                    strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))
+            for short_span in short_spans:
+                for short_ratio in short_ratios:
+                    strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
         return strategies
 
 
