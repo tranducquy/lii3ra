@@ -31,15 +31,11 @@ def strategy_comination(symbol, ashi, start_date, end_date):
         exit_strategies = []
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
-        # BREAKOUT SIGMA1
-        entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))
-        # BREAKOUT WITH A TWIST
-        entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))
+        entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))           # BREAKOUT SIGMA1
+        entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))        # BREAKOUT WITH A TWIST
         # EXIT
-        # NEWVALUE
-        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))
-        # TIMED
-        exit_strategies.append(TimedFactory().create_strategy(ohlcv))
+        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
+        exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
         for entry_strategy in entry_strategies:
             for exit_strategy in exit_strategies:
                 asset = Asset(symbol, initial_cash, leverage, losscut_ratio)
@@ -59,15 +55,11 @@ def optimization_entry(symbol, ashi, start_date, end_date, rough=True):
         entry_strategies = []
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
-        # BREAKOUT SIGMA1
-        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))
-        # BREAKOUT WITH A TWIST
-        entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))
+        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))        # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))     # BREAKOUT WITH A TWIST
         # EXIT
-        # NEWVALUE
-        exit_strategy = NewvalueFactory().create_strategy(ohlcv)
-        # TIMED
-        # exit_strategy = TimedFactory().create_strategy(ohlcv)
+        exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
+        # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
         for entry_strategy in entry_strategies:
             asset = Asset(symbol, initial_cash, leverage, losscut_ratio)
             Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
@@ -86,15 +78,11 @@ def optimization_exit(symbol, ashi, start_date, end_date, rough=True):
         exit_strategies = []
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
-        # BREAKOUT SIGMA1
-        # entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
-        # BREAKOUT WITH A TWIST
-        entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)
+        # entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)                 # BREAKOUT SIGMA1
+        entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)                # BREAKOUT WITH A TWIST
         # EXIT
-        # NEWVALUE
-        exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))
-        # TIMED
-        exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))
+        exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
+        exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED
         for exit_strategy in exit_strategies:
             asset = Asset(symbol, initial_cash, leverage, losscut_ratio)
             Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
