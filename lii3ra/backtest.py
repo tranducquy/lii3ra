@@ -5,8 +5,11 @@ from lii3ra.mylogger import Logger
 from lii3ra.market import Market
 from lii3ra.asset import Asset
 from lii3ra.ohlcv import Ohlcv
+# ENTRY
 from lii3ra.entry_strategy.breakout_sigma1 import BreakoutSigma1Factory
+from lii3ra.entry_strategy.go_with_the_flow import GoWithTheFlowFactory
 from lii3ra.entry_strategy.breakout_with_a_twist import BreakoutWithTwistFactory
+# EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
 
@@ -20,7 +23,7 @@ s = Logger()
 logger = s.myLogger()
 
 
-def strategy_comination(symbol, ashi, start_date, end_date):
+def combination_strategy(symbol, ashi, start_date, end_date):
     logger.info("backtest start")
     logger.info(f"parameter symbol={symbol}, ashi={ashi}, start_date={start_date}, end_date={end_date}")
     initial_cash = 1000000
@@ -32,6 +35,7 @@ def strategy_comination(symbol, ashi, start_date, end_date):
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
         entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))           # BREAKOUT SIGMA1
+        entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))            # GO WITH THE FLOW
         entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))        # BREAKOUT WITH A TWIST
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
@@ -56,6 +60,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, rough=True):
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
         entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))        # BREAKOUT SIGMA1
+        entry_strategies.extend(GoWithTheFlowFactory().create_strategy(ohlcv))             # GO WITH THE FLOW
         entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))     # BREAKOUT WITH A TWIST
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
@@ -79,6 +84,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, rough=True):
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
         # entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)                 # BREAKOUT SIGMA1
+        # entry_strategy = GoWithTheFlowFactory().create_strategy(ohlcv)                  # GO WITH THE FLOW
         entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)                # BREAKOUT WITH A TWIST
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
@@ -97,7 +103,7 @@ if __name__ == '__main__':
     start_date = "2010-01-01"
     end_date = "2019-12-31"
     rough = True
-    strategy_comination(symbol, ashi, start_date, end_date)
+    combination_strategy(symbol, ashi, start_date, end_date)
     # optimization_entry(symbol, ashi, start_date, end_date, rough)
     # optimization_exit(symbol, ashi, start_date, end_date, rough)
 

@@ -1,5 +1,23 @@
 from lii3ra.ordertype import OrderType
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
+
+
+class GoWithTheFlowFactory(EntryStrategyFactory):
+    params = {
+        # NOTHING
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        return GoWithTheFlow(ohlcv)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = [GoWithTheFlow(ohlcv)]
+        return strategies
 
 
 class GoWithTheFlow(EntryStrategy):
@@ -7,10 +25,9 @@ class GoWithTheFlow(EntryStrategy):
     GO WITH THE FLOW
     """
     def __init__(self
-                 , title
                  , ohlcv
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"GoWithTheFlow"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio
