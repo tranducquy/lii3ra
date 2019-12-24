@@ -355,8 +355,9 @@ class BacktestDumper():
                         max_drawdown = drawdown
                         c_time = r[0]
                 count += 1
-            self.logger.info(
-                f"maxdrawdown:{symbol},{leg},{entry_strategy},{exit_strategy},{start_date},{end_date},{c_time},{max_drawdown}")
+            # self.logger.info(
+            #    f"maxdrawdown:{symbol},{leg},{entry_strategy},{exit_strategy}"\
+            #    f",{start_date},{end_date},{c_time},{max_drawdown}")
         return max_drawdown
 
     def round(self, v):
