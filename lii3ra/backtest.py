@@ -130,8 +130,8 @@ if __name__ == '__main__':
     start_date = "2010-01-01"
     end_date = "2019-12-31"
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.10}
-    # rough = True
-    rough = False
+    rough = True
+    # rough = False
     combination_strategy(symbol, ashi, start_date, end_date, asset_values)
     # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
     # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
