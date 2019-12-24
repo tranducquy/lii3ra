@@ -17,6 +17,7 @@ from lii3ra.entry_strategy.rsi_trigger import RSITriggerFactory  # 12
 from lii3ra.entry_strategy.ma_with_a_twist import MAWithTwistFactory  # 13
 from lii3ra.entry_strategy.split_week import SplitWeekFactory  # 14
 from lii3ra.entry_strategy.introducing_serial_correlation import IntroducingSerialCorrelationFactory  # 16
+from lii3ra.entry_strategy.back_in_style import BackInStyleFactory  # 17
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -50,6 +51,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(MAWithTwistFactory().create_strategy(ohlcv))        # MA WITH A TWIST
         entry_strategies.append(SplitWeekFactory().create_strategy(ohlcv))        # SPLIT WEEK
         entry_strategies.append(IntroducingSerialCorrelationFactory().create_strategy(ohlcv))        # INTRO SERIAL
+        entry_strategies.append(BackInStyleFactory().create_strategy(ohlcv))        # BACK IN STYLE
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -83,6 +85,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(MAWithTwistFactory().optimization(ohlcv, rough))       # MA WITH A TWIST
         entry_strategies.extend(SplitWeekFactory().optimization(ohlcv, rough))       # SPLIT WEEK
         entry_strategies.extend(IntroducingSerialCorrelationFactory().optimization(ohlcv, rough))       # INTRO SERIAL
+        entry_strategies.extend(BackInStyleFactory().optimization(ohlcv, rough))       # BACK IN STYLE
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -112,6 +115,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = MAWithTwistFactory().create_strategy(ohlcv)                  # MA WITH A TWIST
         # entry_strategy = SplitWeekFactory().create_strategy(ohlcv)                  # SPLIT WEEK
         entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv)     # INTRO SERIAL
+        # entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                    # BACK IN STYLE
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED

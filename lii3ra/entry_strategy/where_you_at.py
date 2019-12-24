@@ -1,24 +1,69 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class WhereYouAtFactory(EntryStrategyFactory):
+    params = {
+        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
+        "default": [3, 1.0, 3, 1.0]
+        , "^N225": [3, 1.0, 3, 1.0]
+    }
+
+    rough_params = [
+        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
+        [3, 1.0, 3, 1.0]
+        , [6, 1.0, 6, 1.0]
+        , [9, 1.0, 9, 1.0]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_threshold = self.params[s][0]
+            short_threshold = self.params[s][1]
+        else:
+            long_threshold = self.params["default"][0]
+            short_threshold = self.params["default"][1]
+        return WhereYouAt(ohlcv, long_threshold, short_threshold)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(WhereYouAt(ohlcv
+                                                 , p[0]
+                                                 , p[1]))
+        else:
+            long_values = [i for i in np.arange(0.1, 1.0, 0.2)]
+            short_valuse = [i for i in np.arange(0.1, 1.0, 0.2)]
+            for long_span in long_spans:
+                for long_ratio in long_ratios:
+                    strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))
+            for short_span in short_spans:
+                for short_ratio in short_ratios:
+                    strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
+        return strategies
 
 
 class WhereYouAt(EntryStrategy):
     """
-
+    WHERE YOU AT
     """
+
     def __init__(self
-                , title
-                , ohlcv
-                , long_threshold
-                , short_threshold
-                , order_vol_ratio=0.01):
-        self.title                 = title
-        self.ohlcv                 = ohlcv
-        self.long_threshold        = long_threshold
-        self.short_threshold       = short_threshold
-        self.symbol                = self.ohlcv.symbol
-        self.order_vol_ratio       = order_vol_ratio
-    
+                 , ohlcv
+                 , long_threshold
+                 , short_threshold
+                 , order_vol_ratio=0.01):
+        self.title = f"WhereYouAt[{long_threshold:.2f}][{short_threshold:.2f}]"
+        self.ohlcv = ohlcv
+        self.long_threshold = long_threshold
+        self.short_threshold = short_threshold
+        self.symbol = self.ohlcv.symbol
+        self.order_vol_ratio = order_vol_ratio
+
     def check_entry_long(self, idx, last_exit_idx):
         """
 #Var: ll(0), hh(0);
@@ -34,9 +79,9 @@ class WhereYouAt(EntryStrategy):
         if idx < 2:
             return OrderType.NONE_ORDER
         close = self.ohlcv.values['close'][idx]
-        min_low = self.ohlcv.values['low'][idx:idx+1].min()
-        max_high = self.ohlcv.values['high'][idx:idx+1].max()
-        if (close-min_low)/(max_high-min_low+0.000001)<=(1-self.long_threshold):
+        min_low = self.ohlcv.values['low'][idx:idx + 1].min()
+        max_high = self.ohlcv.values['high'][idx:idx + 1].max()
+        if (close - min_low) / (max_high - min_low + 0.000001) <= (1 - self.long_threshold):
             return OrderType.MARKET_LONG
         else:
             return OrderType.NONE_ORDER
@@ -56,9 +101,9 @@ class WhereYouAt(EntryStrategy):
         if idx < 2:
             return OrderType.NONE_ORDER
         close = self.ohlcv.values['close'][idx]
-        min_low = self.ohlcv.values['low'][idx:idx+1].min()
-        max_high = self.ohlcv.values['high'][idx:idx+1].max()
-        if (close-min_low)/(max_high-min_low+0.000001)>=self.short_threshold:
+        min_low = self.ohlcv.values['low'][idx:idx + 1].min()
+        max_high = self.ohlcv.values['high'][idx:idx + 1].max()
+        if (close - min_low) / (max_high - min_low + 0.000001) >= self.short_threshold:
             return OrderType.MARKET_SHORT
         else:
             return OrderType.NONE_ORDER
