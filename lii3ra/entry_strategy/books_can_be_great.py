@@ -1,21 +1,62 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.simple_movingaverage import SimpleMovingAverage
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class BooksCanBeGreatFactory(EntryStrategyFactory):
+    params = {
+        # fast_sma_span, slow_sma_span
+        "default": [5, 10]
+        # , "^N225": [3, 1.0, 3, 1.0]
+    }
+
+    rough_params = [
+        [5, 10]
+        , [7, 14]
+        , [10, 20]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            fast_sma_span = self.params[s][0]
+            slow_sma_span = self.params[s][1]
+        else:
+            fast_sma_span = self.params["default"][0]
+            slow_sma_span = self.params["default"][1]
+        return BooksCanBeGreat(ohlcv, fast_sma_span, slow_sma_span)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(BooksCanBeGreat(ohlcv
+                                                  , p[0]
+                                                  , p[1]))
+        else:
+            fast_spans = [i for i in range(3, 10, 2)]
+            slow_spans = [i for i in range(10, 30, 4)]
+            for fast_span in fast_spans:
+                for slow_span in slow_spans:
+                    strategies.append(BooksCanBeGreat(ohlcv, fast_span, slow_span))
+        return strategies
 
 
 class BooksCanBeGreat(EntryStrategy):
     """
     BOOKS CAN BE GREAT
     """
+
     def __init__(self
-                 , title
                  , ohlcv
-                 , fast_sma
-                 , slow_sma
+                 , fast_sma_span
+                 , slow_sma_span
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"BooksCanBeGreat[{fast_sma_span:.0f},{slow_sma_span:.0f}]"
         self.ohlcv = ohlcv
-        self.fast_sma = fast_sma
-        self.slow_sma = slow_sma
+        self.fast_sma = SimpleMovingAverage(ohlcv, fast_sma_span)
+        self.slow_sma = SimpleMovingAverage(ohlcv, slow_sma_span)
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio
 

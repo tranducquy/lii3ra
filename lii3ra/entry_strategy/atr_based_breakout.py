@@ -1,5 +1,58 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.average_true_range import AverageTrueRange
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class ATRBasedBreakoutFactory(EntryStrategyFactory):
+    params = {
+        # long_atr_span, long_atr_ratio, short_atr_span, short_atr_ratio
+        "default": [15, 1.0, 15, 1.0]
+        # , "^N225": [3, 1.0, 3, 1.0]
+    }
+
+    rough_params = [
+        [5, 1.0, 5, 1.0]
+        , [10, 1.0, 10, 1.0]
+        , [15, 1.0, 15, 1.0]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_span = self.params[s][0]
+            long_ratio = self.params[s][1]
+            short_span = self.params[s][2]
+            short_ratio = self.params[s][3]
+        else:
+            long_span = self.params["default"][0]
+            long_ratio = self.params["default"][1]
+            short_span = self.params["default"][2]
+            short_ratio = self.params["default"][3]
+        return ATRBasedBreakout(ohlcv, long_span, long_ratio, short_span, short_ratio)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(ATRBasedBreakout(ohlcv
+                                                   , p[0]
+                                                   , p[1]
+                                                   , p[2]
+                                                   , p[3]))
+        else:
+            long_spans = [i for i in range(3, 20, 3)]
+            long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
+            short_spans = [i for i in range(3, 20, 3)]
+            short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
+            for long_span in long_spans:
+                for long_ratio in long_ratios:
+                    strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, 0, 0))
+            for short_span in short_spans:
+                for short_ratio in short_ratios:
+                    strategies.append(ATRBasedBreakout(ohlcv, 0, 0, short_span, short_ratio))
+        return strategies
 
 
 class ATRBasedBreakout(EntryStrategy):
@@ -8,33 +61,27 @@ class ATRBasedBreakout(EntryStrategy):
     Short:終値-(ATR*XX)に逆指値注文する
     """
 
-    def __init__(self, title, ohlcv, long_atr, long_atr_ratio, short_atr, short_atr_ratio, vol_ema,
+    def __init__(self, ohlcv, long_atr_span, long_atr_ratio, short_atr_span, short_atr_ratio,
                  order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"ATRBasedBreakout[{long_atr_span:.0f},{long_atr_ratio:.1f}]" \
+                     f"[{short_atr_span:.0f},{short_atr_ratio:.1f}]"
         self.ohlcv = ohlcv
-        self.long_atr = long_atr
+        self.long_atr = AverageTrueRange(ohlcv, long_atr_span)
         self.long_atr_ratio = long_atr_ratio
-        self.short_atr = short_atr
+        self.short_atr = AverageTrueRange(ohlcv, short_atr_span)
         self.short_atr_ratio = short_atr_ratio
-        self.vol_ema = vol_ema
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):
         if (
-                self.long_atr.upper_atrband[idx] == 0
-                or self.long_atr.lower_atrband[idx] == 0
-                or self.long_atr.ema[idx] == 0
-                or self.short_atr.upper_atrband[idx] == 0
-                or self.short_atr.lower_atrband[idx] == 0
-                or self.short_atr.ema[idx] == 0
-                or self.vol_ema.vol_ema[idx] == 0):
+                self.long_atr.atr[idx] == 0
+                or self.short_atr.atr[idx] == 0):
             return False
         else:
             return True
 
     def check_entry_long(self, idx, last_exit_idx):
-        # 当日高値がバンド以上
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
@@ -43,19 +90,14 @@ class ATRBasedBreakout(EntryStrategy):
             return OrderType.NONE_ORDER
         else:
             return OrderType.OCO
-            # return OrderType.STOP_MARKET_LONG
-            # return OrderType.NONE_ORDER
 
     def check_entry_short(self, idx, last_exit_idx):
-        # 当日安値がバンド以下
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if self.short_atr_ratio == 0:
             return OrderType.NONE_ORDER
         else:
             return OrderType.OCO
-            # return OrderType.STOP_MARKET_SHORT
-            # return OrderType.NONE_ORDER
 
     def create_order_entry_long_stop_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:
@@ -110,11 +152,3 @@ class ATRBasedBreakout(EntryStrategy):
         ind6 = self.short_atr.atr[idx] * self.short_atr_ratio
         ind7 = None
         return ind1, ind2, ind3, ind4, ind5, ind6, ind7
-
-    def get_vol_indicators(self, idx, last_exit_idx):
-        ind1 = self.vol_ema.vol_ema[idx]
-        ind2 = None
-        ind3 = None
-        ind4 = None
-        ind5 = None
-        return ind1, ind2, ind3, ind4, ind5

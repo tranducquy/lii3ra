@@ -7,7 +7,8 @@ class TimedFactory(ExitStrategyFactory):
     params = {
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
         "default": [1, 3, 3, 0.03]
-        , "^N225": [2, 3, 3, 0.03]
+        , "^N225": [1, 3, 3, 0.03]
+        , "6753.T": [1, 3, 3, 0.10]
     }
 
     rough_params = [

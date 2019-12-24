@@ -1,6 +1,81 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.average_directional_index import AverageDirectionalIndex
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class PercentRankerFactory(EntryStrategyFactory):
+    params = {
+        # percentile_lookback_span, long_percentile_ratio, long_adx_span, long_adx_ratio1, long_adx_ratio2, short_percentile_ratio, short_adx_span, short_adx_ratio1, short_adx_ratio2
+        "default": [25, 75, 14, 0.20, 0.30, 25, 14, 0.20, 0.30]
+        # , "^N225": [3, 1.0, 3, 1.0]
+    }
+
+    rough_params = [
+        [25, 75, 14, 0.20, 0.30, 25, 14, 0.20, 0.30]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            percentile_lookback_span = self.params[s][0]
+            long_percentile_ratio = self.params[s][1]
+            long_adx_span = self.params[s][2]
+            long_adx_ratio1 = self.params[s][3]
+            long_adx_ratio2 = self.params[s][4]
+            short_percentile_ratio = self.params[s][5]
+            short_adx_span = self.params[s][6]
+            short_adx_ratio1 = self.params[s][7]
+            short_adx_ratio2 = self.params[s][8]
+        else:
+            percentile_lookback_span = self.params["default"][0]
+            long_percentile_ratio = self.params["default"][1]
+            long_adx_span = self.params["default"][2]
+            long_adx_ratio1 = self.params["default"][3]
+            long_adx_ratio2 = self.params["default"][4]
+            short_percentile_ratio = self.params["default"][5]
+            short_adx_span = self.params["default"][6]
+            short_adx_ratio1 = self.params["default"][7]
+            short_adx_ratio2 = self.params["default"][8]
+        return PercentRanker(ohlcv
+                             , percentile_lookback_span
+                             , long_percentile_ratio
+                             , long_adx_span
+                             , long_adx_ratio1
+                             , long_adx_ratio2
+                             , short_percentile_ratio
+                             , short_adx_span
+                             , short_adx_ratio1
+                             , short_adx_ratio2)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(PercentRanker(ohlcv
+                                                , p[0]
+                                                , p[1]
+                                                , p[2]
+                                                , p[3]
+                                                , p[4]
+                                                , p[5]
+                                                , p[6]
+                                                , p[7]
+                                                , p[8]
+                                                ))
+        else:
+            long_spans = [i for i in range(3, 20, 3)]
+            long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
+            short_spans = [i for i in range(3, 20, 3)]
+            short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
+            for long_span in long_spans:
+                for long_ratio in long_ratios:
+                    strategies.append(PercentRanker(ohlcv, long_span, long_ratio, 0, 0))
+            for short_span in short_spans:
+                for short_ratio in short_ratios:
+                    strategies.append(PercentRanker(ohlcv, 0, 0, short_span, short_ratio))
+        return strategies
 
 
 class PercentRanker(EntryStrategy):
@@ -10,27 +85,28 @@ class PercentRanker(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , percentile_lookback_span
                  , long_percentile_ratio
-                 , long_adx
+                 , long_adx_span
                  , long_adx_ratio1
                  , long_adx_ratio2
                  , short_percentile_ratio
-                 , short_adx
+                 , short_adx_span
                  , short_adx_ratio1
                  , short_adx_ratio2
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"PercentRanker[{percentile_lookback_span:.0f}][{long_percentile_ratio:.0f},{long_adx_span:.0f}" \
+                     f",{long_adx_ratio1:.2f},{long_adx_ratio2:.2f}][{short_percentile_ratio:.0f},{short_adx_span:.0f}," \
+                     f"{short_adx_ratio1:.2f},{short_adx_ratio2:.2f}]"
         self.ohlcv = ohlcv
         self.percentile_lookback_span = percentile_lookback_span
         self.long_percentile_ratio = long_percentile_ratio
-        self.long_adx = long_adx
+        self.long_adx = AverageDirectionalIndex(ohlcv, long_adx_span)
         self.long_adx_ratio1 = long_adx_ratio1
         self.long_adx_ratio2 = long_adx_ratio2
         self.short_percentile_ratio = short_percentile_ratio
-        self.short_adx = short_adx
+        self.short_adx = AverageDirectionalIndex(ohlcv, short_adx_span)
         self.short_adx_ratio1 = short_adx_ratio1
         self.short_adx_ratio2 = short_adx_ratio2
         self.symbol = self.ohlcv.symbol

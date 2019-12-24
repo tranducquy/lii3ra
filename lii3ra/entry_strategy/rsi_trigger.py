@@ -1,5 +1,49 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.relative_strength_index import RelativeStrengthIndex
+from lii3ra.technical_indicator.exponentially_smoothed_movingaverage import ExponentiallySmoothedMovingAverage
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class RSITriggerFactory(EntryStrategyFactory):
+    params = {
+        # rsi_span, rsi_threshold, ema_span
+        "default": [5, 80, 5]
+    }
+
+    rough_params = [
+        [5, 80, 5]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            rsi_span = self.params[s][0]
+            rsi_threshold = self.params[s][1]
+            ema_span = self.params[s][2]
+        else:
+            rsi_span = self.params["default"][0]
+            rsi_threshold = self.params["default"][1]
+            ema_span = self.params["default"][2]
+        return RSITrigger(ohlcv, rsi_span, rsi_threshold, ema_span)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(RSITrigger(ohlcv
+                                             , p[0]
+                                             , p[1]
+                                             , p[2]))
+        else:
+            rsi_spans = [i for i in range(3, 10, 2)]
+            rsi_thresholds = [i for i in range(10, 30, 4)]
+            ema_spans = [i for i in range(10, 30, 4)]
+            for rsi_span in rsi_spans:
+                for rsi_threshold in rsi_thresholds:
+                    for ema_span in ema_spans:
+                        strategies.append(RSITrigger(ohlcv, rsi_span, rsi_threshold, ema_span))
+        return strategies
 
 
 class RSITrigger(EntryStrategy):
@@ -7,19 +51,19 @@ class RSITrigger(EntryStrategy):
     RSIがRSI Thresholdを下回っていて、終値が終値のEMAを下回っている場合、次のバーでロングを成行注文する
     RSIが100-RSI Thresholdを上回っていて、終値が終値のEMAを上回っている場合、次のバーでショートを成行注文する
     """
+
     def __init__(self
-                 , title
                  , ohlcv
-                 , rsi
+                 , rsi_span
                  , rsi_threshold
-                 , ema
+                 , ema_span
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"RSITrigger[{rsi_span:.0f},{rsi_threshold:.0f},{ema_span:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
-        self.rsi = rsi
+        self.rsi = RelativeStrengthIndex(ohlcv, rsi_span)
         self.rsi_threshold = rsi_threshold
-        self.ema = ema
+        self.ema = ExponentiallySmoothedMovingAverage(ohlcv, ema_span)
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):

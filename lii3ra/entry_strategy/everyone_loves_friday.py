@@ -1,23 +1,74 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class EveryoneLovesFridayFactory(EntryStrategyFactory):
+    params = {
+        # lookback_span, long_weekday, short_weekday
+        "default": [25, [4], [4]]
+        # , "^N225": [3, 1.0, 3, 1.0]
+    }
+
+    rough_params = [
+        [25, [4], [4]]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            lookback_span = self.params[s][0]
+            long_weekday = self.params[s][1]
+            short_weekday = self.params[s][2]
+        else:
+            lookback_span = self.params["default"][0]
+            long_weekday = self.params["default"][1]
+            short_weekday = self.params["default"][2]
+        return EveryoneLovesFriday(ohlcv
+                                   , lookback_span
+                                   , long_weekday
+                                   , short_weekday)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(EveryoneLovesFriday(ohlcv
+                                                      , p[0]
+                                                      , p[1]
+                                                      , p[2]
+                                                      ))
+        else:
+            lookback_spans = [i for i in range(5, 30, 5)]
+            long_weekdays = [[0], [1], [2], [3], [4], [5], [6]]
+            short_weekdays = [[0], [1], [2], [3], [4], [5], [6]]
+            for lookback_span in lookback_spans:
+                for long_weekday in long_weekdays:
+                    strategies.append(EveryoneLovesFriday(ohlcv, lookback_span, long_weekday, []))
+            for lookback_span in lookback_spans:
+                for short_weekday in short_weekdays:
+                    strategies.append(EveryoneLovesFriday(ohlcv, lookback_span, [], short_weekday))
+        return strategies
 
 
 class EveryoneLovesFriday(EntryStrategy):
     """
     EVERYONE LOVES FRIDAY
+     - 日足のみ
 Var:bbars(25); //number of lookback bars for the highest/lowest evaluation
 if dayofweek(date)=5 and close=highest(close,bbars) then buy next bar at market;
 if dayofweek(date)=5 and close=lowest(close,bbars) then sellshort next bar at market;
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , lookback
                  , long_dayofweek
                  , short_dayofweek
                  , order_vol_ratio=0.01):
-        self.title = title
+        long_entry_dayofweek_title = ",".join(map(str, long_dayofweek))
+        short_entry_dayofweek_title = ",".join(map(str, short_dayofweek))
+        self.title = f"EveryoneLovesFriday[{lookback:.0f}][{long_entry_dayofweek_title}][{short_entry_dayofweek_title}]"
         self.ohlcv = ohlcv
         self.lookback = lookback
         self.long_dayofweek = long_dayofweek
@@ -42,7 +93,7 @@ if dayofweek(date)=5 and close=lowest(close,bbars) then sellshort next bar at ma
         if idx <= self.lookback:
             return OrderType.NONE_ORDER
         close = self.ohlcv.values['close'][idx]
-        highest_close = self.ohlcv.values['close'][idx-self.lookback:idx+1].max()
+        highest_close = self.ohlcv.values['close'][idx - self.lookback:idx + 1].max()
         dayofweek = self.ohlcv.values['time'][idx].weekday()
         condition1 = dayofweek in self.long_dayofweek
         condition2 = close == highest_close
@@ -62,7 +113,7 @@ if dayofweek(date)=5 and close=lowest(close,bbars) then sellshort next bar at ma
         if idx <= self.lookback:
             return OrderType.NONE_ORDER
         close = self.ohlcv.values['close'][idx]
-        lowest_close = self.ohlcv.values['close'][idx-self.lookback:idx+1].min()
+        lowest_close = self.ohlcv.values['close'][idx - self.lookback:idx + 1].min()
         dayofweek = self.ohlcv.values['time'][idx].weekday()
         condition1 = dayofweek in self.short_dayofweek
         condition2 = close == lowest_close
@@ -118,5 +169,3 @@ if dayofweek(date)=5 and close=lowest(close,bbars) then sellshort next bar at ma
         ind6 = None
         ind7 = None
         return ind1, ind2, ind3, ind4, ind5, ind6, ind7
-
-

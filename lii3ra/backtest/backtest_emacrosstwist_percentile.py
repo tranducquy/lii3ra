@@ -55,7 +55,7 @@ def backtest_run(symbol
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         fast_ema = ExponentiallySmoothedMovingAverage(ohlcv, fast_ema_span)
         slow_ema = ExponentiallySmoothedMovingAverage(ohlcv, slow_ema_span)
-        open_title = f"EMACrossWithTwist[{fast_ema_span:.0f},{slow_ema_span:.0f},{price_threshold:.2f}]"
+        open_title = f"MAWithTwist[{fast_ema_span:.0f},{slow_ema_span:.0f},{price_threshold:.2f}]"
         close_title = f"Percentile[{percentile_span_long:.0f},{percentile_ratio_long:.0f}][{percentile_span_short:.0f},{percentile_ratio_short:.0f}][{percentile_losscut_ratio:.2f}]"
         open_strategy = EMACrossWithTwist(open_title, ohlcv, fast_ema, slow_ema, price_threshold)
         close_strategy = Percentile(close_title, ohlcv, percentile_span_long, percentile_ratio_long, percentile_span_short, percentile_ratio_short, percentile_losscut_ratio)
