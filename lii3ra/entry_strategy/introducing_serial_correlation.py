@@ -1,5 +1,47 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class IntroducingSerialCorrelationFactory(EntryStrategyFactory):
+    params = {
+        # lookback, winner_waiting_period, loser_waiting_period
+        "default": [15, 5, 20]
+    }
+
+    rough_params = [
+        [15, 5, 20]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            lookback = self.params[s][0]
+            winner_waiting_period = self.params[s][1]
+            loser_waiting_period = self.params[s][2]
+        else:
+            lookback = self.params["default"][0]
+            winner_waiting_period = self.params["default"][1]
+            loser_waiting_period = self.params["default"][2]
+        return IntroducingSerialCorrelation(ohlcv, lookback, winner_waiting_period, loser_waiting_period)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(IntroducingSerialCorrelation(ohlcv
+                                                 , p[0]
+                                                 , p[1]
+                                                 , p[2]))
+        else:
+            lookback_list = [i for i in range(3, 25, 2)]
+            winner_wait = [i for i in range(2, 20, 2)]
+            loser_wait = [i for i in range(5, 30, 3)]
+            for lookback in lookback_list:
+                for winner in winner_wait:
+                    for loser in loser_wait:
+                        strategies.append(IntroducingSerialCorrelation(ohlcv, lookback, winner, loser))
+        return strategies
 
 
 class IntroducingSerialCorrelation(EntryStrategy):
@@ -20,13 +62,12 @@ end;
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , lookback
                  , winner_waiting_period=5
                  , loser_waiting_period=20
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"IntroSerial[{lookback:.0f},{winner_waiting_period:.0f},{loser_waiting_period:.0f}]"
         self.ohlcv = ohlcv
         self.lookback = lookback
         self.winner_waiting_period = winner_waiting_period

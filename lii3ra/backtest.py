@@ -16,6 +16,7 @@ from lii3ra.entry_strategy.percent_ranker import PercentRankerFactory  # 6
 from lii3ra.entry_strategy.rsi_trigger import RSITriggerFactory  # 12
 from lii3ra.entry_strategy.ma_with_a_twist import MAWithTwistFactory  # 13
 from lii3ra.entry_strategy.split_week import SplitWeekFactory  # 14
+from lii3ra.entry_strategy.introducing_serial_correlation import IntroducingSerialCorrelationFactory  # 16
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -48,6 +49,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))        # RSI TRIGGER
         entry_strategies.append(MAWithTwistFactory().create_strategy(ohlcv))        # MA WITH A TWIST
         entry_strategies.append(SplitWeekFactory().create_strategy(ohlcv))        # SPLIT WEEK
+        entry_strategies.append(IntroducingSerialCorrelationFactory().create_strategy(ohlcv))        # INTRO SERIAL
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -80,6 +82,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(RSITriggerFactory().optimization(ohlcv, rough))       # RSI TRIGGER
         # entry_strategies.extend(MAWithTwistFactory().optimization(ohlcv, rough))       # MA WITH A TWIST
         entry_strategies.extend(SplitWeekFactory().optimization(ohlcv, rough))       # SPLIT WEEK
+        entry_strategies.extend(IntroducingSerialCorrelationFactory().optimization(ohlcv, rough))       # INTRO SERIAL
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -107,7 +110,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = PercentRankerFactory().create_strategy(ohlcv)                 # PERCENT RANKER
         # entry_strategy = RSITriggerFactory().create_strategy(ohlcv)                  # RSI TRIGGER
         # entry_strategy = MAWithTwistFactory().create_strategy(ohlcv)                  # MA WITH A TWIST
-        entry_strategy = SplitWeekFactory().create_strategy(ohlcv)                  # SPLIT WEEK
+        # entry_strategy = SplitWeekFactory().create_strategy(ohlcv)                  # SPLIT WEEK
+        entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv)     # INTRO SERIAL
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED
@@ -120,8 +124,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
 
 
 if __name__ == '__main__':
-    # symbol = "^N225"
-    symbol = "6753.T"
+    symbol = "^N225"
+    # symbol = "6753.T"
     ashi = "1d"
     start_date = "2010-01-01"
     end_date = "2019-12-31"
