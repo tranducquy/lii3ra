@@ -18,6 +18,8 @@ from lii3ra.entry_strategy.ma_with_a_twist import MAWithTwistFactory  # 13
 from lii3ra.entry_strategy.split_week import SplitWeekFactory  # 14
 from lii3ra.entry_strategy.introducing_serial_correlation import IntroducingSerialCorrelationFactory  # 16
 from lii3ra.entry_strategy.back_in_style import BackInStyleFactory  # 17
+from lii3ra.entry_strategy.where_you_at import WhereYouAtFactory  # 18
+from lii3ra.entry_strategy.exponentially_better import ExponentiallyBetterFactory  # 19
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -40,11 +42,11 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         exit_strategies = []
         ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
         # ENTRY
-        # entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))           # BREAKOUT SIGMA1
-        # entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))            # GO WITH THE FLOW
-        # entry_strategies.append(EveryoneLovesFridayFactory().create_strategy(ohlcv))        # EVERYONE LOVES FRIDAY
-        # entry_strategies.append(BooksCanBeGreatFactory().create_strategy(ohlcv))        # BOOKS CAN BE GREAT
-        # entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))        # BREAKOUT WITH A TWIST
+        entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))           # BREAKOUT SIGMA1
+        entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))            # GO WITH THE FLOW
+        entry_strategies.append(EveryoneLovesFridayFactory().create_strategy(ohlcv))        # EVERYONE LOVES FRIDAY
+        entry_strategies.append(BooksCanBeGreatFactory().create_strategy(ohlcv))        # BOOKS CAN BE GREAT
+        entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))        # BREAKOUT WITH A TWIST
         entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))         # ATR BASED BREAKOUT
         entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))              # PERCENT RANKER
         entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))        # RSI TRIGGER
@@ -52,6 +54,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(SplitWeekFactory().create_strategy(ohlcv))        # SPLIT WEEK
         entry_strategies.append(IntroducingSerialCorrelationFactory().create_strategy(ohlcv))        # INTRO SERIAL
         entry_strategies.append(BackInStyleFactory().create_strategy(ohlcv))        # BACK IN STYLE
+        entry_strategies.append(WhereYouAtFactory().create_strategy(ohlcv))                # WHERE YOU AT
+        entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))       # EXPONENTIALLY BETTER
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -86,6 +90,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         entry_strategies.extend(SplitWeekFactory().optimization(ohlcv, rough))       # SPLIT WEEK
         entry_strategies.extend(IntroducingSerialCorrelationFactory().optimization(ohlcv, rough))       # INTRO SERIAL
         entry_strategies.extend(BackInStyleFactory().optimization(ohlcv, rough))       # BACK IN STYLE
+        entry_strategies.extend(WhereYouAtFactory().optimization(ohlcv, rough))               # WHERE YOU AT
+        entry_strategies.extend(ExponentiallyBetterFactory().optimization(ohlcv, rough))      # EXPONENTIALLY BETTER
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -114,8 +120,10 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = RSITriggerFactory().create_strategy(ohlcv)                  # RSI TRIGGER
         # entry_strategy = MAWithTwistFactory().create_strategy(ohlcv)                  # MA WITH A TWIST
         # entry_strategy = SplitWeekFactory().create_strategy(ohlcv)                  # SPLIT WEEK
-        entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv)     # INTRO SERIAL
+        # entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv)     # INTRO SERIAL
         # entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                    # BACK IN STYLE
+        entry_strategy = WhereYouAtFactory().create_strategy(ohlcv)                              # WHERE YOU AT
+        entry_strategy = ExponentiallyBetterFactory().create_strategy(ohlcv)                       # EXPONENTIALLY BETTER
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED

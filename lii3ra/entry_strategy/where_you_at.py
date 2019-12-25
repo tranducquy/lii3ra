@@ -7,15 +7,11 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class WhereYouAtFactory(EntryStrategyFactory):
     params = {
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        "default": [3, 1.0, 3, 1.0]
-        , "^N225": [3, 1.0, 3, 1.0]
+        "default": [0.50, 0.50]
     }
 
     rough_params = [
-        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        [3, 1.0, 3, 1.0]
-        , [6, 1.0, 6, 1.0]
-        , [9, 1.0, 9, 1.0]
+        [0.50, 0.50]
     ]
 
     def create_strategy(self, ohlcv):
@@ -33,17 +29,14 @@ class WhereYouAtFactory(EntryStrategyFactory):
         if rough:
             for p in self.rough_params:
                 strategies.append(WhereYouAt(ohlcv
-                                                 , p[0]
-                                                 , p[1]))
+                                             , p[0]
+                                             , p[1]))
         else:
             long_values = [i for i in np.arange(0.1, 1.0, 0.2)]
-            short_valuse = [i for i in np.arange(0.1, 1.0, 0.2)]
-            for long_span in long_spans:
-                for long_ratio in long_ratios:
-                    strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))
-            for short_span in short_spans:
-                for short_ratio in short_ratios:
-                    strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
+            short_values = [i for i in np.arange(0.1, 1.0, 0.2)]
+            for long_value in long_values:
+                for short_value in short_values:
+                    strategies.append(WhereYouAt(ohlcv, long_value, short_value))
         return strategies
 
 

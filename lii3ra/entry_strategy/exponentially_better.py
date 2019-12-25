@@ -1,6 +1,44 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.exponentially_smoothed_movingaverage import ExponentiallySmoothedMovingAverage
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 from lii3ra.tick import Tick
+
+
+class ExponentiallyBetterFactory(EntryStrategyFactory):
+    params = {
+        # fast_ema_span, slow_ema_span
+        "default": [10, 20]
+    }
+
+    rough_params = [
+        [10, 20]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            fast_ema_span = self.params[s][0]
+            slow_ema_span = self.params[s][1]
+        else:
+            fast_ema_span = self.params["default"][0]
+            slow_ema_span = self.params["default"][1]
+        return ExponentiallyBetter(ohlcv, fast_ema_span, slow_ema_span)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(ExponentiallyBetter(ohlcv
+                                                 , p[0]
+                                                 , p[1]))
+        else:
+            fast_spans = [i for i in range(3, 20, 3)]
+            slow_spans = [i for i in range(10, 40, 3)]
+            for fast_span in fast_spans:
+                for slow_span in slow_spans:
+                    strategies.append(ExponentiallyBetter(ohlcv, fast_span, slow_span))
+        return strategies
 
 
 class ExponentiallyBetter(EntryStrategy):
@@ -9,15 +47,14 @@ class ExponentiallyBetter(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
-                 , fast_ema
-                 , slow_ema
+                 , fast_ema_span
+                 , slow_ema_span
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"ExponentiallyBetter[{fast_ema_span:.0f},{slow_ema_span:.0f}]"
         self.ohlcv = ohlcv
-        self.fast_ema = fast_ema
-        self.slow_ema = slow_ema
+        self.fast_ema = ExponentiallySmoothedMovingAverage(ohlcv, fast_ema_span)
+        self.slow_ema = ExponentiallySmoothedMovingAverage(ohlcv, slow_ema_span)
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio
         self.tick = Tick.get_tick(self.symbol)
