@@ -1,6 +1,55 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.average_true_range import AverageTrueRange
+from lii3ra.technical_indicator.triangular_movingaverage import TriangularMovingAverage
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class AsymmetricTripleFactory(EntryStrategyFactory):
+    params = {
+        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
+        "default": [15, 0.5, 10, 10]
+    }
+
+    rough_params = [
+        [15, 0.5, 10, 10]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            atr_span = self.params[s][0]
+            atr_mult = self.params[s][1]
+            trima_span = self.params[s][2]
+            lookback_span = self.params[s][3]
+        else:
+            atr_span = self.params["default"][0]
+            atr_mult = self.params["default"][1]
+            trima_span = self.params["default"][2]
+            lookback_span = self.params["default"][3]
+        return TriangularMovingAverage(ohlcv, atr_span, atr_mult, trima_span, lookback_span)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(TriangularMovingAverage(ohlcv
+                                                          , p[0]
+                                                          , p[1]
+                                                          , p[2]
+                                                          , p[3]))
+        else:
+            atr_spans = [i for i in range(5, 25, 5)]
+            atr_mults = [i for i in np.arange(0.3, 1.5, 0.2)]
+            trima_spans = [i for i in range(5, 25, 5)]
+            lookback_spans = [i for i in np.arange(5, 16, 5)]
+            for atr_span in atr_spans:
+                for atr_mult in atr_mults:
+                    for trima_span in trima_spans:
+                        for lookback_span in lookback_spans:
+                            strategies.append(TriangularMovingAverage(ohlcv, atr_span, atr_mult, trima_span, lookback_span))
+        return strategies
 
 
 class AsymmetricTriple(EntryStrategy):
@@ -8,18 +57,17 @@ class AsymmetricTriple(EntryStrategy):
     安値の三角移動平均でエントリーを判定し、ATRを用いて逆指値注文する
     """
     def __init__(self
-                 , title
                  , ohlcv
-                 , atr
+                 , atr_span
                  , atr_mult
-                 , trima
+                 , trima_span
                  , lookback_span
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"AsymTriple[{atr_span:.0f},{atr_mult:.1f},{trima_span:.0f}]"
         self.ohlcv = ohlcv
-        self.atr = atr
+        self.atr = AverageTrueRange(ohlcv, atr_span)
         self.atr_mult = atr_mult
-        self.trima = trima
+        self.trima = TriangularMovingAverage(ohlcv, trima_span)
         self.lookback_span = lookback_span
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio
