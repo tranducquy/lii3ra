@@ -1,5 +1,21 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class ClosingPatternOnly2Factory(EntryStrategyFactory):
+    params = {
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        return ClosingPatternOnly2(ohlcv)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = [ClosingPatternOnly2(ohlcv)]
+        return strategies
 
 
 class ClosingPatternOnly2(EntryStrategy):
@@ -8,10 +24,9 @@ class ClosingPatternOnly2(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"ClosingPatternOnly2"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio

@@ -1,20 +1,36 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class QuickPullbackPatternFactory(EntryStrategyFactory):
+    params = {
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        return QuickPullbackPattern(ohlcv)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = [QuickPullbackPattern(ohlcv)]
+        return strategies
 
 
 class QuickPullbackPattern(EntryStrategy):
     """
     QUICK PULLBACK PATTERN
     """
+
     def __init__(self
-                , title
-                , ohlcv
-                , order_vol_ratio=0.01):
-        self.title                 = title
-        self.ohlcv                 = ohlcv
-        self.symbol                = self.ohlcv.symbol
-        self.order_vol_ratio       = order_vol_ratio
-    
+                 , ohlcv
+                 , order_vol_ratio=0.01):
+        self.title = f"QuickPullbackPattern"
+        self.ohlcv = ohlcv
+        self.symbol = self.ohlcv.symbol
+        self.order_vol_ratio = order_vol_ratio
+
     def check_entry_long(self, idx, last_exit_idx):
         """
 if h[2]>h[1] and l[2]<l[1] and c>h[2] then buy next bar at market;
@@ -23,10 +39,10 @@ if h[2]>h[1] and l[2]<l[1] and c>h[2] then buy next bar at market;
             return OrderType.NONE_ORDER
         if idx <= 3:
             return OrderType.NONE_ORDER
-        high2 = self.ohlcv.values['high'][idx-2]
-        high1 = self.ohlcv.values['high'][idx-1]
-        low2 = self.ohlcv.values['low'][idx-2]
-        low1 = self.ohlcv.values['low'][idx-1]
+        high2 = self.ohlcv.values['high'][idx - 2]
+        high1 = self.ohlcv.values['high'][idx - 1]
+        low2 = self.ohlcv.values['low'][idx - 2]
+        low1 = self.ohlcv.values['low'][idx - 1]
         close0 = self.ohlcv.values['close'][idx]
         long_flg1 = high2 > high1
         long_flg2 = low2 > low1
@@ -44,10 +60,10 @@ if l[2]<l[1] and h[2]>h[1] and c<l[2] then sell short next bar at market;
             return OrderType.NONE_ORDER
         if idx <= 3:
             return OrderType.NONE_ORDER
-        low2 = self.ohlcv.values['low'][idx-2]
-        low1 = self.ohlcv.values['low'][idx-1]
-        high2 = self.ohlcv.values['high'][idx-2]
-        high1 = self.ohlcv.values['high'][idx-1]
+        low2 = self.ohlcv.values['low'][idx - 2]
+        low1 = self.ohlcv.values['low'][idx - 1]
+        high2 = self.ohlcv.values['high'][idx - 2]
+        high1 = self.ohlcv.values['high'][idx - 1]
         close0 = self.ohlcv.values['close'][idx]
         short_flg1 = low2 < low1
         short_flg2 = high2 < high1

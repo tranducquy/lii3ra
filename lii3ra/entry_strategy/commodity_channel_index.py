@@ -1,5 +1,67 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.commodity_channel_index import CommodityChannelIndex
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class EntryCommodityChannelIndexFactory(EntryStrategyFactory):
+    params = {
+        # cci_period, cci_constant, cci_avg_length, long_cci_ratio, short_cci_ratio
+        "default": [14, 0.015, 9, -100, 100]
+    }
+
+    rough_params = [
+        [14, 0.015, 9, -100, 100]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            cci_period = self.params[s][0]
+            cci_constant = self.params[s][1]
+            cci_avg_length = self.params[s][2]
+            long_cci_ratio = self.params[s][3]
+            short_cci_ratio = self.params[s][4]
+        else:
+            cci_period = self.params["default"][0]
+            cci_constant = self.params["default"][1]
+            cci_avg_length = self.params["default"][2]
+            long_cci_ratio = self.params["default"][3]
+            short_cci_ratio = self.params["default"][4]
+        return EntryCommodityChannelIndex(ohlcv
+                                          , cci_period, cci_constant
+                                          , cci_avg_length
+                                          , long_cci_ratio, short_cci_ratio)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(EntryCommodityChannelIndex(ohlcv
+                                                             , p[0]
+                                                             , p[1]
+                                                             , p[2]
+                                                             , p[3]
+                                                             , p[4]))
+        else:
+            cci_period_ary = [i for i in range(10, 20, 2)]
+            cci_constant_ary = [i for i in np.arange(0.005, 0.035, 0.01)]
+            cci_avg_length_ary = [i for i in range(3, 25, 2)]
+            long_cci_ratio_ary = [i for i in range(-60, -150, -20)]
+            short_cci_ratio_ary = [i for i in range(60, 150, 20)]
+            for cci_period in cci_period_ary:
+                for cci_constant in cci_constant_ary:
+                    for cci_avg_length in cci_avg_length_ary:
+                        for long_cci_ratio in long_cci_ratio_ary:
+                            for short_cci_ratio in short_cci_ratio_ary:
+                                strategies.append(EntryCommodityChannelIndex(ohlcv
+                                                                     , cci_period
+                                                                     , cci_constant
+                                                                     , cci_avg_length
+                                                                     , long_cci_ratio
+                                                                     , short_cci_ratio))
+        return strategies
 
 
 class EntryCommodityChannelIndex(EntryStrategy):
@@ -8,17 +70,17 @@ class EntryCommodityChannelIndex(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
-                 , cci
+                 , cci_period
+                 , cci_constant
                  , cci_avg_length
                  , long_cci_ratio=-100
                  , short_cci_ratio=100
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"CCI[{cci_period:.0f},{cci_constant:.3f},{cci_avg_length:.0f}][{long_cci_ratio:.0f},{short_cci_ratio:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
-        self.cci = cci
+        self.cci = CommodityChannelIndex(ohlcv, cci_period, cci_constant)
         self.cci_avg_length = cci_avg_length
         self.long_cci_ratio = long_cci_ratio
         self.short_cci_ratio = short_cci_ratio

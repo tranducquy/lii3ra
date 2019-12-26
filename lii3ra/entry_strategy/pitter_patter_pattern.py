@@ -1,5 +1,21 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class PitterPatterPatternFactory(EntryStrategyFactory):
+    params = {
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        return PitterPatterPattern(ohlcv)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = [PitterPatterPattern(ohlcv)]
+        return strategies
 
 
 class PitterPatterPattern(EntryStrategy):
@@ -8,15 +24,15 @@ class PitterPatterPattern(EntryStrategy):
     ロング：前回のオープン>現在の高値と現在のオープン値>前回の終値と前回のクローズ値
     ショート：すべての「高」を「低」に、すべての「>」を「<」に変更
     """
+
     def __init__(self
-                , title
-                , ohlcv
-                , order_vol_ratio=0.01):
-        self.title                 = title
-        self.ohlcv                 = ohlcv
-        self.symbol                = self.ohlcv.symbol
-        self.order_vol_ratio       = order_vol_ratio
-    
+                 , ohlcv
+                 , order_vol_ratio=0.01):
+        self.title = f"PitterPatterPattern"
+        self.ohlcv = ohlcv
+        self.symbol = self.ohlcv.symbol
+        self.order_vol_ratio = order_vol_ratio
+
     def check_entry_long(self, idx, last_exit_idx):
         """
 If o[1] > h[0] AND o[0] > c[1] AND c[1] > l[1] AND l[1] > c[0] then buy next bar at market;
@@ -25,12 +41,12 @@ If o[1] > h[0] AND o[0] > c[1] AND c[1] > l[1] AND l[1] > c[0] then buy next bar
             return OrderType.NONE_ORDER
         if idx <= 1:
             return OrderType.NONE_ORDER
-        before_open = self.ohlcv.values['open'][idx-1]
+        before_open = self.ohlcv.values['open'][idx - 1]
         current_high = self.ohlcv.values['high'][idx]
         current_open = self.ohlcv.values['open'][idx]
-        before_close = self.ohlcv.values['close'][idx-1]
+        before_close = self.ohlcv.values['close'][idx - 1]
         current_close = self.ohlcv.values['close'][idx]
-        before_low = self.ohlcv.values['low'][idx-1]
+        before_low = self.ohlcv.values['low'][idx - 1]
         long_flg1 = before_open > current_high
         long_flg2 = current_open > before_close
         long_flg3 = before_close > before_low
@@ -48,11 +64,11 @@ if l o[1] < l[0] AND o[0] < c[1] AND c[1] < h[1] AND h[1] < c[0] then sell short
             return OrderType.NONE_ORDER
         if idx <= 1:
             return OrderType.NONE_ORDER
-        before_open = self.ohlcv.values['open'][idx-1]
+        before_open = self.ohlcv.values['open'][idx - 1]
         current_low = self.ohlcv.values['low'][idx]
         current_open = self.ohlcv.values['open'][idx]
-        before_close = self.ohlcv.values['close'][idx-1]
-        before_high = self.ohlcv.values['high'][idx-1]
+        before_close = self.ohlcv.values['close'][idx - 1]
+        before_high = self.ohlcv.values['high'][idx - 1]
         current_close = self.ohlcv.values['close'][idx]
         short_flg1 = before_open < current_low
         short_flg2 = current_open < before_close

@@ -26,6 +26,15 @@ from lii3ra.entry_strategy.stochastic_cross import StochasticCrossFactory  # 23
 from lii3ra.entry_strategy.show_me_the_money import ShowMeTheMoneyFactory  # 24
 from lii3ra.entry_strategy.classic_bollingerbands import ClassicBollingerbandsFactory  # 25
 from lii3ra.entry_strategy.classic_keltner_channel import ClassicKeltnerChannelFactory  # 26
+from lii3ra.entry_strategy.three_amigos import ThreeAmigosFactory  # 27
+from lii3ra.entry_strategy.two_amigos import TwoAmigosFactory  # 28
+from lii3ra.entry_strategy.pitter_patter_pattern import PitterPatterPatternFactory  # 29
+from lii3ra.entry_strategy.pitter_patter_pattern2 import PitterPatterPattern2Factory  # 30
+from lii3ra.entry_strategy.closing_pattern_only import ClosingPatternOnlyFactory  # 31
+from lii3ra.entry_strategy.quick_pullback_pattern import QuickPullbackPatternFactory  # 32
+from lii3ra.entry_strategy.closing_pattern_only2 import ClosingPatternOnly2Factory  # 33
+from lii3ra.entry_strategy.breakdown_dead_ahead import BreakdownDeadAheadFactory  # 34
+from lii3ra.entry_strategy.commodity_channel_index import EntryCommodityChannelIndexFactory  # 35
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -67,7 +76,16 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))       # STOCHASTIC CROSS
         # entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))       # SHOW ME THE MONEY
         # entry_strategies.append(ClassicBollingerbandsFactory().create_strategy(ohlcv))       # CLASSIC BOLLINGERBANDS
-        entry_strategies.append(ClassicKeltnerChannelFactory().create_strategy(ohlcv))       # CLASSIC KC
+        # entry_strategies.append(ClassicKeltnerChannelFactory().create_strategy(ohlcv))       # CLASSIC KC
+        # entry_strategies.append(ThreeAmigosFactory().create_strategy(ohlcv))       # THREE AMIGOS
+        # entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))       # TWO AMIGOS
+        # entry_strategies.append(PitterPatterPatternFactory().create_strategy(ohlcv))       # PITTER PATTER PATTERN
+        # entry_strategies.append(PitterPatterPattern2Factory().create_strategy(ohlcv))       # PITTER PATTER PATTERN2
+        # entry_strategies.append(ClosingPatternOnlyFactory().create_strategy(ohlcv))       # CLOSING PATTERN ONLY
+        # entry_strategies.append(ClosingPatternOnly2Factory().create_strategy(ohlcv))       # CLOSING PATTERN ONLY2
+        # entry_strategies.append(QuickPullbackPatternFactory().create_strategy(ohlcv))       # QUICK PULLBACK PATTERN
+        # entry_strategies.append(BreakdownDeadAheadFactory().create_strategy(ohlcv))       # BREAKDOWN DEAD A HEAD
+        entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))   # ENTRY CCI
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -110,6 +128,15 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         entry_strategies.extend(ShowMeTheMoneyFactory().optimization(ohlcv, rough))      # SHOW ME THE MONEY
         entry_strategies.extend(ClassicBollingerbandsFactory().optimization(ohlcv, rough))      # CLASSIC BOLLINGERBANDS
         entry_strategies.extend(ClassicKeltnerChannelFactory().optimization(ohlcv, rough))      # CLASSIC KC
+        entry_strategies.extend(ThreeAmigosFactory().optimization(ohlcv, rough))      # THREE AMIGOS
+        entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))               # TWO AMIGOS
+        entry_strategies.extend(PitterPatterPatternFactory().optimization(ohlcv, rough))        # PITTER PATTER PATTERN
+        entry_strategies.extend(PitterPatterPattern2Factory().optimization(ohlcv, rough))       # PITTER PATTER PATTERN2
+        entry_strategies.extend(ClosingPatternOnlyFactory().optimization(ohlcv, rough))       # CLOSING PATTERN ONLY
+        entry_strategies.extend(ClosingPatternOnly2Factory().optimization(ohlcv, rough))       # CLOSING PATTERN ONLY2
+        entry_strategies.extend(QuickPullbackPatternFactory().optimization(ohlcv, rough))       # QUICK PULLBACK PATTERN
+        entry_strategies.extend(BreakdownDeadAheadFactory().optimization(ohlcv, rough))       # BREAKDOWN DEAD A HEAD
+        entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -147,7 +174,16 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = StochasticCrossFactory().create_strategy(ohlcv)                       # STOCHASTIC CROSS
         # entry_strategy = ShowMeTheMoneyFactory().create_strategy(ohlcv)                       # SHOW ME THE MONEY
         # entry_strategy = ClassicBollingerbandsFactory().create_strategy(ohlcv)                # CLASSIC BOLLINGERBANDS
-        entry_strategy = ClassicKeltnerChannelFactory().create_strategy(ohlcv)                  # CLASSIC KC
+        # entry_strategy = ClassicKeltnerChannelFactory().create_strategy(ohlcv)                  # CLASSIC KC
+        # entry_strategy = ThreeAmigosFactory().create_strategy(ohlcv)                  # THREE AMIGOS
+        # entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)                      # TWO AMIGOS
+        # entry_strategy = PitterPatterPatternFactory().create_strategy(ohlcv)                # PITTER PATTER PATTERN
+        # entry_strategy = PitterPatterPattern2Factory().create_strategy(ohlcv)                 # PITTER PATTER PATTERN2
+        # entry_strategy = ClosingPatternOnlyFactory().create_strategy(ohlcv)                 # CLOSING PATTERN ONLY
+        # entry_strategy = ClosingPatternOnly2Factory().create_strategy(ohlcv)                 # CLOSING PATTERN ONLY2
+        # entry_strategy = QuickPullbackPatternFactory().create_strategy(ohlcv)                 # QUICK PULLBACK PATTERN
+        # entry_strategy = BreakdownDeadAheadFactory().create_strategy(ohlcv)                 # BREAKDOWN DEAD A HEAD
+        entry_strategy = EntryCommodityChannelIndexFactory().create_strategy(ohlcv)           # ENTRY CCI
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED

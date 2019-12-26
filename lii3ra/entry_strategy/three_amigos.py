@@ -1,5 +1,75 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.relative_strength_index import RelativeStrengthIndex
+from lii3ra.technical_indicator.average_directional_index import AverageDirectionalIndex
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class ThreeAmigosFactory(EntryStrategyFactory):
+    params = {
+        # adx_span, adx_threshold, rsi_span, rsi_threshold, lookback1, lookback2
+        "default": [14, 0.25, 14, 50, 20, 10]
+    }
+
+    rough_params = [
+        [14, 0.25, 14, 50, 20, 10]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            adx_span = self.params[s][0]
+            adx_threshold = self.params[s][1]
+            rsi_span = self.params[s][2]
+            rsi_threshold = self.params[s][3]
+            lookback1 = self.params[s][4]
+            lookback2 = self.params[s][5]
+        else:
+            adx_span = self.params["default"][0]
+            adx_threshold = self.params["default"][1]
+            rsi_span = self.params["default"][2]
+            rsi_threshold = self.params["default"][3]
+            lookback1 = self.params["default"][4]
+            lookback2 = self.params["default"][5]
+        return ThreeAmigos(ohlcv, adx_span, adx_threshold, rsi_span, rsi_threshold, lookback1, lookback2)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(ThreeAmigos(ohlcv
+                                              , p[0]
+                                              , p[1]
+                                              , p[2]
+                                              , p[3]
+                                              , p[4]
+                                              , p[5]))
+        else:
+            adx_span_ary = [i for i in range(5, 25, 5)]
+            adx_threshold_ary = [i for i in np.arange(0.10, 0.9, 0.1)]
+            rsi_span_ary = [i for i in range(5, 25, 5)]
+            rsi_threshold_ary = [i for i in range(20, 90, 10)]
+            lookback1_ary = [i for i in range(5, 25, 5)]
+            lookback2_ary = [i for i in range(5, 25, 5)]
+            for adx_span in adx_span_ary:
+                for adx_threshold in adx_threshold_ary:
+                    strategies.append(ThreeAmigos(ohlcv
+                                                  , adx_span, adx_threshold
+                                                  , self.params["default"][2], self.params["default"][3]
+                                                  , self.params["default"][4], self.params["default"][5]))
+            for rsi_span in rsi_span_ary:
+                for rsi_threshold in rsi_threshold_ary:
+                    strategies.append(ThreeAmigos(ohlcv
+                                                  , self.params["default"][0], self.params["default"][1]
+                                                  , rsi_span, rsi_threshold
+                                                  , self.params["default"][4], self.params["default"][5]))
+            for lookback1 in lookback1_ary:
+                for lookback2 in lookback2_ary:
+                    strategies.append(ThreeAmigos(ohlcv
+                                                  , self.params["default"][0], self.params["default"][1]
+                                                  , self.params["default"][2], self.params["default"][3]
+                                                  , lookback1, lookback2))
+        return strategies
 
 
 class ThreeAmigos(EntryStrategy):
@@ -9,21 +79,20 @@ class ThreeAmigos(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
-                 , adx
+                 , adx_span
                  , adx_threshold
-                 , rsi
+                 , rsi_span
                  , rsi_threshold
                  , lookback1
                  , lookback2
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"ThreeAmigos[{adx_span:.0f},{adx_threshold:.0f}][{rsi_span:.0f},{rsi_threshold:.0f}][{lookback1:.0f},{lookback2:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
-        self.adx = adx
+        self.adx = AverageDirectionalIndex(ohlcv, adx_span)
         self.adx_threshold = adx_threshold
-        self.rsi = rsi
+        self.rsi = RelativeStrengthIndex(ohlcv, rsi_span)
         self.rsi_threshold = rsi_threshold
         self.lookback1 = lookback1
         self.lookback2 = lookback2
