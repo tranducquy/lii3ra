@@ -15,7 +15,7 @@ class EntryStrategyFactory:
 class EntryStrategy:
     """ポジションエントリー用のストラテジー"""
 
-    def __init__(self, title, ohlcv, order_vol_ratio=0.01, ema=None):
+    def __init__(self, ohlcv, order_vol_ratio=0.01, ema=None):
         self.title = "EntryStrategy"
         self.ohlcv = ohlcv
         self.ema = ema

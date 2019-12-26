@@ -1,5 +1,41 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class BigTailBarsFactory(EntryStrategyFactory):
+    params = {
+        # lookback, threshold
+        "default": [10, 1]
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            lookback = self.params[s][0]
+            threshold = self.params[s][1]
+        else:
+            lookback = self.params["default"][0]
+            threshold = self.params["default"][1]
+        return BigTailBars(ohlcv, lookback, threshold)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(BigTailBars(ohlcv
+                                              , p[0]
+                                              , p[1]))
+        else:
+            lookback_ary = [i for i in range(3, 25, 2)]
+            threshold_ary = [i for i in range(2, 10, 2)]
+            for lookback in lookback_ary:
+                for threshold in threshold_ary:
+                    strategies.append(BigTailBars(ohlcv, lookback, threshold))
+        return strategies
 
 
 class BigTailBars(EntryStrategy):
@@ -8,12 +44,11 @@ class BigTailBars(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , lookback_period
                  , threshold
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"BigTailBars[{lookback_period:.0f},{threshold}]"
         self.ohlcv = ohlcv
         self.lookback_period = lookback_period
         self.threshold = threshold
