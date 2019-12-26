@@ -37,6 +37,7 @@ from lii3ra.entry_strategy.breakdown_dead_ahead import BreakdownDeadAheadFactory
 from lii3ra.entry_strategy.commodity_channel_index import EntryCommodityChannelIndexFactory  # 35
 from lii3ra.entry_strategy.big_tail_bars import BigTailBarsFactory  # 36
 from lii3ra.entry_strategy.newhigh_with_consecutive_highs import NewHighWithConsecutiveHighsFactory  # 37
+from lii3ra.entry_strategy.start_with_an_awesome_oscillator import StartWithAwesomeOscillatorFactory  # 38
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -89,7 +90,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(BreakdownDeadAheadFactory().create_strategy(ohlcv))       # BREAKDOWN DEAD A HEAD
         # entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))   # ENTRY CCI
         # entry_strategies.append(BigTailBarsFactory().create_strategy(ohlcv))            # BIG TAIL BARS
-        entry_strategies.append(NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv))    # NEW HIGH
+        # entry_strategies.append(NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv))    # NEW HIGH
+        entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))    # START AWESOME
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
