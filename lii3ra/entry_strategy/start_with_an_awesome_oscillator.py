@@ -1,5 +1,52 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class StartWithAwesomeOscillatorFactory(EntryStrategyFactory):
+    params = {
+        # atr_span, atr_mult, trima_span, lookback_span
+        "default": [15, 0.5, 10, 10]
+    }
+
+    rough_params = [
+        [15, 0.5, 10, 10]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            ao = self.params[s][0]
+            aback = self.params[s][0]
+            bback = self.params[s][0]
+            fatr = self.params[s][0]
+        else:
+            ao = self.params["default"][0]
+            aback = self.params["default"][1]
+            bback = self.params["default"][2]
+            fatr = self.params["default"][3]
+        return StartWithAwesomeOscillator(ohlcv, atr_span, atr_mult, trima_span, lookback_span)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(StartWithAwesomeOscillator(ohlcv
+                                                   , p[0]
+                                                   , p[1]
+                                                   , p[2]
+                                                   , p[3]))
+        else:
+            atr_spans = [i for i in range(5, 25, 5)]
+            atr_mults = [i for i in np.arange(0.3, 1.5, 0.2)]
+            trima_spans = [i for i in range(5, 25, 5)]
+            lookback_spans = [i for i in np.arange(5, 16, 5)]
+            for atr_span in atr_spans:
+                for atr_mult in atr_mults:
+                    for trima_span in trima_spans:
+                        for lookback_span in lookback_spans:
+                            strategies.append(StartWithAwesomeOscillator(ohlcv, atr_span, atr_mult, trima_span, lookback_span))
+        return strategies
 
 
 class StartWithAwesomeOscillator(EntryStrategy):

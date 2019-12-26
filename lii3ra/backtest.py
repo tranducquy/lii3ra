@@ -36,6 +36,7 @@ from lii3ra.entry_strategy.closing_pattern_only2 import ClosingPatternOnly2Facto
 from lii3ra.entry_strategy.breakdown_dead_ahead import BreakdownDeadAheadFactory  # 34
 from lii3ra.entry_strategy.commodity_channel_index import EntryCommodityChannelIndexFactory  # 35
 from lii3ra.entry_strategy.big_tail_bars import BigTailBarsFactory  # 36
+from lii3ra.entry_strategy.newhigh_with_consecutive_highs import NewHighWithConsecutiveHighsFactory  # 37
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -87,7 +88,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(QuickPullbackPatternFactory().create_strategy(ohlcv))       # QUICK PULLBACK PATTERN
         # entry_strategies.append(BreakdownDeadAheadFactory().create_strategy(ohlcv))       # BREAKDOWN DEAD A HEAD
         # entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))   # ENTRY CCI
-        entry_strategies.append(BigTailBarsFactory().create_strategy(ohlcv))            # BIG TAIL BARS
+        # entry_strategies.append(BigTailBarsFactory().create_strategy(ohlcv))            # BIG TAIL BARS
+        entry_strategies.append(NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv))    # NEW HIGH
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -140,6 +142,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         entry_strategies.extend(BreakdownDeadAheadFactory().optimization(ohlcv, rough))       # BREAKDOWN DEAD A HEAD
         entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
         entry_strategies.extend(BigTailBarsFactory().optimization(ohlcv, rough))               # BIG TAIL BARS
+        entry_strategies.extend(NewHighWithConsecutiveHighsFactory().optimization(ohlcv, rough))   # NEW HIGH
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -187,7 +190,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = QuickPullbackPatternFactory().create_strategy(ohlcv)                 # QUICK PULLBACK PATTERN
         # entry_strategy = BreakdownDeadAheadFactory().create_strategy(ohlcv)                 # BREAKDOWN DEAD A HEAD
         # entry_strategy = EntryCommodityChannelIndexFactory().create_strategy(ohlcv)           # ENTRY CCI
-        entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                         # BIG TAIL BARS
+        # entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                         # BIG TAIL BARS
+        entry_strategy = NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv)           # NEW HIGH
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED
