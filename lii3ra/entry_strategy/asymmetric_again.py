@@ -1,6 +1,44 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.average_true_range import AverageTrueRange
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class AsymmetricAgainFactory(EntryStrategyFactory):
+    params = {
+        # atr_span, atr_mult
+        "default": [15, 0.5]
+    }
+
+    rough_params = [
+        [15, 0.5]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            atr_span = self.params[s][0]
+            atr_mult = self.params[s][1]
+        else:
+            atr_span = self.params["default"][0]
+            atr_mult = self.params["default"][1]
+        return AsymmetricAgain(ohlcv, atr_span, atr_mult)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(AsymmetricAgain(ohlcv
+                                                  , p[0]
+                                                  , p[1]))
+        else:
+            atr_spans = [i for i in range(5, 25, 5)]
+            atr_mults = [i for i in np.arange(0.3, 1.5, 0.2)]
+            for atr_span in atr_spans:
+                for atr_mult in atr_mults:
+                    strategies.append(AsymmetricAgain(ohlcv, atr_span, atr_mult))
+        return strategies
 
 
 class AsymmetricAgain(EntryStrategy):
@@ -9,14 +47,13 @@ class AsymmetricAgain(EntryStrategy):
     ザラ場開始直後の戦略か
     """
     def __init__(self
-                 , title
                  , ohlcv
-                 , atr
+                 , atr_span
                  , atr_mult
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"AsymmetricAgain[{atr_span:.0f},{atr_mult:.2f}]"
         self.ohlcv = ohlcv
-        self.atr = atr
+        self.atr = AverageTrueRange(ohlcv, atr_span)
         self.atr_mult = atr_mult
         self.symbol = self.ohlcv.symbol
         self.order_vol_ratio = order_vol_ratio

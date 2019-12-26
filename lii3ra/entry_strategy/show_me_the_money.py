@@ -1,5 +1,48 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.money_flow_indicator import MoneyFlowIndicator
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class ShowMeTheMoneyFactory(EntryStrategyFactory):
+    params = {
+        # mfi_length, oversold, overbought
+        "default": [15, 20, 80]
+    }
+
+    rough_params = [
+        [15, 20, 80]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            mfi_length = self.params[s][0]
+            oversold = self.params[s][1]
+            overbought = self.params[s][2]
+        else:
+            mfi_length = self.params["default"][0]
+            oversold = self.params["default"][1]
+            overbought = self.params["default"][2]
+        return ShowMeTheMoney(ohlcv, mfi_length, oversold, overbought)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(ShowMeTheMoney(ohlcv
+                                                 , p[0]
+                                                 , p[1]
+                                                 , p[2]))
+        else:
+            mfi_ary = [i for i in range(5, 25, 5)]
+            oversold_ary = [i for i in range(10, 100, 10)]
+            overbought_ary = [i for i in range(10, 100, 10)]
+            for mfi in mfi_ary:
+                for oversold in oversold_ary:
+                    for overbought in overbought_ary:
+                        strategies.append(ShowMeTheMoney(ohlcv, mfi, oversold, overbought))
+        return strategies
 
 
 class ShowMeTheMoney(EntryStrategy):
@@ -7,18 +50,17 @@ class ShowMeTheMoney(EntryStrategy):
     MFIがしきい値をクロスした場合、エントリー
     """
     def __init__(self
-                 , title
                  , ohlcv
-                 , mfi
-                 , overbought
+                 , mfi_length
                  , oversold
+                 , overbought
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"ShowMeTheMoney[{mfi_length:.0f},{oversold:.0f},{overbought:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
-        self.mfi = mfi
-        self.overbought = overbought
+        self.mfi = MoneyFlowIndicator(ohlcv, mfi_length)
         self.oversold = oversold
+        self.overbought = overbought
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):

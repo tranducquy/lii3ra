@@ -20,7 +20,12 @@ from lii3ra.entry_strategy.introducing_serial_correlation import IntroducingSeri
 from lii3ra.entry_strategy.back_in_style import BackInStyleFactory  # 17
 from lii3ra.entry_strategy.where_you_at import WhereYouAtFactory  # 18
 from lii3ra.entry_strategy.exponentially_better import ExponentiallyBetterFactory  # 19
-from lii3ra.entry_strategy.asymmetric_triple import AsymmetricTripleFactory  # 20
+from lii3ra.entry_strategy.asymmetric_triple import AsymmetricTripleFactory  # 21
+from lii3ra.entry_strategy.asymmetric_again import AsymmetricAgainFactory  # 22
+from lii3ra.entry_strategy.stochastic_cross import StochasticCrossFactory  # 23
+from lii3ra.entry_strategy.show_me_the_money import ShowMeTheMoneyFactory  # 24
+from lii3ra.entry_strategy.classic_bollingerbands import ClassicBollingerbandsFactory  # 25
+from lii3ra.entry_strategy.classic_keltner_channel import ClassicKeltnerChannelFactory  # 26
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -57,7 +62,12 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(BackInStyleFactory().create_strategy(ohlcv))        # BACK IN STYLE
         # entry_strategies.append(WhereYouAtFactory().create_strategy(ohlcv))                # WHERE YOU AT
         # entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))       # EXPONENTIALLY BETTER
-        entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))       # ASYMETRIC TRIPLE
+        # entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))       # ASYMMETRIC TRIPLE
+        # entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))       # ASYMMETRIC AGAIN
+        # entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))       # STOCHASTIC CROSS
+        # entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))       # SHOW ME THE MONEY
+        # entry_strategies.append(ClassicBollingerbandsFactory().create_strategy(ohlcv))       # CLASSIC BOLLINGERBANDS
+        entry_strategies.append(ClassicKeltnerChannelFactory().create_strategy(ohlcv))       # CLASSIC KC
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -95,6 +105,11 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         entry_strategies.extend(WhereYouAtFactory().optimization(ohlcv, rough))               # WHERE YOU AT
         entry_strategies.extend(ExponentiallyBetterFactory().optimization(ohlcv, rough))      # EXPONENTIALLY BETTER
         entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))      # ASTMETRIC TRIPLE
+        entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
+        entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
+        entry_strategies.extend(ShowMeTheMoneyFactory().optimization(ohlcv, rough))      # SHOW ME THE MONEY
+        entry_strategies.extend(ClassicBollingerbandsFactory().optimization(ohlcv, rough))      # CLASSIC BOLLINGERBANDS
+        entry_strategies.extend(ClassicKeltnerChannelFactory().optimization(ohlcv, rough))      # CLASSIC KC
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -126,8 +141,13 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv)     # INTRO SERIAL
         # entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                    # BACK IN STYLE
         # entry_strategy = WhereYouAtFactory().create_strategy(ohlcv)                              # WHERE YOU AT
-        entry_strategy = ExponentiallyBetterFactory().create_strategy(ohlcv)                       # EXPONENTIALLY BETTER
-        entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)                       # ASYMETRIC TRIPLE
+        # entry_strategy = ExponentiallyBetterFactory().create_strategy(ohlcv)                  # EXPONENTIALLY BETTER
+        # entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)                       # ASYMMETRIC TRIPLE
+        # entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)                       # ASYMMETRIC AGAIN
+        # entry_strategy = StochasticCrossFactory().create_strategy(ohlcv)                       # STOCHASTIC CROSS
+        # entry_strategy = ShowMeTheMoneyFactory().create_strategy(ohlcv)                       # SHOW ME THE MONEY
+        # entry_strategy = ClassicBollingerbandsFactory().create_strategy(ohlcv)                # CLASSIC BOLLINGERBANDS
+        entry_strategy = ClassicKeltnerChannelFactory().create_strategy(ohlcv)                  # CLASSIC KC
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED

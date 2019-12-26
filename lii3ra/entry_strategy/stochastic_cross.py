@@ -1,5 +1,48 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.stochastics import Stochastic
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class StochasticCrossFactory(EntryStrategyFactory):
+    params = {
+        # atr_span, atr_mult
+        "default": [8, 23, 22]
+    }
+
+    rough_params = [
+        [8, 23, 22]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            stoch_period = self.params[s][0]
+            stoch_smoothing1 = self.params[s][1]
+            stoch_smoothing2 = self.params[s][2]
+        else:
+            stoch_period = self.params["default"][0]
+            stoch_smoothing1 = self.params["default"][1]
+            stoch_smoothing2 = self.params["default"][2]
+        return StochasticCross(ohlcv, stoch_period, stoch_smoothing1, stoch_smoothing2)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(StochasticCross(ohlcv
+                                                  , p[0]
+                                                  , p[1]
+                                                  , p[2]))
+        else:
+            period_ary = [i for i in range(5, 25, 5)]
+            smoothing1_ary = [i for i in np.arange(0.3, 1.5, 0.2)]
+            smoothing2_ary = [i for i in np.arange(0.3, 1.5, 0.2)]
+            for period in period_ary:
+                for smoothing1 in smoothing1_ary:
+                    for smoothing2 in smoothing2_ary:
+                        strategies.append(StochasticCross(ohlcv, period, smoothing1, smoothing2))
+        return strategies
 
 
 class StochasticCross(EntryStrategy):
@@ -8,14 +51,15 @@ class StochasticCross(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
-                 , stoch
+                 , stoch_period
+                 , stoch_smoothing1
+                 , stoch_smoothing2
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"StochCross[{stoch_period:.0f},{stoch_smoothing1:.0f},{stoch_smoothing2:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
-        self.stoch = stoch
+        self.stoch = Stochastic(ohlcv, stoch_period, stoch_smoothing1, stoch_smoothing2)
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):

@@ -8,7 +8,7 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 
 class AsymmetricTripleFactory(EntryStrategyFactory):
     params = {
-        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
+        # atr_span, atr_mult, trima_span, lookback_span
         "default": [15, 0.5, 10, 10]
     }
 
@@ -28,17 +28,17 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
             atr_mult = self.params["default"][1]
             trima_span = self.params["default"][2]
             lookback_span = self.params["default"][3]
-        return TriangularMovingAverage(ohlcv, atr_span, atr_mult, trima_span, lookback_span)
+        return AsymmetricTriple(ohlcv, atr_span, atr_mult, trima_span, lookback_span)
 
     def optimization(self, ohlcv, rough=True):
         strategies = []
         if rough:
             for p in self.rough_params:
-                strategies.append(TriangularMovingAverage(ohlcv
-                                                          , p[0]
-                                                          , p[1]
-                                                          , p[2]
-                                                          , p[3]))
+                strategies.append(AsymmetricTriple(ohlcv
+                                                   , p[0]
+                                                   , p[1]
+                                                   , p[2]
+                                                   , p[3]))
         else:
             atr_spans = [i for i in range(5, 25, 5)]
             atr_mults = [i for i in np.arange(0.3, 1.5, 0.2)]
@@ -48,7 +48,7 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
                 for atr_mult in atr_mults:
                     for trima_span in trima_spans:
                         for lookback_span in lookback_spans:
-                            strategies.append(TriangularMovingAverage(ohlcv, atr_span, atr_mult, trima_span, lookback_span))
+                            strategies.append(AsymmetricTriple(ohlcv, atr_span, atr_mult, trima_span, lookback_span))
         return strategies
 
 
