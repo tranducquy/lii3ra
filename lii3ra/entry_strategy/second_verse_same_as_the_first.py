@@ -1,23 +1,55 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class SecondVerseSameAsTheFirstFactory(EntryStrategyFactory):
+    params = {
+        # threshold, lookback
+        "default": [0.5, 10]
+    }
+
+    rough_params = [
+        [0.5, 10]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            threshold = self.params[s][0]
+            lookback = self.params[s][1]
+        else:
+            threshold = self.params["default"][0]
+            lookback = self.params["default"][1]
+        return SecondVerseSameAsTheFirst(ohlcv, threshold, lookback)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(SecondVerseSameAsTheFirst(ohlcv
+                                                            , p[0]
+                                                            , p[1]))
+        else:
+            threshold_list = [i for i in np.arange(0.3, 1.0, 0.2)]
+            lookback_list = [i for i in range(5, 20, 3)]
+            for threshold in threshold_list:
+                for lookback in lookback_list:
+                    strategies.append(SecondVerseSameAsTheFirst(ohlcv, threshold, lookback))
+        return strategies
 
 
 class SecondVerseSameAsTheFirst(EntryStrategy):
     """
     SECOND VERSE SAME AS THE FIRST
     """
-    def __init__(self
-                 , title
-                 , ohlcv
-                 , threshold=0.5
-                 , lookback=10
-                 , order_vol_ratio=0.01):
-        self.title = title
-        self.ohlcv = ohlcv
-        self.symbol = self.ohlcv.symbol
+
+    def __init__(self, ohlcv, threshold=0.5, lookback=10, order_vol_ratio=0.01):
+        super().__init__(ohlcv, order_vol_ratio)
+        self.title = f"SecondVerse[{threshold:.1f},{lookback:.0f}]"
         self.threshold = threshold
         self.lookback = lookback
-        self.order_vol_ratio = order_vol_ratio
 
     def check_entry_long(self, idx, last_exit_idx):
         """
@@ -30,12 +62,12 @@ If month(date)<=6 and close=highest(close,xbar) and ((c-l)/(h-l)) <thresh then b
         current_ts = self.ohlcv.values['time'][idx]
         current_month = current_ts.month
         close = self.ohlcv.values['close'][idx]
-        highest_close = (self.ohlcv.values['close'][idx-self.lookback:idx+1]).max()
+        highest_close = (self.ohlcv.values['close'][idx - self.lookback:idx + 1]).max()
         high = self.ohlcv.values['high'][idx]
         low = self.ohlcv.values['low'][idx]
         condition1 = current_month <= 6
         condition2 = close == highest_close
-        condition3 = (close-low)/(high-low) < self.threshold
+        condition3 = (close - low) / (high - low) < self.threshold
         if condition1 and condition2 and condition3:
             return OrderType.MARKET_LONG
         else:
@@ -52,12 +84,12 @@ If month(date)>6 and close=lowest(close,xbar) and ((c-l)/(h-l))>(1-thresh) then 
         current_ts = self.ohlcv.values['time'][idx]
         current_month = current_ts.month
         close = self.ohlcv.values['close'][idx]
-        lowest_close = (self.ohlcv.values['close'][idx-self.lookback:idx+1]).min()
+        lowest_close = (self.ohlcv.values['close'][idx - self.lookback:idx + 1]).min()
         high = self.ohlcv.values['high'][idx]
         low = self.ohlcv.values['low'][idx]
         condition1 = current_month > 6
         condition2 = close == lowest_close
-        condition3 = (close-low)/(high-low) > (1-self.threshold)
+        condition3 = (close - low) / (high - low) > (1 - self.threshold)
         if condition1 and condition2 and condition3:
             return OrderType.MARKET_SHORT
         else:

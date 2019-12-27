@@ -1,15 +1,82 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 from lii3ra.tick import Tick
+
+
+class EnhancedEconomicCalenderFactory(EntryStrategyFactory):
+    params = {
+        # long_dayofweek, long_time, short_dayofweek, short_time, lookback
+        "default": [[2], "093000", [3], "093000", 10]
+    }
+
+    rough_params = [
+        [[2], "093000", [3], "093000", 10]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_dayofweek = self.params[s][0]
+            long_time = self.params[s][1]
+            short_dayofweek = self.params[s][2]
+            short_time = self.params[s][3]
+            lookback = self.params[s][4]
+        else:
+            long_dayofweek = self.params["default"][0]
+            long_time = self.params["default"][1]
+            short_dayofweek = self.params["default"][2]
+            short_time = self.params["default"][3]
+            lookback = self.params["default"][4]
+        return EnhancedEconomicCalender(ohlcv, long_dayofweek, long_time, short_dayofweek, short_time, lookback)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(EnhancedEconomicCalender(ohlcv
+                                                           , p[0]
+                                                           , p[1]
+                                                           , p[2]
+                                                           , p[3]
+                                                           , p[4]))
+        else:
+            long_dayofweek_list = [i for i in range(7)]
+            long_time_list = [f"{i:02.0f}0000" for i in range(25)]
+            short_dayofweek_list = [i for i in range(7)]
+            short_time_list = [f"{i:02.0f}0000" for i in range(25)]
+            # lookback_list = [i for i in range(10, 15, 5)]
+            lookback_list = [10]
+            for long_dayofweek in long_dayofweek_list:
+                for long_time in long_time_list:
+                    for lookback in lookback_list:
+                        strategies.append(EnhancedEconomicCalender(ohlcv
+                                                                   , long_dayofweek
+                                                                   , long_time
+                                                                   , self.params["default"][2]
+                                                                   , self.params["default"][3]
+                                                                   , lookback))
+            for short_dayofweek in short_dayofweek_list:
+                for short_time in short_time_list:
+                    for lookback in lookback_list:
+                        strategies.append(EnhancedEconomicCalender(ohlcv
+                                                                   , self.params["default"][0]
+                                                                   , self.params["default"][1]
+                                                                   , short_dayofweek
+                                                                   , short_time
+                                                                   , lookback))
+        return strategies
 
 
 class EnhancedEconomicCalender(EntryStrategy):
     """
     ENHANCED ECONOMIC CALENDER
+     * 分足のみ
     """
+
     def __init__(self
-                 , title
                  , ohlcv
                  , long_dayofweek
                  , long_time
@@ -17,7 +84,9 @@ class EnhancedEconomicCalender(EntryStrategy):
                  , short_time
                  , lookback
                  , order_vol_ratio=0.01):
-        self.title = title
+        long_entry_dayofweek_title = ",".join(map(str, long_dayofweek))
+        short_entry_dayofweek_title = ",".join(map(str, short_dayofweek))
+        self.title = f"EnhancedEconomicCalender[{long_entry_dayofweek_title},{long_time}][{short_entry_dayofweek_title},{short_time}][{lookback:.0f}]"
         self.ohlcv = ohlcv
         self.long_dayofweek = long_dayofweek
         self.long_time = long_time
@@ -62,7 +131,7 @@ class EnhancedEconomicCalender(EntryStrategy):
             return OrderType.NONE_ORDER
         dayofweek = self.ohlcv.values['time'][idx].weekday()
         close = self.ohlcv.values['close'][idx]
-        before_close = self.ohlcv.values['close'][idx-self.lookback]
+        before_close = self.ohlcv.values['close'][idx - self.lookback]
         condition1 = dayofweek in self.long_dayofweek
         condition2 = close > before_close
         if condition1 and condition2:
@@ -83,7 +152,7 @@ class EnhancedEconomicCalender(EntryStrategy):
             return OrderType.NONE_ORDER
         dayofweek = self.ohlcv.values['time'][idx].weekday()
         close = self.ohlcv.values['close'][idx]
-        before_close = self.ohlcv.values['close'][idx-self.lookback]
+        before_close = self.ohlcv.values['close'][idx - self.lookback]
         condition1 = dayofweek in self.short_dayofweek
         condition2 = close < before_close
         if condition1 and condition2:
@@ -167,4 +236,3 @@ class EnhancedEconomicCalender(EntryStrategy):
         past_lows1 = self.ohlcv.values['low'][self.ohlcv.values['time'].dt.date == before_day1]
         lowest_low1 = past_lows1.min()
         return lowest_low1
-

@@ -1,12 +1,82 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.tick import Tick
+from lii3ra.technical_indicator.average_directional_index import AverageDirectionalIndex
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class IntradayBreakoutFactory(EntryStrategyFactory):
+    params = {
+        # adx_span, adx_threshold, begin_time, end_time
+        "default": [10, 0.2, "090000", "190000"]
+    }
+
+    rough_params = [
+        [10, 0.2, "090000", "190000"]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            adx_span = self.params[s][0]
+            adx_threshold = self.params[s][1]
+            begin_time = self.params[s][2]
+            end_time = self.params[s][3]
+        else:
+            adx_span = self.params["default"][0]
+            adx_threshold = self.params["default"][1]
+            begin_time = self.params["default"][2]
+            end_time = self.params["default"][3]
+        return IntradayBreakout(ohlcv, adx_span, adx_threshold, begin_time, end_time)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(IntradayBreakout(ohlcv, p[0], p[1], p[2], p[3]))
+        else:
+            adx_span_list = [i for i in range(4, 15, 2)]
+            adx_threshold_list = [f"{i:02.0f}0000" for i in range(25)]
+            time_list = [
+                ["080000", "090000"]
+                , ["090000", "100000"]
+                , ["100000", "110000"]
+                , ["110000", "120000"]
+                , ["110000", "120000"]
+                , ["120000", "130000"]
+                , ["130000", "140000"]
+                , ["140000", "150000"]
+                , ["150000", "160000"]
+                , ["160000", "170000"]
+                , ["170000", "180000"]
+                , ["180000", "190000"]
+                , ["190000", "200000"]
+                , ["200000", "210000"]
+                , ["210000", "220000"]
+                , ["220000", "230000"]
+                , ["230000", "000000"]
+                , ["000000", "010000"]
+                , ["010000", "020000"]
+                , ["020000", "030000"]
+                , ["030000", "040000"]
+                , ["040000", "050000"]
+                , ["050000", "060000"]
+                , ["060000", "070000"]
+                , ["070000", "080000"]
+            ]
+            for adx_span in adx_span_list:
+                for adx_threshold in adx_threshold_list:
+                    for times in time_list:
+                        strategies.append(IntradayBreakout(ohlcv, adx_span, adx_threshold, times[0], times[1]))
+        return strategies
 
 
 class IntradayBreakout(EntryStrategy):
     """
     INTRADAY BREAKOUT
+     * 分足のみ
 Var: tbeg(945); // signal window start time
 Var: tend(1045); //signal window end time
 Var: offset(.1); //additional amount the price has to break the high or low before entering a trade – can be zero if desired
@@ -21,16 +91,15 @@ end;
     """
 
     def __init__(self
-                 , title
                  , ohlcv
-                 , adx
+                 , adx_span
                  , adx_threshold
                  , begin_time
                  , end_time
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"IntradayBreakout[{adx_span:.0f},{adx_threshold:.2f}][{begin_time},{end_time}]"
         self.ohlcv = ohlcv
-        self.adx = adx
+        self.adx = AverageDirectionalIndex(ohlcv, adx_span)
         self.adx_threshold = adx_threshold
         self.begin_time = begin_time
         self.end_time = end_time

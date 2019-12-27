@@ -1,7 +1,89 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 from lii3ra.ohlcv import Ohlcv
 from lii3ra.technical_indicator.average_true_range import AverageTrueRange
+
+
+class RangeBreakoutFactory(EntryStrategyFactory):
+    params = {
+        # begin_time, end_time, atr_span_1d, xfl, xfs
+        "default": ["084500", "100000", 10, 1.0, 1.0]
+    }
+
+    rough_params = [
+        ["084500", "100000", 10, 1.0, 1.0]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            begin_time = self.params[s][0]
+            end_time = self.params[s][1]
+            atr_span_1d = self.params[s][2]
+            xfl = self.params[s][3]
+            xfs = self.params[s][4]
+        else:
+            begin_time = self.params["default"][0]
+            end_time = self.params["default"][1]
+            atr_span_1d = self.params["default"][2]
+            xfl = self.params["default"][3]
+            xfs = self.params["default"][4]
+        return RangeBreakout(ohlcv, begin_time, end_time, atr_span_1d, xfl, xfs)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(RangeBreakout(ohlcv
+                                                , p[0]
+                                                , p[1]
+                                                , p[2]
+                                                , p[3]
+                                                , p[4]))
+        else:
+            time_list = [
+                ["080000", "090000"]
+                , ["090000", "100000"]
+                , ["100000", "110000"]
+                , ["110000", "120000"]
+                , ["110000", "120000"]
+                , ["120000", "130000"]
+                , ["130000", "140000"]
+                , ["140000", "150000"]
+                , ["150000", "160000"]
+                , ["160000", "170000"]
+                , ["170000", "180000"]
+                , ["180000", "190000"]
+                , ["190000", "200000"]
+                , ["200000", "210000"]
+                , ["210000", "220000"]
+                , ["220000", "230000"]
+                , ["230000", "000000"]
+                , ["000000", "010000"]
+                , ["010000", "020000"]
+                , ["020000", "030000"]
+                , ["030000", "040000"]
+                , ["040000", "050000"]
+                , ["050000", "060000"]
+                , ["060000", "070000"]
+                , ["070000", "080000"]
+            ]
+            atr_span_1d_list = [i for i in range(3, 16, 3)]
+            xfl_list = [i for i in np.arange()]
+            # xfs_list = [i for i in np.arange()]
+            for times in time_list:
+                for atr_span in atr_span_1d_list:
+                    for xfl in xfl_list:
+                        strategies.append(RangeBreakout(ohlcv
+                                                        , times[0]
+                                                        , times[1]
+                                                        , atr_span
+                                                        , xfl
+                                                        , xfl))
+        return strategies
 
 
 class RangeBreakout(EntryStrategy):
@@ -12,7 +94,6 @@ class RangeBreakout(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , begin_time
                  , end_time
@@ -20,7 +101,7 @@ class RangeBreakout(EntryStrategy):
                  , xfl
                  , xfs
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"RangeBreakout[{begin_time},{end_time}][{atr_span_1d:.0f},{xfl:.2f},{xfs:.2f}]"
         self.ohlcv = ohlcv
         self.begin_time = begin_time
         self.end_time = end_time

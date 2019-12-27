@@ -1,5 +1,37 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class FilteredEntryFactory(EntryStrategyFactory):
+    params = {
+        # lookback
+        "default": [25]
+    }
+
+    rough_params = [
+        [25]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            lookback = self.params[s][0]
+        else:
+            lookback = self.params["default"][0]
+        return FilteredEntry(ohlcv, lookback)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(FilteredEntry(ohlcv, p[0]))
+        else:
+            lookback_list = [i for i in range(5, 35, 5)]
+            for lookback in lookback_list:
+                strategies.append(FilteredEntry(ohlcv, lookback))
+        return strategies
 
 
 class FilteredEntry(EntryStrategy):
@@ -8,11 +40,10 @@ class FilteredEntry(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , lookback
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"FilteredEntry[{lookback:.0f}]"
         self.ohlcv = ohlcv
         self.lookback = lookback
         self.symbol = self.ohlcv.symbol

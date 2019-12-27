@@ -1,5 +1,36 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class DayOfWeekFactory(EntryStrategyFactory):
+    params = {
+        # long_dayofweek, short_dayofweek
+        "default": [3, 4]
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_dayofweek = self.params[s][0]
+            short_dayofweek = self.params[s][1]
+        else:
+            long_dayofweek = self.params["default"][0]
+            short_dayofweek = self.params["default"][1]
+        return DayOfWeek(ohlcv, long_dayofweek, short_dayofweek)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        long_dayofweek_list = [i for i in range(7)]
+        short_dayofweek_list = [i for i in range(7)]
+        for long_dayofweek in long_dayofweek_list:
+            strategies.append(DayOfWeek(ohlcv, long_dayofweek, self.params["default"][1]))
+        for short_dayofweek in short_dayofweek_list:
+            strategies.append(DayOfWeek(ohlcv, self.params["default"][0], short_dayofweek))
+        return strategies
 
 
 class DayOfWeek(EntryStrategy):
@@ -8,12 +39,11 @@ class DayOfWeek(EntryStrategy):
     """
 
     def __init__(self
-                 , title
                  , ohlcv
                  , long_dayofweek
                  , short_dayofweek
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"DayOfWeek[{long_dayofweek:.0f},{short_dayofweek:.0f}]"
         self.ohlcv = ohlcv
         self.long_dayofweek = long_dayofweek
         self.short_dayofweek = short_dayofweek

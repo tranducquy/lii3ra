@@ -1,4 +1,6 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.awesome_oscillator import AwesomeOscillator
 from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 
@@ -81,7 +83,7 @@ class StartWithAwesomeOscillator(EntryStrategy):
         self.title = f"StartAwesome[{slow_period:.0f},{fast_period:.0f},{aback:.0f},{bback:.0f},{fatr:.1f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
-        self.ao = ao
+        self.ao = AwesomeOscillator(ohlcv, fast_period, slow_period)
         self.aback = aback
         self.bback = bback
         self.fatr = fatr

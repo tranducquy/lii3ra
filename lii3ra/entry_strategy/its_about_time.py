@@ -1,19 +1,63 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class ItsAboutTimeFactory(EntryStrategyFactory):
+    params = {
+        # lookback, long_time, short_time
+        "default": [12, "100000", "110000"]
+    }
+
+    rough_params = [
+        [12, "100000", "100000"]
+        , [12, "110000", "110000"]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            lookback = self.params[s][0]
+            long_time = self.params[s][1]
+            short_time = self.params[s][2]
+        else:
+            lookback = self.params["default"][0]
+            long_time = self.params["default"][1]
+            short_time = self.params["default"][2]
+        return ItsAboutTime(ohlcv, lookback, long_time, short_time)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            # strategies = self._optimization_rough(ohlcv)
+            for p in self.rough_params:
+                strategies.append(ItsAboutTime(ohlcv, p[0], p[1], p[2]))
+        else:
+            lookback_list = [i for i in range(4, 15, 2)]
+            long_time_list = [f"{i:02.0f}0000" for i in range(25)]
+            short_time_list = [f"{i:02.0f}0000" for i in range(25)]
+            for lookback in lookback_list:
+                for long_time in long_time_list:
+                    strategies.append(ItsAboutTime(ohlcv, lookback, long_time, self.params["default"][2]))
+            for lookback in lookback_list:
+                for short_time in short_time_list:
+                    strategies.append(ItsAboutTime(ohlcv, lookback, self.params["default"][1], short_time))
+        return strategies
 
 
 class ItsAboutTime(EntryStrategy):
     """
     IT'S ABOUT TIME
+     * 分足のみ
     """
+
     def __init__(self
-                 , title
                  , ohlcv
                  , lookback
                  , long_time
                  , short_time
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"ItsAboutTime[{lookback:.0f},{long_time},{short_time}]"
         self.ohlcv = ohlcv
         self.lookback = lookback
         self.long_time = long_time
@@ -34,9 +78,9 @@ if Bullsignaltime and close>close[barsback] then Buy next bar at close limit;
         if idx <= self.lookback:
             return OrderType.NONE_ORDER
         current_time = self.ohlcv.values['time'][idx].strftime("%H%M%S")
-        before_time = self.ohlcv.values['time'][idx-1].strftime("%H%M%S")
+        before_time = self.ohlcv.values['time'][idx - 1].strftime("%H%M%S")
         close = self.ohlcv.values['close'][idx]
-        close_lookback = self.ohlcv.values['close'][idx-self.lookback]
+        close_lookback = self.ohlcv.values['close'][idx - self.lookback]
         long_flg1 = current_time > self.long_time >= before_time
         long_flg2 = close > close_lookback
         if long_flg1 and long_flg2:
@@ -57,9 +101,9 @@ if Bearsignaltime and close<close[barsback] then sellshort next bar at close lim
         if idx <= self.lookback:
             return OrderType.NONE_ORDER
         current_time = (self.ohlcv.values['time'][idx]).strftime("%H%M%S")
-        before_time = self.ohlcv.values['time'][idx-1].strftime("%H%M%S")
+        before_time = self.ohlcv.values['time'][idx - 1].strftime("%H%M%S")
         close = self.ohlcv.values['close'][idx]
-        close_lookback = self.ohlcv.values['close'][idx-self.lookback]
+        close_lookback = self.ohlcv.values['close'][idx - self.lookback]
         short_flg1 = current_time > self.short_time >= before_time
         short_flg2 = close < close_lookback
         if short_flg1 and short_flg2:
