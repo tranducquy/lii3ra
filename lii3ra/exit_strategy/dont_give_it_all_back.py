@@ -1,5 +1,50 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class DontGiveItAllBackFactory(ExitStrategyFactory):
+    params = {
+        # num_of_bars_long, num_of_bars_short, losscut_ratio
+        "default": [3, 3, 0.05]
+    }
+
+    rough_params = [
+        [3, 3, 0.05]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            num_of_bars_long = self.params[s][0]
+            num_of_bars_short = self.params[s][1]
+            losscut_ratio = self.params[s][2]
+        else:
+            num_of_bars_long = self.params["default"][0]
+            num_of_bars_short = self.params["default"][1]
+            losscut_ratio = self.params["default"][2]
+        return GettingIsGood(ohlcv
+                             , num_of_bars_long
+                             , num_of_bars_short
+                             , losscut_ratio)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(GettingIsGood(ohlcv, p[0], p[1], p[2]))
+        else:
+            num_of_bars_list = [i for i in range(1, 5)]
+            losscut_ratio_list = [0.03, 0.05, 0.10]
+            for long_bars in num_of_bars_list:
+                for short_bars in num_of_bars_list:
+                    for losscut_ratio in losscut_ratio_list:
+                        strategies.append(GettingIsGood(ohlcv
+                                                        , long_bars
+                                                        , short_bars
+                                                        , losscut_ratio))
+        return strategies
 
 
 class DontGiveItAllBack(ExitStrategy):

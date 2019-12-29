@@ -1,13 +1,28 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class EndOfBarFactory(ExitStrategyFactory):
+    params = {
+    }
+
+    rough_params = [
+    ]
+
+    def create_strategy(self, ohlcv):
+        return EndOfBar(ohlcv)
+
+    def optimization(self, ohlcv, rough=True):
+        return [EndOfBar(ohlcv)]
 
 
 class EndOfBar(ExitStrategy):
     """
     Entryしたバーの終値で成行返済する。実装はmarket.py
     """
-    def __init__(self, title, ohlcv):
-        self.title = title
+    def __init__(self, ohlcv):
+        self.title = "EndOfBar"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
 
