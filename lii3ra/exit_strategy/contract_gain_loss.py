@@ -9,7 +9,7 @@ class ContractGainLossFactory(ExitStrategyFactory):
 
     params = {
         # imethod, profit_ratio, loss_ratio, atr_span, specified_profit_ratio, specified_loss_ratio
-        "default": [1, 0.09, 0.03, 14, 0.30, 0.10]
+        "default": [1, 0.06, 0.02, 14, 0.30, 0.10]
     }
 
     rough_params = [
@@ -46,12 +46,21 @@ class ContractGainLossFactory(ExitStrategyFactory):
             for p in self.rough_params:
                 strategies.append(ContractGainLoss(ohlcv, p[0], p[1], p[2], p[3], p[4], p[5]))
         else:
-            imethod_list = [1, 2, 3, 4]
-            profit_ratio_list = [i for i in range(1, 6, 2)]
-            loss_ratio_list = [i for i in range(1, 6, 2)]
-            atr_span_list = [0.03, 0.06]
-            specified_profit_ratio_list = [0.03, 0.06]
-            specified_loss_ratio_list = [0.03, 0.06]
+            profit_ratio_list = [0.03, 0.06, 0.09]
+            loss_ratio_list = [0.01, 0.03, 0.06]
+            imethod = 1
+            for profit_ratio in profit_ratio_list:
+                for loss_ratio in loss_ratio_list:
+                    strategies.append(ContractGainLoss(ohlcv
+                                                       , imethod
+                                                       , profit_ratio
+                                                       , loss_ratio))
+            imethod_list = [2, 3, 4]
+            profit_ratio_list = [0.25, 0.50, 1.00]
+            loss_ratio_list = [0.10, 0.30, 0.60]
+            atr_span_list = [i for i in range(5, 20, 5)]
+            specified_profit_ratio_list = [0.03, 0.06, 0.09]
+            specified_loss_ratio_list = [0.01, 0.03, 0.06]
             for imethod in imethod_list:
                 for profit_ratio in profit_ratio_list:
                     for loss_ratio in loss_ratio_list:
@@ -71,7 +80,6 @@ class ContractGainLossFactory(ExitStrategyFactory):
 class ContractGainLoss(ExitStrategy):
     """
     終値が指定した利益率を超えている場合、成行でクローズする
-    書籍ではpipsだが、ここでは割合
     """
 
     def __init__(self
@@ -80,9 +88,9 @@ class ContractGainLoss(ExitStrategy):
                  , profit_ratio
                  , loss_ratio
                  , atr_span=14
-                 , specified_profit_ratio=0
-                 , specified_loss_ratio=0):
-        self.title = f"Contract[{imethod:.0f}][{profit_ratio:.2f},{loss_ratio:.2f}][{atr_span:.f0}]"\
+                 , specified_profit_ratio=0.09
+                 , specified_loss_ratio=0.03):
+        self.title = f"Contract[{imethod:.0f}][{profit_ratio:.2f},{loss_ratio:.2f}][{atr_span:.0f}]"\
                      f"[{specified_profit_ratio:.2f},{specified_loss_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
