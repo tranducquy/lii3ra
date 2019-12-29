@@ -47,6 +47,7 @@ from lii3ra.entry_strategy.day_of_week import DayOfWeekFactory  # 9
 from lii3ra.entry_strategy.economic_calender import EconomicCalenderFactory
 from lii3ra.entry_strategy.enhanced_economic_calender import EnhancedEconomicCalenderFactory
 from lii3ra.entry_strategy.range_breakout import RangeBreakoutFactory  # 20
+from lii3ra.entry_strategy.the_ultimate import TheUltimateFactory  # Bonus 1
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
@@ -109,7 +110,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(DayOfWeekFactory().create_strategy(ohlcv))  # DAY OF WEEK
         # entry_strategies.append(EconomicCalenderFactory().create_strategy(ohlcv))  # ECONOMIC CALENDER
         # entry_strategies.append(EnhancedEconomicCalenderFactory().create_strategy(ohlcv))  # ENHANCED ECONOMIC CALENDER
-        entry_strategies.append(RangeBreakoutFactory().create_strategy(ohlcv))  # RANGE BREAKOUT
+        # entry_strategies.append(RangeBreakoutFactory().create_strategy(ohlcv))  # RANGE BREAKOUT
+        entry_strategies.append(TheUltimateFactory().create_strategy(ohlcv))  # THE ULTIMATE
         # EXIT
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
@@ -172,7 +174,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(DayOfWeekFactory().optimization(ohlcv, rough))   # DAY OF WEEK
         # entry_strategies.extend(EconomicCalenderFactory().optimization(ohlcv, rough))   # ECONOMIC CALENDER
         # entry_strategies.extend(EnhancedEconomicCalenderFactory().optimization(ohlcv, rough))   # ENHANCED ECONOMIC CALENDER
-        entry_strategies.extend(RangeBreakoutFactory().optimization(ohlcv, rough))   # RANGE BREAKOUT
+        # entry_strategies.extend(RangeBreakoutFactory().optimization(ohlcv, rough))   # RANGE BREAKOUT
+        entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))   # THE ULTIMATE
         # EXIT
         exit_strategy = NewvalueFactory().create_strategy(ohlcv)                           # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
@@ -231,7 +234,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = DayOfWeekFactory().create_strategy(ohlcv)     # DAY OF WEEK
         # entry_strategy = EconomicCalenderFactory().create_strategy(ohlcv)     # ECONOMIC CALENDER
         # entry_strategy = EnhancedEconomicCalenderFactory().create_strategy(ohlcv)     # ENHANCED ECONOMIC CALENDER
-        entry_strategy = RangeBreakoutFactory().create_strategy(ohlcv)     # RANGE BREAKOUT
+        # entry_strategy = RangeBreakoutFactory().create_strategy(ohlcv)     # RANGE BREAKOUT
+        entry_strategy = TheUltimateFactory().create_strategy(ohlcv)     # THE ULTIMATE
         # EXIT
         exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))              # NEWVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED
@@ -252,7 +256,7 @@ if __name__ == '__main__':
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.10}
     rough = True
     # rough = False
-    combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-    # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+    # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+    optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
     # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 

@@ -1,22 +1,95 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.average_true_range import AverageTrueRange
+from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class ContractGainLossFactory(ExitStrategyFactory):
+
+    params = {
+        # imethod, profit_ratio, loss_ratio, atr_span, specified_profit_ratio, specified_loss_ratio
+        "default": [1, 0.09, 0.03, 14, 0.30, 0.10]
+    }
+
+    rough_params = [
+        [1, 0.09, 0.03, 14, 0.30, 0.10]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            imethod = self.params[s][0]
+            profit_ratio = self.params[s][1]
+            loss_ratio = self.params[s][2]
+            atr_span = self.params[s][3]
+            specified_profit_ratio = self.params[s][4]
+            specified_loss_ratio = self.params[s][5]
+        else:
+            imethod = self.params["default"][0]
+            profit_ratio = self.params["default"][1]
+            loss_ratio = self.params["default"][2]
+            atr_span = self.params["default"][3]
+            specified_profit_ratio = self.params["default"][4]
+            specified_loss_ratio = self.params["default"][5]
+        return ContractGainLoss(ohlcv
+                                , imethod
+                                , profit_ratio
+                                , loss_ratio
+                                , atr_span
+                                , specified_profit_ratio
+                                , specified_loss_ratio)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(ContractGainLoss(ohlcv, p[0], p[1], p[2], p[3], p[4], p[5]))
+        else:
+            imethod_list = [1, 2, 3, 4]
+            profit_ratio_list = [i for i in range(1, 6, 2)]
+            loss_ratio_list = [i for i in range(1, 6, 2)]
+            atr_span_list = [0.03, 0.06]
+            specified_profit_ratio_list = [0.03, 0.06]
+            specified_loss_ratio_list = [0.03, 0.06]
+            for imethod in imethod_list:
+                for profit_ratio in profit_ratio_list:
+                    for loss_ratio in loss_ratio_list:
+                        for atr_span in atr_span_list:
+                            for specified_profit_ratio in specified_profit_ratio_list:
+                                for specified_loss_ratio in specified_loss_ratio_list:
+                                    strategies.append(ContractGainLoss(ohlcv
+                                                                       , imethod
+                                                                       , profit_ratio
+                                                                       , loss_ratio
+                                                                       , atr_span
+                                                                       , specified_profit_ratio
+                                                                       , specified_loss_ratio))
+        return strategies
 
 
 class ContractGainLoss(ExitStrategy):
     """
     終値が指定した利益率を超えている場合、成行でクローズする
-    書籍ではpipsだが、ここではpercent
+    書籍ではpipsだが、ここでは割合
     """
 
-    def __init__(self, title, ohlcv, imethod, profit_ratio, loss_ratio, atr=None, specified_profit_ratio=0,
-                 specified_loss_ratio=0):
-        self.title = title
+    def __init__(self
+                 , ohlcv
+                 , imethod
+                 , profit_ratio
+                 , loss_ratio
+                 , atr_span=14
+                 , specified_profit_ratio=0
+                 , specified_loss_ratio=0):
+        self.title = f"Contract[{imethod:.0f}][{profit_ratio:.2f},{loss_ratio:.2f}][{atr_span:.f0}]"\
+                     f"[{specified_profit_ratio:.2f},{specified_loss_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.imethod = imethod
         self.profit_ratio = profit_ratio
         self.loss_ratio = loss_ratio
-        self.atr = atr
+        self.atr = AverageTrueRange(ohlcv, atr_span)
         self.specified_profit_ratio = specified_profit_ratio
         self.specified_loss_ratio = specified_loss_ratio
         self.profit_target = None
@@ -34,7 +107,8 @@ class ContractGainLoss(ExitStrategy):
         elif self.imethod == 2 and self.atr is not None:
             self.profit_target = pos_price + (self.atr.atr[entry_idx] * self.profit_ratio)
             self.loss_target = pos_price - (self.atr.atr[entry_idx] * self.loss_ratio)
-        # calculate using imethod.2, but include a check to make sure the stop does not go below some minimum value for the stop or the profit target.
+        # calculate using imethod.2, but include a check to make sure the stop does not go below some minimum value
+        # for the stop or the profit target.
         elif self.imethod == 3 and self.atr is not None:
             atr_profit_target = pos_price + (self.atr.atr[entry_idx] * self.profit_ratio)
             specified_profit_target = pos_price + (pos_price * self.specified_profit_ratio)
@@ -42,7 +116,8 @@ class ContractGainLoss(ExitStrategy):
             atr_loss_target = pos_price - (self.atr.atr[entry_idx] * self.loss_ratio)
             specified_loss_target = pos_price - (self.atr.atr[entry_idx] * self.specified_loss_ratio)
             self.loss_target = atr_loss_target if specified_loss_target > atr_loss_target else specified_loss_target
-        # calculate using imethod.2, but include a check to make sure the stop does not go above the specified maximum value for the stop or the profit target.
+        # calculate using imethod.2, but include a check to make sure the stop does not go above the specified
+        # maximum value for the stop or the profit target.
         elif self.imethod == 4 and self.atr is not None:
             atr_profit_target = pos_price + (self.atr.atr[entry_idx] * self.profit_ratio)
             specified_profit_target = pos_price + (pos_price * self.specified_profit_ratio)
@@ -69,7 +144,8 @@ class ContractGainLoss(ExitStrategy):
         elif self.imethod == 2 and self.atr is not None:
             self.profit_target = pos_price - (self.atr.atr[entry_idx] * self.profit_ratio)
             self.loss_target = pos_price + (self.atr.atr[entry_idx] * self.loss_ratio)
-        # calculate using imethod.2, but include a check to make sure the stop does not go below some minimum value for the stop or the profit target.
+        # calculate using imethod.2, but include a check to make sure the stop does not go below some minimum value
+        # for the stop or the profit target.
         elif self.imethod == 3 and self.atr is not None:
             atr_profit_target = pos_price - (self.atr.atr[entry_idx] * self.profit_ratio)
             specified_profit_target = pos_price - (pos_price * self.specified_profit_ratio)
@@ -77,7 +153,8 @@ class ContractGainLoss(ExitStrategy):
             atr_loss_target = pos_price + (self.atr.atr[entry_idx] * self.loss_ratio)
             specified_loss_target = pos_price + (pos_price * self.specified_loss_ratio)
             self.loss_target = atr_loss_target if specified_loss_target < atr_loss_target else specified_loss_target
-        # calculate using imethod.2, but include a check to make sure the stop does not go above the specified maximum value for the stop or the profit target.
+        # calculate using imethod.2, but include a check to make sure the stop does not go above the specified
+        # maximum value for the stop or the profit target.
         elif self.imethod == 4 and self.atr is not None:
             atr_profit_target = pos_price - (self.atr.atr[entry_idx] * self.profit_ratio)
             specified_profit_target = pos_price - (pos_price * self.specified_profit_ratio)

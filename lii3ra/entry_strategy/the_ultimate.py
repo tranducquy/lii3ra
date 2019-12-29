@@ -1,6 +1,56 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
+from lii3ra.technical_indicator.ultimate_oscillator import UltimateOscillator
+from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
 from lii3ra.entry_strategy.entry_strategy import EntryStrategy
+
+
+class TheUltimateFactory(EntryStrategyFactory):
+    params = {
+        # lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3
+        "default": [10, 7, 14, 28]
+    }
+
+    rough_params = [
+        [5, 3, 6, 12]
+        , [10, 7, 14, 28]
+        , [15, 10, 20, 40]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            lookback = self.params[s][0]
+            ultimate_avg1 = self.params[s][1]
+            ultimate_avg2 = self.params[s][2]
+            ultimate_avg3 = self.params[s][3]
+        else:
+            lookback = self.params["default"][0]
+            ultimate_avg1 = self.params["default"][1]
+            ultimate_avg2 = self.params["default"][2]
+            ultimate_avg3 = self.params["default"][3]
+        return TheUltimate(ohlcv, lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            for p in self.rough_params:
+                strategies.append(TheUltimate(ohlcv
+                                              , p[0]
+                                              , p[1]
+                                              , p[2]
+                                              , p[3]))
+        else:
+            lookback_list = [i for i in range(5, 25, 5)]
+            ultimate_avg1_list = [i for i in range(7, 8, 2)]
+            ultimate_avg2_list = [i for i in range(14, 17, 2)]
+            ultimate_avg3_list = [i for i in range(28, 29, 2)]
+            for lookback in lookback_list:
+                for ultimate_avg1 in ultimate_avg1_list:
+                    for ultimate_avg2 in ultimate_avg2_list:
+                        for ultimate_avg3 in ultimate_avg3_list:
+                            strategies.append(TheUltimate(ohlcv, lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3))
+        return strategies
 
 
 class TheUltimate(EntryStrategy):
@@ -8,16 +58,17 @@ class TheUltimate(EntryStrategy):
     THE ULTIMATE
     """
     def __init__(self
-                 , title
                  , ohlcv
                  , lookback
-                 , uo
+                 , ultimate_avg1
+                 , ultimate_avg2
+                 , ultimate_avg3
                  , order_vol_ratio=0.01):
-        self.title = title
+        self.title = f"TheUltimate[{lookback:.0f},{ultimate_avg1:.0f},{ultimate_avg2:.0f},{ultimate_avg3:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.lookback = lookback
-        self.uo = uo
+        self.uo = UltimateOscillator(ohlcv, ultimate_avg1, ultimate_avg2, ultimate_avg3)
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):
