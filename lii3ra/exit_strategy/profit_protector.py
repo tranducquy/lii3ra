@@ -1,5 +1,62 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class ProfitProtectorFactory(ExitStrategyFactory):
+    params = {
+        # long_profit_floor, long_pp_ratio, short_profit_floor, short_pp_ratio
+        "default": [30000, 0.60, 30000, 0.60]
+    }
+
+    rough_params = [
+        [30000, 0.60, 30000, 0.60]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_profit_floor = self.params[s][0]
+            long_pp_ratio = self.params[s][1]
+            short_profit_floor = self.params[s][2]
+            short_pp_ratio = self.params[s][3]
+        else:
+            long_profit_floor = self.params["default"][0]
+            long_pp_ratio = self.params["default"][1]
+            short_profit_floor = self.params["default"][2]
+            short_pp_ratio = self.params["default"][3]
+        return ProfitProtector(ohlcv
+                               , long_profit_floor
+                               , long_pp_ratio
+                               , short_profit_floor
+                               , short_pp_ratio)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(ProfitProtector(ohlcv, p[0], p[1], p[2], p[3]))
+        else:
+            long_profit_floor_list = [i for i in range(3, 16, 3)]
+            long_pp_ratio_list = [0.05, 0.10, 0.20, 0.30]
+            short_profit_floor_list = [i for i in range(3, 16, 3)]
+            short_pp_ratio_list = [0.05, 0.10, 0.20, 0.30]
+            for long_profit_floor in long_profit_floor_list:
+                for long_pp_ratio in long_pp_ratio_list:
+                    strategies.append(ProfitProtector(ohlcv
+                                                      , long_profit_floor
+                                                      , long_pp_ratio
+                                                      , self.params["default"][2]
+                                                      , self.params["default"][3]))
+            for short_profit_floor in short_profit_floor_list:
+                for short_pp_ratio in short_pp_ratio_list:
+                    strategies.append(ProfitProtector(ohlcv
+                                                      , self.params["default"][0]
+                                                      , self.params["default"][1]
+                                                      , short_profit_floor
+                                                      , short_pp_ratio))
+        return strategies
 
 
 class ProfitProtector(ExitStrategy):
@@ -8,8 +65,14 @@ class ProfitProtector(ExitStrategy):
     現在のポジションの利益を最大利益で割った値がpp_ratioより小さい場合、次のバーで成行返済する。
     """
 
-    def __init__(self, title, ohlcv, long_profit_floor, long_pp_ratio, short_profit_floor, short_pp_ratio):
-        self.title = title
+    def __init__(self
+                 , ohlcv
+                 , long_profit_floor=100000
+                 , long_pp_ratio=0.6
+                 , short_profit_floor=100000
+                 , short_pp_ratio=0.6):
+        self.title = f"ProfitProtector[{long_profit_floor:.2f},{long_pp_ratio:.2f}]" \
+                     f"[{short_profit_floor:.2f},{short_pp_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.long_profit_floor = long_profit_floor
@@ -17,8 +80,9 @@ class ProfitProtector(ExitStrategy):
         self.short_profit_floor = short_profit_floor
         self.short_pp_ratio = short_pp_ratio
         self.max_profit = 0
+        self.current_profit = 0
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:
@@ -32,7 +96,7 @@ class ProfitProtector(ExitStrategy):
                 return OrderType.CLOSE_LONG_MARKET
         return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx ):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:
@@ -69,7 +133,7 @@ class ProfitProtector(ExitStrategy):
     def get_indicators(self, idx, entry_idx):
         ind1 = self.max_profit
         ind2 = self.current_profit
-        ind3 = (self.current_profit / self.max_profit)
+        ind3 = (self.current_profit / self.max_profit) if self.current_profit != 0 and self.max_profit != 0 else None
         ind4 = self.long_profit_floor
         ind5 = self.long_pp_ratio
         ind6 = self.short_profit_floor

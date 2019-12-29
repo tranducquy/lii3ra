@@ -55,6 +55,8 @@ from lii3ra.exit_strategy.contract_gain_loss import ContractGainLossFactory
 from lii3ra.exit_strategy.percentile import PercentileFactory
 from lii3ra.exit_strategy.getting_is_good import GettingIsGoodFactory
 from lii3ra.exit_strategy.end_of_bar import EndOfBarFactory
+from lii3ra.exit_strategy.dont_give_it_all_back import DontGiveItAllBackFactory
+from lii3ra.exit_strategy.profit_protector import ProfitProtectorFactory
 
 # from lii3ra.symbol.test import Symbol
 # from lii3ra.symbol.bollingerband_newvalue import Symbol
@@ -117,12 +119,14 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(RangeBreakoutFactory().create_strategy(ohlcv))  # RANGE BREAKOUT
         # entry_strategies.append(TheUltimateFactory().create_strategy(ohlcv))  # THE ULTIMATE
         # EXIT
-        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
-        exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
-        exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))          # CONTRACT GAIN AND LOSS
-        exit_strategies.append(PercentileFactory().create_strategy(ohlcv))          # PERCENTILE
-        exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))          # GETTING IS GOOD
-        exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))          # END OF BAR
+        # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))                  # NEWVALUE
+        # exit_strategies.append(TimedFactory().create_strategy(ohlcv))                     # TIMED
+        # exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))          # CONTRACT GAIN AND LOSS
+        # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))          # PERCENTILE
+        # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))          # GETTING IS GOOD
+        # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))          # END OF BAR
+        # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))          # DON'T GIVE IT ALL BACK
+        exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))          # PROFIT PROTECTOR
         for entry_strategy in entry_strategies:
             for exit_strategy in exit_strategies:
                 asset = Asset(symbol
@@ -190,7 +194,9 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                   # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                   # PERCENTILE
         # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                   # GETTING IS GOOD
-        exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                   # END OF BAR
+        # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                   # END OF BAR
+        # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)                   # DON'T GIVE IT ALL BACK
+        exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                   # PROFIT PROTECTOR
         for entry_strategy in entry_strategies:
             asset = Asset(symbol, asset_values["initial_cash"], asset_values["leverage"], asset_values["losscut_ratio"])
             Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
@@ -254,7 +260,9 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # exit_strategies.extend(ContractGainLossFactory().optimization(ohlcv, rough))      # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().optimization(ohlcv, rough))      # PERCENTILE
         # exit_strategies.extend(GettingIsGoodFactory().optimization(ohlcv, rough))      # GETTING IS GOOD
-        exit_strategies.extend(EndOfBarFactory().optimization(ohlcv, rough))      # END OF BAR
+        # exit_strategies.extend(EndOfBarFactory().optimization(ohlcv, rough))      # END OF BAR
+        # exit_strategies.extend(DontGiveItAllBackFactory().optimization(ohlcv, rough))      # DON'T GIVE IT ALL BACK
+        exit_strategies.extend(ProfitProtectorFactory().optimization(ohlcv, rough))      # PROFIT PROTECTOR
         for exit_strategy in exit_strategies:
             asset = Asset(symbol, asset_values["initial_cash"], asset_values["leverage"], asset_values["losscut_ratio"])
             Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
