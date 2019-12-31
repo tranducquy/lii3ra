@@ -48,7 +48,7 @@ class BreakdownDeadAheadFactory(EntryStrategyFactory):
 
 class BreakdownDeadAhead(EntryStrategy):
     """
-    高値または安値がATRBANDを超えた場合に逆指値注文する
+    モメンタムにあわせて逆指値注文する
     """
 
     def __init__(self

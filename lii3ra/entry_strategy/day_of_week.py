@@ -36,6 +36,7 @@ class DayOfWeekFactory(EntryStrategyFactory):
 class DayOfWeek(EntryStrategy):
     """
     DAY OF WEEK
+     * 日足のみ
     """
 
     def __init__(self

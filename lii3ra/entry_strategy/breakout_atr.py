@@ -5,6 +5,7 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 
 class BreakoutATR(EntryStrategy):
     """高値または安値がATRBANDを超えた場合に逆指値注文する"""
+    # TODO:KC
 
     def __init__(self, title, ohlcv, long_atr, short_atr, vol_ema, order_vol_ratio=0.01):
         self.title = title

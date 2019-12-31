@@ -58,6 +58,7 @@ class SplitWeekFactory(EntryStrategyFactory):
 
 class SplitWeek(EntryStrategy):
     """
+     - 分足のみ
 Var: bbars(15); // lookbar period for the recent highest and lowest prices
 Var: maxl(2500); // max allowable average true range, converted to dollars per contract
 Condition1 = dayofweek(date)=2 dayofweek(date)=4; //True or False
