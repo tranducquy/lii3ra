@@ -133,7 +133,7 @@ class Market:
                     elif low <= p.order.price:
                         order_price = p.order.price
                         order_vol = p.order.vol
-                        p.entry_short(idx, candle_time, p.order.price, p.order.vol)
+                        p.entry_short(idx, candle_time, p.order.price, order_vol)
                     else:
                         p.order.fail_order()
                     self.set_order_info(execution_order_info, p.order)

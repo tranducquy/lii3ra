@@ -10,7 +10,9 @@ class ExitWhereYouLikeFactory(ExitStrategyFactory):
     }
 
     rough_params = [
-        [10, 7, 10, 7]
+        [5, 3, 5, 3]
+        , [10, 7, 10, 7]
+        , [15, 10, 15, 10]
     ]
 
     def create_strategy(self, ohlcv):
@@ -72,7 +74,8 @@ class ExitWhereYouLike(ExitStrategy):
                  , long_loss_exit
                  , short_prof_exit
                  , short_loss_exit):
-        self.title = f"ExitWhereYouLike[{long_prof_exit:.0f},{long_loss_exit:.0f}][{short_prof_exit:.0f},{short_loss_exit:.0f}]"
+        self.title = f"ExitWhereYouLike[{long_prof_exit:.0f},{long_loss_exit:.0f}]"\
+                     f"[{short_prof_exit:.0f},{short_loss_exit:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.long_prof_exit = long_prof_exit
@@ -81,6 +84,8 @@ class ExitWhereYouLike(ExitStrategy):
         self.short_loss_exit = short_loss_exit
         self.long_prof_price = None
         self.long_loss_price = None
+        self.short_prof_price = None
+        self.short_loss_price = None
 
     def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):

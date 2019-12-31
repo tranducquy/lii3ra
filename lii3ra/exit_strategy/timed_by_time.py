@@ -1,5 +1,65 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class TimedByTimeFactory(ExitStrategyFactory):
+    params = {
+        # exit_time
+        "default": ["113000"]
+    }
+
+    rough_params = [
+        ["003000"]
+        , ["013000"]
+        , ["023000"]
+        , ["033000"]
+        , ["043000"]
+        , ["053000"]
+        , ["063000"]
+        , ["073000"]
+        , ["083000"]
+        , ["093000"]
+        , ["103000"]
+        , ["113000"]
+        , ["123000"]
+        , ["133000"]
+        , ["143000"]
+        , ["153000"]
+        , ["163000"]
+        , ["173000"]
+        , ["183000"]
+        , ["193000"]
+        , ["203000"]
+        , ["213000"]
+        , ["223000"]
+        , ["233000"]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            exit_time = self.params[s][0]
+        else:
+            exit_time = self.params["default"][0]
+        return TimedByTime(ohlcv, exit_time)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(TimedByTime(ohlcv, p[0]))
+        else:
+            hour_list = [f"{i:02.0f}" for i in range(24)]
+            min_list = ["00", "15", "30", "45"]
+            sec_list = ["00"]
+            for h in hour_list:
+                for m in min_list:
+                    for s in sec_list:
+                        exit_time = h + m + s
+                        strategies.append(TimedByTime(ohlcv, exit_time))
+        return strategies
 
 
 class TimedByTime(ExitStrategy):
@@ -7,8 +67,8 @@ class TimedByTime(ExitStrategy):
     指定した時刻に成行返済する。
     分足および秒足のみ対応
     """
-    def __init__(self, title, ohlcv, exit_time, losscut_ratio=0.03):
-        self.title = title
+    def __init__(self, ohlcv, exit_time, losscut_ratio=0.03):
+        self.title = f"TimedByTime[{exit_time}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.exit_time = exit_time

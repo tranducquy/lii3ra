@@ -101,7 +101,7 @@ class Position:
         stop_market_order = order.Order()
         stop_market_order.set_order(create_time, OrderType.CLOSE_LONG_STOP_MARKET, stop_market_price, vol)
         self.order = order.Order()
-        self.order.set_oco_order(create_time, OrderType.CLOSE_LONG_OCO, limit_order, stop_market_order)
+        self.order.set_oco_order(create_time, OrderType.CLOSE_LONG_OCO, stop_market_order, limit_order)
 
     def create_order_exit_short_oco(self, idx, create_time, limit_price, stop_market_price, vol):
         limit_order = order.Order()
@@ -109,7 +109,7 @@ class Position:
         stop_market_order = order.Order()
         stop_market_order.set_order(create_time, OrderType.CLOSE_SHORT_STOP_MARKET, stop_market_price, vol)
         self.order = order.Order()
-        self.order.set_oco_order(create_time, OrderType.CLOSE_SHORT_OCO, limit_order, stop_market_order)
+        self.order.set_oco_order(create_time, OrderType.CLOSE_SHORT_OCO, stop_market_order, limit_order)
 
     def call_order(self, idx, order_time):
         self.order.order(order_time)
