@@ -57,6 +57,7 @@ from lii3ra.exit_strategy.getting_is_good import GettingIsGoodFactory
 from lii3ra.exit_strategy.end_of_bar import EndOfBarFactory
 from lii3ra.exit_strategy.dont_give_it_all_back import DontGiveItAllBackFactory
 from lii3ra.exit_strategy.profit_protector import ProfitProtectorFactory
+from lii3ra.exit_strategy.exit_where_you_like import ExitWhereYouLikeFactory
 
 # from lii3ra.symbol.test import Symbol
 # from lii3ra.symbol.bollingerband_newvalue import Symbol
@@ -126,7 +127,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))          # GETTING IS GOOD
         # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))          # END OF BAR
         # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))          # DON'T GIVE IT ALL BACK
-        exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))          # PROFIT PROTECTOR
+        # exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))          # PROFIT PROTECTOR
+        exit_strategies.append(ExitWhereYouLikeFactory().create_strategy(ohlcv))          # EXIT WHERE YOU LIKE
         for entry_strategy in entry_strategies:
             for exit_strategy in exit_strategies:
                 asset = Asset(symbol
@@ -196,7 +198,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                   # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                   # END OF BAR
         # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)                   # DON'T GIVE IT ALL BACK
-        exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                   # PROFIT PROTECTOR
+        # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                   # PROFIT PROTECTOR
+        exit_strategy = ExitWhereYouLikeFactory().create_strategy(ohlcv)                   # EXIT WHERE YOU LIKE
         for entry_strategy in entry_strategies:
             asset = Asset(symbol, asset_values["initial_cash"], asset_values["leverage"], asset_values["losscut_ratio"])
             Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
@@ -262,7 +265,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # exit_strategies.extend(GettingIsGoodFactory().optimization(ohlcv, rough))      # GETTING IS GOOD
         # exit_strategies.extend(EndOfBarFactory().optimization(ohlcv, rough))      # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().optimization(ohlcv, rough))      # DON'T GIVE IT ALL BACK
-        exit_strategies.extend(ProfitProtectorFactory().optimization(ohlcv, rough))      # PROFIT PROTECTOR
+        # exit_strategies.extend(ProfitProtectorFactory().optimization(ohlcv, rough))      # PROFIT PROTECTOR
+        exit_strategies.extend(ExitWhereYouLikeFactory().optimization(ohlcv, rough))      # EXIT WHERE YOU LIKE
         for exit_strategy in exit_strategies:
             asset = Asset(symbol, asset_values["initial_cash"], asset_values["leverage"], asset_values["losscut_ratio"])
             Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)

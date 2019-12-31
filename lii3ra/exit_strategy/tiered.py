@@ -43,7 +43,7 @@ class Tiered(ExitStrategy):
         self.max_profit = 0
         self.pp_ratio = 0
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:
@@ -69,7 +69,7 @@ class Tiered(ExitStrategy):
         else:
             return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:

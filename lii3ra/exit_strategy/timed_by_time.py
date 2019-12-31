@@ -14,7 +14,7 @@ class TimedByTime(ExitStrategy):
         self.exit_time = exit_time
         self.losscut_ratio = losscut_ratio
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         current_time = self.ohlcv.values['time'][idx].strftime("%H%M%S")
@@ -28,7 +28,7 @@ class TimedByTime(ExitStrategy):
         else:
             return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         current_time = self.ohlcv.values['time'][idx].strftime("%H%M%S")

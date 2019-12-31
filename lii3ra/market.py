@@ -392,7 +392,7 @@ class Market:
                         p.create_order_entry_short_market(idx, candle_time, price, vol)
                         self.set_order_info(order_info, p.order)
             elif current_position == PositionType.LONG:
-                exit_order_type = exit_strategy.check_exit_long(p.pos_price, idx, p.entry_idx)
+                exit_order_type = exit_strategy.check_exit_long(p.pos_price, p.pos_vol, idx, p.entry_idx)
                 if exit_order_type == OrderType.CLOSE_LONG_STOP_MARKET:
                     # 逆指値成行返売注文
                     price = exit_strategy.create_order_exit_long_stop_market(idx, p.entry_idx)
@@ -413,7 +413,7 @@ class Market:
                 else:
                     pass  # 注文無し
             elif current_position == PositionType.SHORT:
-                exit_order_type = exit_strategy.check_exit_short(p.pos_price, idx, p.entry_idx)
+                exit_order_type = exit_strategy.check_exit_short(p.pos_price, p.pos_vol, idx, p.entry_idx)
                 if exit_order_type == OrderType.CLOSE_SHORT_STOP_MARKET:
                     # 逆指値成行返買注文
                     price = exit_strategy.create_order_exit_short_stop_market(idx, p.entry_idx)

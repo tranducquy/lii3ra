@@ -64,7 +64,7 @@ class GettingIsGood(ExitStrategy):
         self.num_of_bars_short = num_of_bars_short
         self.losscut_ratio = losscut_ratio
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         exit_long = True
@@ -90,7 +90,7 @@ class GettingIsGood(ExitStrategy):
             else:
                 return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         exit_short = True

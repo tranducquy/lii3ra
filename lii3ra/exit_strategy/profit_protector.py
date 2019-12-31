@@ -6,11 +6,15 @@ from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 class ProfitProtectorFactory(ExitStrategyFactory):
     params = {
         # long_profit_floor, long_pp_ratio, short_profit_floor, short_pp_ratio
-        "default": [30000, 0.60, 30000, 0.60]
+        "default": [80000, 0.80, 80000, 0.80, 0.05]
     }
 
     rough_params = [
-        [30000, 0.60, 30000, 0.60]
+        [10000, 0.60, 10000, 0.60, 0.05]
+        , [30000, 0.60, 30000, 0.60, 0.05]
+        , [50000, 0.60, 50000, 0.60, 0.05]
+        , [100000, 0.60, 100000, 0.60, 0.05]
+        , [300000, 0.60, 300000, 0.60, 0.05]
     ]
 
     def create_strategy(self, ohlcv):
@@ -20,16 +24,19 @@ class ProfitProtectorFactory(ExitStrategyFactory):
             long_pp_ratio = self.params[s][1]
             short_profit_floor = self.params[s][2]
             short_pp_ratio = self.params[s][3]
+            losscut_ratio = self.params[s][4]
         else:
             long_profit_floor = self.params["default"][0]
             long_pp_ratio = self.params["default"][1]
             short_profit_floor = self.params["default"][2]
             short_pp_ratio = self.params["default"][3]
+            losscut_ratio = self.params["default"][4]
         return ProfitProtector(ohlcv
                                , long_profit_floor
                                , long_pp_ratio
                                , short_profit_floor
-                               , short_pp_ratio)
+                               , short_pp_ratio
+                               , losscut_ratio)
 
     def optimization(self, ohlcv, rough=True):
         strategies = []
@@ -48,14 +55,16 @@ class ProfitProtectorFactory(ExitStrategyFactory):
                                                       , long_profit_floor
                                                       , long_pp_ratio
                                                       , self.params["default"][2]
-                                                      , self.params["default"][3]))
+                                                      , self.params["default"][3]
+                                                      , self.params["default"][4]))
             for short_profit_floor in short_profit_floor_list:
                 for short_pp_ratio in short_pp_ratio_list:
                     strategies.append(ProfitProtector(ohlcv
                                                       , self.params["default"][0]
                                                       , self.params["default"][1]
                                                       , short_profit_floor
-                                                      , short_pp_ratio))
+                                                      , short_pp_ratio
+                                                      , self.params["default"][4]))
         return strategies
 
 
@@ -70,9 +79,10 @@ class ProfitProtector(ExitStrategy):
                  , long_profit_floor=100000
                  , long_pp_ratio=0.6
                  , short_profit_floor=100000
-                 , short_pp_ratio=0.6):
+                 , short_pp_ratio=0.6
+                 , losscut_ratio=0.03):
         self.title = f"ProfitProtector[{long_profit_floor:.2f},{long_pp_ratio:.2f}]" \
-                     f"[{short_profit_floor:.2f},{short_pp_ratio:.2f}]"
+                     f"[{short_profit_floor:.2f},{short_pp_ratio:.2f}][{losscut_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.long_profit_floor = long_profit_floor
@@ -81,6 +91,7 @@ class ProfitProtector(ExitStrategy):
         self.short_pp_ratio = short_pp_ratio
         self.max_profit = 0
         self.current_profit = 0
+        self.losscut_ratio = losscut_ratio
 
     def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
@@ -89,11 +100,15 @@ class ProfitProtector(ExitStrategy):
             self.current_profit = 0
             self.max_profit = 0
         close = self.ohlcv.values['close'][idx]
-        self.current_profit = close - pos_price
+        self.current_profit = (close - pos_price) * pos_vol
         self.max_profit = self.current_profit if self.max_profit < self.current_profit else self.max_profit
         if self.max_profit >= self.long_profit_floor:
             if (self.current_profit / self.max_profit) < self.long_pp_ratio:
                 return OrderType.CLOSE_LONG_MARKET
+        # 最低losscut設定
+        losscut_price = pos_price - (pos_price * self.losscut_ratio)
+        if close < losscut_price:
+            return OrderType.CLOSE_LONG_MARKET
         return OrderType.NONE_ORDER
 
     def check_exit_short(self, pos_price, pos_vol, idx, entry_idx ):
@@ -103,11 +118,15 @@ class ProfitProtector(ExitStrategy):
             self.current_profit = 0
             self.max_profit = 0
         close = self.ohlcv.values['close'][idx]
-        self.current_profit = pos_price - close
+        self.current_profit = (pos_price - close) * pos_vol
         self.max_profit = self.current_profit if self.max_profit < self.current_profit else self.max_profit
         if self.max_profit >= self.short_profit_floor:
             if (self.current_profit / self.max_profit) < self.short_pp_ratio:
                 return OrderType.CLOSE_SHORT_MARKET
+        # 最低losscut設定
+        losscut_price = pos_price + (pos_price * self.losscut_ratio)
+        if close > losscut_price:
+            return OrderType.CLOSE_SHORT_MARKET
         return OrderType.NONE_ORDER
 
     def create_order_exit_long_stop_market(self, idx, entry_idx):

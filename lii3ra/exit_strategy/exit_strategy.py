@@ -44,10 +44,10 @@ class ExitStrategy:
         else:
             return True
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         raise NotImplementedError
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         raise NotImplementedError
 
     def create_order_exit_long_stop_market(self, idx, entry_idx):

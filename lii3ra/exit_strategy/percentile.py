@@ -85,13 +85,13 @@ class Percentile(ExitStrategy):
         self.pos_price = 0
         self.losscut_ratio = losscut_ratio
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         self.pos_price = pos_price
         return OrderType.CLOSE_LONG_STOP_MARKET
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         self.pos_price = pos_price

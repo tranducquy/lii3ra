@@ -26,10 +26,10 @@ class EndOfBar(ExitStrategy):
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         return OrderType.NONE_ORDER
 
     def create_order_exit_long_stop_market(self, idx, entry_idx):

@@ -82,7 +82,7 @@ class DontGiveItAllBack(ExitStrategy):
         self.current_profit = None
         self.profit_diff = None
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:
@@ -97,7 +97,7 @@ class DontGiveItAllBack(ExitStrategy):
         else:
             return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:

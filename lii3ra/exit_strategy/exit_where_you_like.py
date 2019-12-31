@@ -1,5 +1,62 @@
 from lii3ra.ordertype import OrderType
+from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
+
+
+class ExitWhereYouLikeFactory(ExitStrategyFactory):
+    params = {
+        # long_prof_exit, long_loss_exit, short_prof_exit, short_loss_exit
+        "default": [10, 7, 10, 7]
+    }
+
+    rough_params = [
+        [10, 7, 10, 7]
+    ]
+
+    def create_strategy(self, ohlcv):
+        s = ohlcv.symbol
+        if s in self.params:
+            long_prof_exit = self.params[s][0]
+            long_loss_exit = self.params[s][1]
+            short_prof_exit = self.params[s][2]
+            short_loss_exit = self.params[s][3]
+        else:
+            long_prof_exit = self.params["default"][0]
+            long_loss_exit = self.params["default"][1]
+            short_prof_exit = self.params["default"][2]
+            short_loss_exit = self.params["default"][3]
+        return ExitWhereYouLike(ohlcv
+                                , long_prof_exit
+                                , long_loss_exit
+                                , short_prof_exit
+                                , short_loss_exit)
+
+    def optimization(self, ohlcv, rough=True):
+        strategies = []
+        if rough:
+            #
+            for p in self.rough_params:
+                strategies.append(ExitWhereYouLike(ohlcv, p[0], p[1], p[2], p[3]))
+        else:
+            long_prof_exit_list = [i for i in range(3, 16, 3)]
+            long_loss_exit_list = [i for i in range(3, 16, 3)]
+            short_prof_exit_list = [i for i in range(3, 16, 3)]
+            short_loss_exit_list = [i for i in range(3, 16, 3)]
+            for long_prof_exit in long_prof_exit_list:
+                for long_loss_exit in long_loss_exit_list:
+                    strategies.append(ExitWhereYouLike(ohlcv
+                                                       , long_prof_exit
+                                                       , long_loss_exit
+                                                       , self.params["default"][2]
+                                                       , self.params["default"][3]))
+            for short_prof_exit in short_prof_exit_list:
+                for short_loss_exit in short_loss_exit_list:
+                    strategies.append(ExitWhereYouLike(ohlcv
+                                                       , self.params["default"][0]
+                                                       , self.params["default"][1]
+                                                       , short_prof_exit
+                                                       , short_loss_exit))
+        return strategies
 
 
 class ExitWhereYouLike(ExitStrategy):
@@ -9,8 +66,13 @@ class ExitWhereYouLike(ExitStrategy):
     指値注文で利確をして、逆指値注文で損切りする。
     """
 
-    def __init__(self, title, ohlcv, long_prof_exit, long_loss_exit, short_prof_exit, short_loss_exit):
-        self.title = title
+    def __init__(self
+                 , ohlcv
+                 , long_prof_exit
+                 , long_loss_exit
+                 , short_prof_exit
+                 , short_loss_exit):
+        self.title = f"ExitWhereYouLike[{long_prof_exit:.0f},{long_loss_exit:.0f}][{short_prof_exit:.0f},{short_loss_exit:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.long_prof_exit = long_prof_exit
@@ -20,17 +82,17 @@ class ExitWhereYouLike(ExitStrategy):
         self.long_prof_price = None
         self.long_loss_price = None
 
-    def check_exit_long(self, pos_price, idx, entry_idx):
+    def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         return OrderType.CLOSE_LONG_OCO
 
-    def check_exit_short(self, pos_price, idx, entry_idx):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         return OrderType.CLOSE_SHORT_OCO
 
-    def create_order_close_long_limit(self, idx, entry_idx):
+    def create_order_exit_long_limit(self, idx, entry_idx):
         slice_idx = entry_idx - self.long_prof_exit
         if slice_idx < 0:
             slice_idx = 0
@@ -50,7 +112,7 @@ class ExitWhereYouLike(ExitStrategy):
         self.long_loss_price = min_low
         return min_low
 
-    def create_order_close_short_limit(self, idx, entry_idx):
+    def create_order_exit_short_limit(self, idx, entry_idx):
         slice_idx = entry_idx - self.short_prof_exit
         if slice_idx < 0:
             slice_idx = 0
