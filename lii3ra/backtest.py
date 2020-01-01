@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
+
 import threading
 import numpy as np
 from lii3ra.mylogger import Logger
@@ -97,30 +99,30 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))  # ATR BASED BREAKOUT
         entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))  # ASYMMETRIC AGAIN
         entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))  # ASYMMETRIC TRIPLE
+        entry_strategies.append(BackInStyleFactory().create_strategy(ohlcv))  # BACK IN STYLE
+        entry_strategies.append(BigTailBarsFactory().create_strategy(ohlcv))  # BIG TAIL BARS
         entry_strategies.append(BooksCanBeGreatFactory().create_strategy(ohlcv))  # BOOKS CAN BE GREAT
         entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))  # BREAKOUT WITH A TWIST
         entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))  # BREAKOUT SIGMA1
-        entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
+        entry_strategies.append(BreakdownDeadAheadFactory().create_strategy(ohlcv))  # BREAKDOWN DEAD A HEAD
+        entry_strategies.append(ClassicBollingerbandsFactory().create_strategy(ohlcv))  # CLASSIC BOLLINGERBANDS
+        entry_strategies.append(ClassicKeltnerChannelFactory().create_strategy(ohlcv))  # CLASSIC KC
+        entry_strategies.append(ClosingPatternOnlyFactory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY
+        entry_strategies.append(ClosingPatternOnly2Factory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY2
+        entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
+        ## entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
         entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))  # PERCENT RANKER
         entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))  # RSI TRIGGER
         entry_strategies.append(MAWithTwistFactory().create_strategy(ohlcv))  # MA WITH A TWIST
         entry_strategies.append(IntroducingSerialCorrelationFactory().create_strategy(ohlcv))  # INTRO SERIAL
-        entry_strategies.append(BackInStyleFactory().create_strategy(ohlcv))  # BACK IN STYLE
         entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))  # EXPONENTIALLY BETTER
         entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))  # STOCHASTIC CROSS
         entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))  # SHOW ME THE MONEY
-        entry_strategies.append(ClassicBollingerbandsFactory().create_strategy(ohlcv))  # CLASSIC BOLLINGERBANDS
-        entry_strategies.append(ClassicKeltnerChannelFactory().create_strategy(ohlcv))  # CLASSIC KC
-        entry_strategies.append(ThreeAmigosFactory().create_strategy(ohlcv))  # THREE AMIGOS
-        entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))  # TWO AMIGOS
         entry_strategies.append(PitterPatterPatternFactory().create_strategy(ohlcv))  # PITTER PATTER PATTERN
         entry_strategies.append(PitterPatterPattern2Factory().create_strategy(ohlcv))  # PITTER PATTER PATTERN2
-        entry_strategies.append(ClosingPatternOnlyFactory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY
-        entry_strategies.append(ClosingPatternOnly2Factory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY2
         entry_strategies.append(QuickPullbackPatternFactory().create_strategy(ohlcv))  # QUICK PULLBACK PATTERN
-        entry_strategies.append(BreakdownDeadAheadFactory().create_strategy(ohlcv))  # BREAKDOWN DEAD A HEAD
-        entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
-        entry_strategies.append(BigTailBarsFactory().create_strategy(ohlcv))  # BIG TAIL BARS
+        entry_strategies.append(ThreeAmigosFactory().create_strategy(ohlcv))  # THREE AMIGOS
+        entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))  # TWO AMIGOS
         entry_strategies.append(NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv))  # NEW HIGH
         entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))  # START AWESOME
         entry_strategies.append(SecondVerseSameAsTheFirstFactory().create_strategy(ohlcv))  # SECOND VERSE
@@ -148,7 +150,6 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
                               , asset_values["initial_cash"]
                               , asset_values["leverage"]
                               , asset_values["losscut_ratio"])
-                Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
                 thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
                                                                                          , entry_strategy
                                                                                          , exit_strategy
@@ -238,9 +239,28 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                   # PROFIT PROTECTOR
         # exit_strategy = ExitWhereYouLikeFactory().create_strategy(ohlcv)                   # EXIT WHERE YOU LIKE
         # exit_strategy = TieredFactory().create_strategy(ohlcv)                               # TIERED
+        thread_pool = list()
         for entry_strategy in entry_strategies:
-            asset = Asset(symbol, asset_values["initial_cash"], asset_values["leverage"], asset_values["losscut_ratio"])
-            Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
+            asset = Asset(symbol
+                          , asset_values["initial_cash"]
+                          , asset_values["leverage"]
+                          , asset_values["losscut_ratio"])
+            thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
+                                                                                     , entry_strategy
+                                                                                     , exit_strategy
+                                                                                     , asset
+                                                                                     )))
+        thread_join_cnt = 0
+        thread_pool_cnt = len(thread_pool)
+        split_num = (thread_pool_cnt / 16) + 1
+        thread_pools = list(np.array_split(thread_pool, split_num))
+        for p in thread_pools:
+            for t in p:
+                t.start()
+            for t in p:
+                t.join()
+                thread_join_cnt += 1
+                logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
     except Exception as err:
         print(err)
     logger.info("backtest bruteforce entry end")
@@ -313,9 +333,29 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # exit_strategies.extend(ProfitProtectorFactory().optimization(ohlcv, rough))      # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().optimization(ohlcv, rough))      # EXIT WHERE YOU LIKE
         # exit_strategies.extend(TieredFactory().optimization(ohlcv, rough))                  # TIERED
+        thread_pool = list()
         for exit_strategy in exit_strategies:
-            asset = Asset(symbol, asset_values["initial_cash"], asset_values["leverage"], asset_values["losscut_ratio"])
-            Market().simulator_run(ohlcv, entry_strategy, exit_strategy, asset)
+            asset = Asset(symbol
+                          , asset_values["initial_cash"]
+                          , asset_values["leverage"]
+                          , asset_values["losscut_ratio"])
+            thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
+                                                                                     , entry_strategy
+                                                                                     , exit_strategy
+                                                                                     , asset
+                                                                                     )))
+        thread_join_cnt = 0
+        thread_pool_cnt = len(thread_pool)
+        split_num = (thread_pool_cnt / 16) + 1
+        thread_pools = list(np.array_split(thread_pool, split_num))
+        for p in thread_pools:
+            for t in p:
+                t.start()
+            for t in p:
+                t.join()
+                thread_join_cnt += 1
+                logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
+
     except Exception as err:
         print(err)
     logger.info("backtest bruteforce exit end")
@@ -325,7 +365,8 @@ if __name__ == '__main__':
     # symbol
     # symbol = "^N225"
     # symbol = "N225minif"
-    symbol_list = ["6753.T"]
+    # symbol_list = ["6753.T"]
+    symbol_list = Symbol.symbols
 
     # ashi
     ashi = "1d"
@@ -333,7 +374,7 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2010-01-01"
-    start_date = "2014-01-01"
+    start_date = "2004-01-01"
     end_date = "2019-12-31"
 
     # その他

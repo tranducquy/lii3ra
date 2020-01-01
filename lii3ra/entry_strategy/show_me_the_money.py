@@ -35,12 +35,12 @@ class ShowMeTheMoneyFactory(EntryStrategyFactory):
                                                  , p[1]
                                                  , p[2]))
         else:
-            mfi_ary = [i for i in range(5, 25, 5)]
-            oversold_ary = [i for i in range(10, 100, 10)]
-            overbought_ary = [i for i in range(10, 100, 10)]
-            for mfi in mfi_ary:
-                for oversold in oversold_ary:
-                    for overbought in overbought_ary:
+            mfi_list = [i for i in range(5, 25, 5)]
+            oversold_list = [i for i in range(10, 100, 10)]
+            overbought_list = [i for i in range(10, 100, 10)]
+            for mfi in mfi_list:
+                for oversold in oversold_list:
+                    for overbought in overbought_list:
                         strategies.append(ShowMeTheMoney(ohlcv, mfi, oversold, overbought))
         return strategies
 
