@@ -8,14 +8,14 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class BreakoutWithTwistFactory(EntryStrategyFactory):
     params = {
         # long_lookback_span, long_adx_span, long_adx_value, short_lookback_span, short_adx_span, short_adx_value
-        "default": [10, 24, 0.3, 10, 6, 0.5]
+        "default": [10, 15, 0.2, 10, 15, 0.2]
         , "^N225": [10, 24, 0.3, 10, 6, 0.5]
     }
 
     rough_params = [
-        [10, 24, 0.3, 10, 6, 0.5]
-        , [130, 26, 0.7, 130, 4, 0.7]
-        , [60, 14, 0.4, 60, 14, 0.4]
+        [10, 15, 0.3, 10, 15, 0.3]
+        , [60, 14, 0.4, 60, 15, 0.4]
+        , [130, 15, 0.7, 130, 15, 0.7]
     ]
 
     def create_strategy(self, ohlcv):
@@ -50,10 +50,10 @@ class BreakoutWithTwistFactory(EntryStrategyFactory):
                                                     , p[5]))
         else:
             long_lookback_spans = [i for i in range(10, 250, 10)]
-            long_adx_spans = [i for i in range(5, 16, 3)]
+            long_adx_spans = [i for i in range(5, 25, 5)]
             long_adx_values = [i for i in np.arange(0.1, 0.9, 0.1)]
             short_lookback_spans = [i for i in range(10, 250, 10)]
-            short_adx_spans = [i for i in range(5, 16, 3)]
+            short_adx_spans = [i for i in range(5, 25, 5)]
             short_adx_values = [i for i in np.arange(0.1, 0.9, 0.1)]
             for long_lookback_span in long_lookback_spans:
                 for long_adx_span in long_adx_spans:
