@@ -110,7 +110,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(ClosingPatternOnlyFactory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY
         entry_strategies.append(ClosingPatternOnly2Factory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY2
         entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
-        ## entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
+        entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
         entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))  # PERCENT RANKER
         entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))  # RSI TRIGGER
         entry_strategies.append(MAWithTwistFactory().create_strategy(ohlcv))  # MA WITH A TWIST
