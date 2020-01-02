@@ -1,8 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
-
 import threading
 import numpy as np
 from lii3ra.mylogger import Logger
@@ -366,6 +364,7 @@ if __name__ == '__main__':
     # symbol = "^N225"
     # symbol = "N225minif"
     # symbol_list = ["6753.T"]
+    from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
     symbol_list = Symbol.symbols
 
     # ashi
