@@ -361,11 +361,12 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
 
 if __name__ == '__main__':
     # symbol
-    # symbol = "^N225"
+    symbol_list = ["^N225"]
     # symbol = "N225minif"
     # symbol_list = ["6753.T"]
-    from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
-    symbol_list = Symbol.symbols
+    # from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
+    # symbol_list = Symbol.symbols
+    # symbol_list = Symbol.symbols
 
     # ashi
     ashi = "1d"
