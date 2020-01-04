@@ -61,7 +61,7 @@ class Market:
                 if p.order.order_type == OrderType.LIMIT_LONG:
                     # 約定判定
                     if p.order.price == -1:
-                        self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
+                        # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
                     elif p.order.vol == 0:
                         p.order.fail_order()
@@ -75,7 +75,7 @@ class Market:
                 if p.order.order_type == OrderType.LIMIT_SHORT:
                     # 約定判定
                     if p.order.price == -1:
-                        self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
+                        # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
                     elif p.order.vol == 0:
                         p.order.fail_order()
@@ -90,7 +90,7 @@ class Market:
                     # 約定判定
                     order_price = 0
                     if p.order.price == -1:
-                        self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
+                        # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
                     elif p.order.vol == 0:
                         p.order.fail_order()
@@ -119,7 +119,7 @@ class Market:
                 elif p.order.order_type == OrderType.STOP_MARKET_SHORT:
                     # 約定判定
                     if p.order.price == -1:
-                        self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
+                        # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
                     elif p.order.vol == 0:
                         p.order.fail_order()
@@ -148,7 +148,7 @@ class Market:
                 elif p.order.order_type == OrderType.MARKET_LONG:
                     # 約定判定
                     if p.order.price == -1:
-                        self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
+                        # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
                     else:
                         # 最大volまで購入
@@ -158,7 +158,7 @@ class Market:
                 elif p.order.order_type == OrderType.MARKET_SHORT:
                     # 約定判定
                     if p.order.price == -1:
-                        self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
+                        # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, p.order.price))
                         p.order.fail_order()
                     else:
                         # 最大volまで売却
@@ -173,7 +173,7 @@ class Market:
                         oco_order1 = p.order.oco_order1
                         # 約定判定
                         if oco_order1.price == -1:
-                            self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, oco_order1.price))
+                            # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, oco_order1.price))
                             p.order.fail_order()
                         elif p.order.vol == 0:
                             p.order.fail_order()
@@ -205,7 +205,7 @@ class Market:
                         oco_order2 = p.order.oco_order2
                         # 約定判定
                         if oco_order2.price == -1:
-                            self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, oco_order2.price))
+                            # self.logger.error("symbol:[%s] idx:[%d] order_price:[%f]" % (symbol, idx, oco_order2.price))
                             p.order.fail_order()
                         elif oco_order2.vol == 0:
                             p.order.fail_order()

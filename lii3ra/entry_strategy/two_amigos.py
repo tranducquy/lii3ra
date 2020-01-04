@@ -56,7 +56,7 @@ class TwoAmigos(EntryStrategy):
                  , adx_threshold
                  , lookback
                  , order_vol_ratio=0.01):
-        self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.0f},,{lookback:.0f}]"
+        self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.0f},{lookback:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.adx = AverageDirectionalIndex(ohlcv, adx_span)

@@ -65,11 +65,6 @@ from lii3ra.exit_strategy.profit_protector import ProfitProtectorFactory
 from lii3ra.exit_strategy.exit_where_you_like import ExitWhereYouLikeFactory
 from lii3ra.exit_strategy.tiered import TieredFactory
 
-# from lii3ra.symbol.test import Symbol
-# from lii3ra.symbol.bollingerband_newvalue import Symbol
-# from lii3ra.symbol.topix17etf_nomura import Symbol
-# from lii3ra.symbol.n225 import Symbol
-# from lii3ra.symbol.n225_topix import Symbol
 
 s = Logger()
 logger = s.myLogger()
@@ -133,8 +128,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # ENTRY
         entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))     # BREAKOUT WITH A TWIST
         # EXIT
-        exit_strategy = NewvalueFactory().create_strategy(ohlcv)  # NEWVALUE
-        # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
+        # exit_strategy = NewvalueFactory().create_strategy(ohlcv)  # NEWVALUE
+        exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                   # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                   # PERCENTILE
         # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                   # GETTING IS GOOD
@@ -218,7 +213,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
 
 
 if __name__ == '__main__':
-    from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
+    from lii3ra.symbol.volume_10b import Symbol
     symbol_list = Symbol.symbols
 
     # ashi
@@ -235,7 +230,7 @@ if __name__ == '__main__':
     # rough = False
 
     for symbol in symbol_list:
-        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-        # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
         # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 

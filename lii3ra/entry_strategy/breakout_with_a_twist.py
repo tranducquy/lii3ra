@@ -13,9 +13,33 @@ class BreakoutWithTwistFactory(EntryStrategyFactory):
     }
 
     rough_params = [
-        [10, 15, 0.3, 10, 15, 0.3]
-        , [60, 14, 0.4, 60, 15, 0.4]
-        , [130, 15, 0.7, 130, 15, 0.7]
+        [10, 15, 0.3, 0, 1, 0]
+        , [10, 15, 0.7, 0, 1, 0]
+        , [10, 25, 0.3, 0, 1, 0]
+        , [10, 25, 0.7, 0, 1, 0]
+        , [60, 15, 0.3, 0, 1, 0]
+        , [60, 25, 0.3, 0, 1, 0]
+        , [60, 15, 0.7, 0, 1, 0]
+        , [60, 25, 0.7, 0, 1, 0]
+        , [130, 15, 0.3, 0, 1, 0]
+        , [130, 25, 0.3, 0, 1, 0]
+        , [130, 15, 0.7, 0, 1, 0]
+        , [130, 25, 0.7, 0, 1, 0]
+        , [0, 1, 0, 10, 6, 0.40]
+        , [0, 1, 0, 10, 14, 0.40]
+        , [0, 1, 0, 10, 6, 0.70]
+        , [0, 1, 0, 10, 14, 0.70]
+        , [0, 1, 0, 60, 6, 0.40]
+        , [0, 1, 0, 60, 14, 0.40]
+        , [0, 1, 0, 60, 6, 0.70]
+        , [0, 1, 0, 60, 14, 0.70]
+        , [0, 1, 0, 130, 6, 0.40]
+        , [0, 1, 0, 130, 14, 0.40]
+        , [0, 1, 0, 130, 6, 0.70]
+        , [0, 1, 0, 130, 14, 0.70]
+        # , [10, 15, 0.3, 10, 15, 0.3]
+        # , [60, 15, 0.4, 60, 15, 0.4]
+        # , [130, 15, 0.7, 130, 15, 0.7]
     ]
 
     def create_strategy(self, ohlcv):
@@ -50,20 +74,20 @@ class BreakoutWithTwistFactory(EntryStrategyFactory):
                                                     , p[5]))
         else:
             long_lookback_spans = [i for i in range(10, 250, 10)]
-            long_adx_spans = [i for i in range(5, 25, 5)]
+            long_adx_spans = [i for i in range(5, 26, 5)]
             long_adx_values = [i for i in np.arange(0.1, 0.9, 0.1)]
             short_lookback_spans = [i for i in range(10, 250, 10)]
-            short_adx_spans = [i for i in range(5, 25, 5)]
+            short_adx_spans = [i for i in range(5, 26, 5)]
             short_adx_values = [i for i in np.arange(0.1, 0.9, 0.1)]
             for long_lookback_span in long_lookback_spans:
                 for long_adx_span in long_adx_spans:
                     for long_adx_value in long_adx_values:
                         strategies.append(BreakoutWithTwist(ohlcv, long_lookback_span, long_adx_span, long_adx_value
-                                                            , 0, 0, 0))
+                                                            , 0, 1, 0))
             for short_lookback_span in short_lookback_spans:
                 for short_adx_span in short_adx_spans:
                     for short_adx_value in short_adx_values:
-                        strategies.append(BreakoutWithTwist(ohlcv, 0, 0, 0
+                        strategies.append(BreakoutWithTwist(ohlcv, 0, 1, 0
                                                             , short_lookback_span, short_adx_span, short_adx_value))
         return strategies
 

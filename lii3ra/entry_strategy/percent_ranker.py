@@ -52,6 +52,7 @@ class PercentRankerFactory(EntryStrategyFactory):
     def optimization(self, ohlcv, rough=True):
         strategies = []
         if rough:
+            #
             for p in self.rough_params:
                 strategies.append(PercentRanker(ohlcv
                                                 , p[0]
@@ -65,16 +66,16 @@ class PercentRankerFactory(EntryStrategyFactory):
                                                 , p[8]
                                                 ))
         else:
-            long_spans = [i for i in range(3, 20, 3)]
+            long_spans = [i for i in range(3, 26, 5)]
             long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
-            short_spans = [i for i in range(3, 20, 3)]
+            short_spans = [i for i in range(3, 26, 5)]
             short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
-                    strategies.append(PercentRanker(ohlcv, long_span, long_ratio, 0, 0))
+                    strategies.append(PercentRanker(ohlcv, long_span, long_ratio, 1, 0))
             for short_span in short_spans:
                 for short_ratio in short_ratios:
-                    strategies.append(PercentRanker(ohlcv, 0, 0, short_span, short_ratio))
+                    strategies.append(PercentRanker(ohlcv, 1, 0, short_span, short_ratio))
         return strategies
 
 
