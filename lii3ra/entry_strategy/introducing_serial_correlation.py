@@ -30,9 +30,9 @@ class IntroducingSerialCorrelationFactory(EntryStrategyFactory):
         if rough:
             for p in self.rough_params:
                 strategies.append(IntroducingSerialCorrelation(ohlcv
-                                                 , p[0]
-                                                 , p[1]
-                                                 , p[2]))
+                                                               , p[0]
+                                                               , p[1]
+                                                               , p[2]))
         else:
             lookback_list = [i for i in range(3, 25, 2)]
             winner_wait = [i for i in range(2, 20, 2)]

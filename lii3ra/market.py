@@ -458,8 +458,6 @@ class Market:
             backtest_history.append(history)
         self.dumper.save_history(symbol, ohlcv.ashi, entry_strategy.title, exit_strategy.title, backtest_history)
         summary_msg = self.dumper.save_result(entry_strategy.title, exit_strategy.title, p.summary, ohlcv)
-        self.dumper.update_maxdrawdown(symbol, ohlcv.ashi, entry_strategy.title, exit_strategy.title, ohlcv.start_date,
-                                       ohlcv.end_date)
         self.logger.info(summary_msg)
 
     def set_order_info(self, info, order):

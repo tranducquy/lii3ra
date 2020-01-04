@@ -254,30 +254,6 @@ class BacktestDumper():
         market_start_time = ohlcv.get_headdate()
         market_end_time = ohlcv.get_taildate()
         regist_time = datetime.now()
-        msg = f"{symbol}"
-        msg += f",{ashi}"
-        # msg += f",バックテスト開始日:{start_date}"
-        # msg += f",バックテスト終了日:{end_date}"
-        market_start_date = market_start_time.strftime("%Y%m%d")
-        msg += f",取引開始日時:{market_start_date}"
-        market_end_date = market_end_time.strftime("%Y%m%d")
-        msg += f",取引終了日時:{market_end_date}"
-        msg += f",トレード保有秒数:{summary['PositionHavingSec']}"
-        msg += f",1トレードあたりの平均日数:{position_having_sec_per_trade}"
-        msg += f",初期資産:{summary['InitValue']:.0f}"
-        msg += f",最終資産:{summary['LastValue']:.0f}"
-        msg += f",全体騰落率(%%):{rate_of_return:.2f}"
-        msg += f",勝ちトレード数:{summary['WinCount']:.0f}"
-        msg += f",負けトレード数:{summary['LoseCount']:.0f}"
-        msg += f",勝率(%%):{win_rate:.4f}"
-        msg += f",ペイオフレシオ:{payoffratio:.4f}"
-        msg += f",1トレードあたりの利益率(%%):{profit_rate_per_trade:.4f}"
-        msg += f",1トレードあたりの利益率long(%%):{long_profit_rate_per_trade:.4f}"
-        msg += f",1トレードあたりの利益率short(%%):{short_profit_rate_per_trade:.4f}"
-        msg += f",売買手数料:{summary['Fee']:.2f}"
-        msg += f",スプレッドによる差損:{summary['SpreadFee']:.4f}"
-        msg += f",{entry_strategy_title}"
-        msg += f",{exit_strategy_title}"
         # dbに保存
         self.save_simulate_result(
             symbol
@@ -316,29 +292,52 @@ class BacktestDumper():
             , self.round(summary['SpreadFee'])
             , regist_time
         )
+        self._update_maxdrawdown(symbol, ashi, entry_strategy_title, exit_strategy_title, start_date, end_date)
+        msg = f"{symbol}"
+        msg += f",{ashi}"
+        market_start_date = market_start_time.strftime("%Y%m%d")
+        msg += f",取引開始日時:{market_start_date}"
+        market_end_date = market_end_time.strftime("%Y%m%d")
+        msg += f",取引終了日時:{market_end_date}"
+        msg += f",トレード保有秒数:{summary['PositionHavingSec']}"
+        msg += f",1トレードあたりの平均日数:{position_having_sec_per_trade}"
+        msg += f",初期資産:{summary['InitValue']:.0f}"
+        msg += f",最終資産:{summary['LastValue']:.0f}"
+        msg += f",全体騰落率(%%):{rate_of_return:.2f}"
+        msg += f",勝ちトレード数:{summary['WinCount']:.0f}"
+        msg += f",負けトレード数:{summary['LoseCount']:.0f}"
+        msg += f",勝率(%%):{win_rate:.4f}"
+        msg += f",ペイオフレシオ:{payoffratio:.4f}"
+        msg += f",1トレードあたりの利益率(%%):{profit_rate_per_trade:.4f}"
+        msg += f",1トレードあたりの利益率long(%%):{long_profit_rate_per_trade:.4f}"
+        msg += f",1トレードあたりの利益率short(%%):{short_profit_rate_per_trade:.4f}"
+        msg += f",売買手数料:{summary['Fee']:.2f}"
+        msg += f",スプレッドによる差損:{summary['SpreadFee']:.4f}"
+        msg += f",最大ドローダウン:{self.max_drawdown:.2f}"
+        msg += f",{entry_strategy_title}"
+        msg += f",{exit_strategy_title}"
         return msg
 
-    def update_maxdrawdown(self, symbol, leg, entry_strategy, exit_strategy, start_date, end_date):
+    def _update_maxdrawdown(self, symbol, leg, entry_strategy, exit_strategy, start_date, end_date):
         # ドローダウン算出
-        drawdown = self.get_maxdrawdown(symbol, leg, entry_strategy, exit_strategy, start_date, end_date)
+        self.max_drawdown = self._get_maxdrawdown(symbol, leg, entry_strategy, exit_strategy, start_date, end_date)
         # DB更新
         dba = DbAccess()
-        dba.update_maxdrawdown(symbol, leg, entry_strategy, exit_strategy, drawdown)
+        dba.update_maxdrawdown(symbol, leg, entry_strategy, exit_strategy, self.max_drawdown)
 
-    def get_maxdrawdown(self
-                        , symbol
-                        , leg
-                        , entry_strategy
-                        , exit_strategy
-                        , start_date
-                        , end_date
-                        ):
+    def _get_maxdrawdown(self
+                         , symbol
+                         , leg
+                         , entry_strategy
+                         , exit_strategy
+                         , start_date
+                         , end_date
+                         ):
         dba = DbAccess()
         rs = dba.get_backtest_history(symbol, leg, entry_strategy, exit_strategy, start_date, end_date)
         maxv = 0
         minv = 0
         max_drawdown = 0
-        c_time = ''
         count = 0
         if rs:
             for r in rs:
@@ -355,7 +354,6 @@ class BacktestDumper():
                     drawdown = self.round(diff / maxv)
                     if max_drawdown < drawdown:
                         max_drawdown = drawdown
-                        c_time = r[0]
                 count += 1
             # self.logger.info(
             #    f"maxdrawdown:{symbol},{leg},{entry_strategy},{exit_strategy}"\

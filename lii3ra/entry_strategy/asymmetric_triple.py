@@ -10,6 +10,7 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
     params = {
         # atr_span, atr_mult, trima_span, lookback_span
         "default": [15, 0.5, 10, 10]
+        , "^N225": [10, 0.3, 25, 10]
     }
 
     rough_params = [
@@ -40,10 +41,10 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
                                                    , p[2]
                                                    , p[3]))
         else:
-            atr_spans = [i for i in range(5, 25, 5)]
-            atr_mults = [i for i in np.arange(0.3, 1.5, 0.2)]
-            trima_spans = [i for i in range(5, 25, 5)]
-            lookback_spans = [i for i in np.arange(5, 16, 5)]
+            atr_spans = [i for i in range(5, 26, 5)]
+            atr_mults = [i for i in np.arange(0.3, 1.6, 0.3)]
+            trima_spans = [i for i in range(5, 26, 5)]
+            lookback_spans = [i for i in range(5, 16, 5)]
             for atr_span in atr_spans:
                 for atr_mult in atr_mults:
                     for trima_span in trima_spans:
@@ -63,7 +64,7 @@ class AsymmetricTriple(EntryStrategy):
                  , trima_span
                  , lookback_span
                  , order_vol_ratio=0.01):
-        self.title = f"AsymTriple[{atr_span:.0f},{atr_mult:.1f},{trima_span:.0f}]"
+        self.title = f"AsymTriple[{atr_span:.0f},{atr_mult:.1f},{trima_span:.0f},{lookback_span:.0f}]"
         self.ohlcv = ohlcv
         self.atr = AverageTrueRange(ohlcv, atr_span)
         self.atr_mult = atr_mult

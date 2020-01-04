@@ -10,7 +10,11 @@ class GettingIsGoodFactory(ExitStrategyFactory):
     }
 
     rough_params = [
-        [3, 3, 0.05]
+        [1, 1, 0.05]
+        , [2, 2, 0.05]
+        , [3, 3, 0.05]
+        , [4, 4, 0.05]
+        , [5, 5, 0.05]
     ]
 
     def create_strategy(self, ohlcv):
@@ -36,7 +40,7 @@ class GettingIsGoodFactory(ExitStrategyFactory):
                 strategies.append(GettingIsGood(ohlcv, p[0], p[1], p[2]))
         else:
             num_of_bars_list = [i for i in range(1, 5)]
-            losscut_ratio_list = [0.03, 0.05, 0.10]
+            losscut_ratio_list = [0.05]
             for long_bars in num_of_bars_list:
                 for short_bars in num_of_bars_list:
                     for losscut_ratio in losscut_ratio_list:

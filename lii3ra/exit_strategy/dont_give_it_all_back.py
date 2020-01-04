@@ -8,10 +8,15 @@ class DontGiveItAllBackFactory(ExitStrategyFactory):
     params = {
         # long_atr_span, long_xatr, short_atr_span, short_xatr
         "default": [3, 0.20, 3, 0.20]
+        , "^N225": [13, 0.10, 13, 0.20]
     }
 
     rough_params = [
         [3, 0.20, 3, 0.20]
+        , [5, 0.20, 5, 0.20]
+        , [8, 0.20, 8, 0.20]
+        , [10, 0.20, 10, 0.20]
+        , [15, 0.20, 15, 0.20]
     ]
 
     def create_strategy(self, ohlcv):
@@ -39,24 +44,19 @@ class DontGiveItAllBackFactory(ExitStrategyFactory):
             for p in self.rough_params:
                 strategies.append(DontGiveItAllBack(ohlcv, p[0], p[1], p[2], p[3]))
         else:
-            long_atr_span_list = [i for i in range(3, 16, 3)]
-            long_xatr_list = [0.05, 0.10, 0.20, 0.30]
-            short_atr_span_list = [i for i in range(3, 16, 3)]
-            short_xatr_list = [0.05, 0.10, 0.20, 0.30]
+            long_atr_span_list = [i for i in range(3, 20, 5)]
+            long_xatr_list = [0.05, 0.15, 0.25]
+            short_atr_span_list = [i for i in range(3, 20, 5)]
+            short_xatr_list = [0.05, 0.15, 0.25]
             for long_atr_span in long_atr_span_list:
                 for long_xatr in long_xatr_list:
-                    strategies.append(DontGiveItAllBack(ohlcv
-                                                        , long_atr_span
-                                                        , long_xatr
-                                                        , self.params["default"][2]
-                                                        , self.params["default"][3]))
-            for short_atr_span in short_atr_span_list:
-                for short_xatr in short_xatr_list:
-                    strategies.append(DontGiveItAllBack(ohlcv
-                                                        , self.params["default"][0]
-                                                        , self.params["default"][1]
-                                                        , short_atr_span
-                                                        , short_xatr))
+                    for short_atr_span in short_atr_span_list:
+                        for short_xatr in short_xatr_list:
+                            strategies.append(DontGiveItAllBack(ohlcv
+                                                                , long_atr_span
+                                                                , long_xatr
+                                                                , short_atr_span
+                                                                , short_xatr))
         return strategies
 
 

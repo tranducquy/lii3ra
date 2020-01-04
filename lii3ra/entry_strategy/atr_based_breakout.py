@@ -9,7 +9,7 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
     params = {
         # long_atr_span, long_atr_ratio, short_atr_span, short_atr_ratio
         "default": [15, 1.0, 15, 1.0]
-        # , "^N225": [3, 1.0, 3, 1.0]
+        , "^N225": [23, 0.6, 28, 0.3]
     }
 
     rough_params = [

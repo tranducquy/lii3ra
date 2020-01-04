@@ -18,6 +18,9 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         [3, 1.0, 3, 1.0]
         , [6, 1.0, 6, 1.0]
         , [9, 1.0, 9, 1.0]
+        , [12, 1.0, 12, 1.0]
+        , [15, 1.0, 15, 1.0]
+        , [18, 1.0, 18, 1.0]
     ]
 
     def create_strategy(self, ohlcv):
@@ -44,10 +47,10 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
                                                  , p[2]
                                                  , p[3]))
         else:
-            long_spans = [i for i in range(3, 25, 2)]
-            long_ratios = [i for i in np.arange(0.2, 2.5, 0.2)]
+            long_spans = [i for i in range(3, 25, 5)]
+            long_ratios = [i for i in np.arange(0.2, 2.5, 0.3)]
             short_spans = [i for i in range(3, 25, 2)]
-            short_ratios = [i for i in np.arange(0.2, 2.5, 0.2)]
+            short_ratios = [i for i in np.arange(0.2, 2.5, 0.3)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
                     strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))

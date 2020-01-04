@@ -9,10 +9,13 @@ class AsymmetricAgainFactory(EntryStrategyFactory):
     params = {
         # atr_span, atr_mult
         "default": [15, 0.5]
+        , "^N225": [10, 0.5]
     }
 
     rough_params = [
-        [15, 0.5]
+        [10, 0.5]
+        , [15, 0.5]
+        , [20, 0.5]
     ]
 
     def create_strategy(self, ohlcv):

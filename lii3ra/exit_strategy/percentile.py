@@ -1,6 +1,5 @@
 import numpy as np
 from lii3ra.ordertype import OrderType
-from lii3ra.technical_indicator.simple_movingaverage import SimpleMovingAverage
 from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 
@@ -8,11 +7,15 @@ from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 class PercentileFactory(ExitStrategyFactory):
     params = {
         # percentile_span_long, percentile_ratio_long, percentile_span_short, percentile_span_short, percentile_ratio_short, percentile_losscut_ratio
-        "default": [5, 50, 5, 50, 0.10]
+        "default": [5, 50, 5, 50, 0.05]
+        , "^N225": [10, 30, 5, 50, 0.05]
     }
 
     rough_params = [
-        [5, 50, 5, 50, 0.10]
+        [5, 50, 5, 50, 0.05]
+        , [10, 50, 10, 50, 0.05]
+        , [15, 50, 15, 50, 0.05]
+        , [20, 50, 20, 50, 0.05]
     ]
 
     def create_strategy(self, ohlcv):
@@ -42,11 +45,11 @@ class PercentileFactory(ExitStrategyFactory):
             for p in self.rough_params:
                 strategies.append(Percentile(ohlcv, p[0], p[1], p[2], p[3], p[4]))
         else:
-            long_span_list = [5, 10, 15]
-            long_ratio_list = [0.40, 0.50, 0.60]
-            short_span_list = [5, 10, 15]
-            short_ratio_list = [0.40, 0.50, 0.60]
-            losscut_ratio_list = [0.03, 0.05, 0.10]
+            long_span_list = [5, 10, 15, 20]
+            long_ratio_list = [30, 40, 50, 60, 70]
+            short_span_list = [5, 10, 15, 20]
+            short_ratio_list = [30, 40, 50, 60, 70]
+            losscut_ratio_list = [0.05]
             for long_span in long_span_list:
                 for long_ratio in long_ratio_list:
                     for short_span in short_span_list:
@@ -66,7 +69,7 @@ class Percentile(ExitStrategy):
     指定したバーのパーセンタイルで逆指値返済注文する
     """
 
-    # TODO:逆指値しない
+    # TODO:逆指値しない。終値がパーセンタイルを超えていたら次のバーでEXIT
     def __init__(self
                  , ohlcv
                  , long_span
@@ -74,7 +77,7 @@ class Percentile(ExitStrategy):
                  , short_span
                  , short_ratio
                  , losscut_ratio=0.05):
-        self.title = f"Percentile[{long_span:.0f},{long_ratio:.2f}][{short_span:.0f},{short_ratio:.2f}][{losscut_ratio:.2f}]"
+        self.title = f"Percentile[{long_span:.0f},{long_ratio:.0f}][{short_span:.0f},{short_ratio:.0f}][{losscut_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.percentile_span_long = long_span
