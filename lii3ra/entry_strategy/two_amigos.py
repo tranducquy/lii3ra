@@ -1,3 +1,4 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.technical_indicator.average_directional_index import AverageDirectionalIndex
 from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
@@ -29,15 +30,16 @@ class TwoAmigosFactory(EntryStrategyFactory):
     def optimization(self, ohlcv, rough=True):
         strategies = []
         if rough:
+            #
             for p in self.rough_params:
                 strategies.append(TwoAmigos(ohlcv
                                             , p[0]
                                             , p[1]
                                             , p[2]))
         else:
-            adx_span_ary = [i for i in range(5, 25, 5)]
+            adx_span_ary = [i for i in range(5, 26, 5)]
             adx_threshold_ary = [i for i in np.arange(0.10, 0.9, 0.1)]
-            lookback_ary = [i for i in range(5, 25, 5)]
+            lookback_ary = [i for i in range(5, 26, 5)]
             for adx_span in adx_span_ary:
                 for adx_threshold in adx_threshold_ary:
                     for lookback in lookback_ary:

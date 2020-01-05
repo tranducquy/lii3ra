@@ -66,16 +66,41 @@ class PercentRankerFactory(EntryStrategyFactory):
                                                 , p[8]
                                                 ))
         else:
-            long_spans = [i for i in range(3, 26, 5)]
-            long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
-            short_spans = [i for i in range(3, 26, 5)]
-            short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
-            for long_span in long_spans:
-                for long_ratio in long_ratios:
-                    strategies.append(PercentRanker(ohlcv, long_span, long_ratio, 1, 0))
-            for short_span in short_spans:
-                for short_ratio in short_ratios:
-                    strategies.append(PercentRanker(ohlcv, 1, 0, short_span, short_ratio))
+            lookback_span_list = [5, 10, 15, 20]
+            percentile_ratio_list = [30, 40, 50, 60, 70]
+            adx_span_list = [5, 10, 15, 20]
+            adx_ratio1_list = [0.20]
+            adx_ratio2_list = [0.30, 0.45]
+            for lookback in lookback_span_list:
+                for percentile_ratio in percentile_ratio_list:
+                    for adx_span in adx_span_list:
+                        for adx_ratio1 in adx_ratio1_list:
+                            for adx_ratio2 in adx_ratio2_list:
+                                strategies.append(PercentRanker(ohlcv
+                                                                , lookback
+                                                                , percentile_ratio
+                                                                , adx_span
+                                                                , adx_ratio1
+                                                                , adx_ratio2
+                                                                , 0
+                                                                , 1
+                                                                , 0
+                                                                , 0))
+        for lookback in lookback_span_list:
+            for percentile_ratio in percentile_ratio_list:
+                for adx_span in adx_span_list:
+                    for adx_ratio1 in adx_ratio1_list:
+                        for adx_ratio2 in adx_ratio2_list:
+                            strategies.append(PercentRanker(ohlcv
+                                                            , lookback
+                                                            , 0
+                                                            , 1
+                                                            , 0
+                                                            , 0
+                                                            , percentile_ratio
+                                                            , adx_span
+                                                            , adx_ratio1
+                                                            , adx_ratio2))
         return strategies
 
 

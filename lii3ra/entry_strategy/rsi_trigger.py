@@ -36,9 +36,9 @@ class RSITriggerFactory(EntryStrategyFactory):
                                              , p[1]
                                              , p[2]))
         else:
-            rsi_spans = [i for i in range(3, 10, 2)]
-            rsi_thresholds = [i for i in range(10, 30, 4)]
-            ema_spans = [i for i in range(10, 30, 4)]
+            rsi_spans = [i for i in range(3, 16, 3)]
+            rsi_thresholds = [i for i in range(20, 90, 10)]
+            ema_spans = [i for i in range(5, 26, 5)]
             for rsi_span in rsi_spans:
                 for rsi_threshold in rsi_thresholds:
                     for ema_span in ema_spans:
