@@ -7,6 +7,7 @@ class GettingIsGoodFactory(ExitStrategyFactory):
     params = {
         # num_of_bars_long, num_of_bars_short, losscut_ratio
         "default": [3, 3, 0.05]
+        , "^N225": [2, 1, 0.05]
     }
 
     rough_params = [
