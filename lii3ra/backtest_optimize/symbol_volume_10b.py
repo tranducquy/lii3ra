@@ -90,6 +90,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(SplitWeekFactory().create_strategy(ohlcv))  # SPLIT WEEK
         # entry_strategies.append(DayOfWeekFactory().create_strategy(ohlcv))  # DAY OF WEEK
         # any
+
         entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))   # ATR BASED BREAKOUT
         entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
         entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))   # ASYMMETRIC TRIPLE
@@ -104,8 +105,11 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))      # PERCENT RANKER
         entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))  # START AWESOME
         entry_strategies.append(QuickPullbackPatternFactory().create_strategy(ohlcv))        # QUICK PULLBACK PATTERN
+        entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))     # SHOW ME THE MONEY
+        entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
+        entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))  # EXPONENTIALLY BETTER
+        entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
 
-        # entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))  # SHOW ME THE MONEY
         # entry_strategies.append(NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv))  # NEW HIGH
         # entry_strategies.append(BackInStyleFactory().create_strategy(ohlcv))  # BACK IN STYLE
         # entry_strategies.append(BigTailBarsFactory().create_strategy(ohlcv))  # BIG TAIL BARS
@@ -115,11 +119,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(ClassicKeltnerChannelFactory().create_strategy(ohlcv))  # CLASSIC KC
         # entry_strategies.append(ClosingPatternOnlyFactory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY
         # entry_strategies.append(ClosingPatternOnly2Factory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY2
-        # entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
-        # entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
         # entry_strategies.append(MAWithTwistFactory().create_strategy(ohlcv))  # MA WITH A TWIST
         # entry_strategies.append(IntroducingSerialCorrelationFactory().create_strategy(ohlcv))  # INTRO SERIAL
-        # entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))  # EXPONENTIALLY BETTER
         # entry_strategies.append(PitterPatterPatternFactory().create_strategy(ohlcv))  # PITTER PATTER PATTERN
         # entry_strategies.append(PitterPatterPattern2Factory().create_strategy(ohlcv))  # PITTER PATTER PATTERN2
         # entry_strategies.append(SecondVerseSameAsTheFirstFactory().create_strategy(ohlcv))  # SECOND VERSE
