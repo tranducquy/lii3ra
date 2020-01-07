@@ -11,10 +11,13 @@ setup(
         # https://pypi.python.org/pypi?:action=list_classifiers
         "Development Status :: 1 - Planning"
     ],
-    keywords='donkatsu',
+    keywords='lii3ra',
     install_requires=[
         "pandas",
-        "numpy"
+        "numpy",
+        "yfinance",
+        "oandapyV20",
+        "iso8601"
         ],
 )
 
