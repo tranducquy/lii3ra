@@ -45,22 +45,22 @@ class EntryCommodityChannelIndexFactory(EntryStrategyFactory):
                                                              , p[3]
                                                              , p[4]))
         else:
-            cci_period_ary = [i for i in range(10, 20, 2)]
-            cci_constant_ary = [i for i in np.arange(0.005, 0.035, 0.01)]
-            cci_avg_length_ary = [i for i in range(3, 25, 2)]
-            long_cci_ratio_ary = [i for i in range(-60, -150, -20)]
-            short_cci_ratio_ary = [i for i in range(60, 150, 20)]
+            cci_period_ary = [i for i in range(5, 20, 5)]
+            cci_constant_ary = [0.015]
+            cci_avg_length_ary = [i for i in range(3, 25, 5)]
+            long_cci_ratio_ary = [-60, -80, -100]
+            short_cci_ratio_ary = [60, 80, 100]
             for cci_period in cci_period_ary:
                 for cci_constant in cci_constant_ary:
                     for cci_avg_length in cci_avg_length_ary:
                         for long_cci_ratio in long_cci_ratio_ary:
                             for short_cci_ratio in short_cci_ratio_ary:
                                 strategies.append(EntryCommodityChannelIndex(ohlcv
-                                                                     , cci_period
-                                                                     , cci_constant
-                                                                     , cci_avg_length
-                                                                     , long_cci_ratio
-                                                                     , short_cci_ratio))
+                                                                             , cci_period
+                                                                             , cci_constant
+                                                                             , cci_avg_length
+                                                                             , long_cci_ratio
+                                                                             , short_cci_ratio))
         return strategies
 
 
