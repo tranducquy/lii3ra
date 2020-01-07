@@ -1,3 +1,4 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.technical_indicator.stochastics import Stochastic
 from lii3ra.entry_strategy.entry_strategy import EntryStrategyFactory
@@ -7,11 +8,11 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class StochasticCrossFactory(EntryStrategyFactory):
     params = {
         # atr_span, atr_mult
-        "default": [8, 23, 22]
+        "default": [8, 22, 23]
     }
 
     rough_params = [
-        [8, 23, 22]
+        [8, 22, 23]
     ]
 
     def create_strategy(self, ohlcv):
@@ -35,12 +36,12 @@ class StochasticCrossFactory(EntryStrategyFactory):
                                                   , p[1]
                                                   , p[2]))
         else:
-            period_ary = [i for i in range(5, 25, 5)]
-            smoothing1_ary = [i for i in np.arange(0.3, 1.5, 0.2)]
-            smoothing2_ary = [i for i in np.arange(0.3, 1.5, 0.2)]
-            for period in period_ary:
-                for smoothing1 in smoothing1_ary:
-                    for smoothing2 in smoothing2_ary:
+            period_list = [i for i in range(5, 25, 5)]
+            smoothing1_list = [3, 6, 12, 18, 22]
+            smoothing2_list = [5, 9, 14, 19, 23]
+            for period in period_list:
+                for smoothing1 in smoothing1_list:
+                    for smoothing2 in smoothing2_list:
                         strategies.append(StochasticCross(ohlcv, period, smoothing1, smoothing2))
         return strategies
 
