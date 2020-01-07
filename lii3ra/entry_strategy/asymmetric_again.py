@@ -47,7 +47,6 @@ class AsymmetricAgainFactory(EntryStrategyFactory):
 class AsymmetricAgain(EntryStrategy):
     """
     前日安値でエントリーを判定し、ATRを用いて逆指値注文する
-    ザラ場開始直後の戦略か
     """
     def __init__(self
                  , ohlcv
@@ -71,7 +70,7 @@ class AsymmetricAgain(EntryStrategy):
 
     def check_entry_long(self, idx, last_exit_idx):
         """
-        前日安値が当日始値よりも高い場合は逆指値でロングのエントリー
+        前日安値が当日始値よりも安い場合は逆指値でロングのエントリー
         """
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
@@ -88,7 +87,7 @@ class AsymmetricAgain(EntryStrategy):
 
     def check_entry_short(self, idx, last_exit_idx):
         """
-        前日安値が当日始値よりも安い場合は逆指値でショートのエントリー
+        前日安値が当日始値よりも高い場合は逆指値でショートのエントリー
         """
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER

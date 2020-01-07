@@ -11,6 +11,7 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
         "default": [3, 1.0, 3, 1.0]
         , "^N225": [10, 0.9, 3, 1.4]
+        , "6753.T": [8, 0.5, 7, 1.1]
     }
 
     rough_params = [
@@ -92,7 +93,7 @@ class BreakoutSigma1(EntryStrategy):
             return OrderType.NONE_ORDER
         long_flg = self.ohlcv.values['high'][idx] >= self.long_bb.upper_sigma1[idx]
         short_flg = self.ohlcv.values['low'][idx] <= self.long_bb.lower_sigma1[idx]
-        if long_flg == True and short_flg == False:
+        if long_flg and not short_flg:
             return OrderType.STOP_MARKET_LONG
         else:
             return OrderType.NONE_ORDER
@@ -103,7 +104,7 @@ class BreakoutSigma1(EntryStrategy):
             return OrderType.NONE_ORDER
         long_flg = self.ohlcv.values['high'][idx] >= self.short_bb.upper_sigma1[idx]
         short_flg = self.ohlcv.values['low'][idx] <= self.short_bb.lower_sigma1[idx]
-        if long_flg == False and short_flg == True:
+        if not long_flg and short_flg:
             return OrderType.STOP_MARKET_SHORT
         else:
             return OrderType.NONE_ORDER

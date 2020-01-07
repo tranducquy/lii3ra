@@ -9,6 +9,7 @@ class PercentileFactory(ExitStrategyFactory):
         # percentile_span_long, percentile_ratio_long, percentile_span_short, percentile_span_short, percentile_ratio_short, percentile_losscut_ratio
         "default": [5, 50, 5, 50, 0.05]
         , "^N225": [10, 30, 5, 50, 0.05]
+        , "7717.T": [5, 50, 20, 60, 0.05]
     }
 
     rough_params = [
