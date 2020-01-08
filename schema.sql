@@ -114,6 +114,7 @@ create table backtest_history
     total_value double precision,
     profit_value double precision,
     profit_rate double precision,
+    max_drawdown double precision,
     leverage double precision,
     fee double precision,
     spread_fee double precision,

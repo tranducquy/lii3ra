@@ -9,6 +9,7 @@ class TimedFactory(ExitStrategyFactory):
         "default": [1, 3, 3, 0.03]
         , "^N225": [1, 3, 3, 0.03]
         , "6753.T": [1, 3, 3, 0.10]
+        , "4043.T": [1, 3, 1, 0.03]
     }
 
     rough_params = [

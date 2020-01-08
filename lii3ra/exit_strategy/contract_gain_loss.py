@@ -10,10 +10,13 @@ class ContractGainLossFactory(ExitStrategyFactory):
     params = {
         # imethod, profit_ratio, loss_ratio, atr_span, specified_profit_ratio, specified_loss_ratio
         "default": [1, 0.06, 0.02, 14, 0.30, 0.10]
+        # , "3038.T": [1, 0.09, 0.03, 14, 0.30, 0.10]
+        , "3038.T": [2, 1.00, 0.10, 15, 0.06, 0.01]
     }
 
     rough_params = [
-        [1, 0.09, 0.03, 14, 0.30, 0.10]
+        [1, 0.06, 0.02, 14, 0.30, 0.10]
+        , [1, 0.09, 0.03, 14, 0.30, 0.10]
     ]
 
     def create_strategy(self, ohlcv):
