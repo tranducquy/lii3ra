@@ -361,9 +361,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
 
 if __name__ == '__main__':
     # symbol
-    # from lii3ra.symbol.bollingerband_newvalue import Symbol
-    # symbol_list = Symbol.symbols
-    symbol_list = ["1570.T"]
+    from lii3ra.symbol.bollingerband_newvalue import Symbol
+    symbol_list = Symbol.symbols
 
     # ashi
     ashi = "1d"
@@ -372,7 +371,7 @@ if __name__ == '__main__':
     # range
     # start_date = "2010-01-01"
     start_date = "2004-01-01"
-    end_date = "2019-12-31"
+    end_date = "2020-12-31"
 
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}

@@ -53,7 +53,7 @@ def get_option():
 
 
 def crawler(symbols, start_date, end_date):
-    s = mylogger.Logger()
+    s = lii3ra.mylogger.Logger()
     logger = s.myLogger('test')
     logger.info('crawler_yfinance.crawler() start.')
     YfinanceCrawler().download(symbols, start_date, end_date)
@@ -67,12 +67,17 @@ default_symbols = [
     , "1568.T"
     , "1570.T"
     , "1571.T"
+    , "3038.T"
+    , "3288.T"
+    , "4043.T"
     , "6141.T"
     , "6753.T"
+    , "7717.T"
     , "9104.T"
     , "9107.T"
     , "^N225"
 ]
+
 
 if __name__ == '__main__':
     args = get_option()
