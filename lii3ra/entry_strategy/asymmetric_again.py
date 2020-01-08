@@ -10,6 +10,9 @@ class AsymmetricAgainFactory(EntryStrategyFactory):
         # atr_span, atr_mult
         "default": [15, 0.5]
         , "^N225": [10, 0.5]
+        , "3288.T": [15, 0.5]
+        , "4043.T": [15, 0.5]
+        , "3038.T": [20, 0.3]
     }
 
     rough_params = [
@@ -100,6 +103,7 @@ class AsymmetricAgain(EntryStrategy):
         if np.isnan(value1) or np.isnan(value2) or value1 >= value2:
             return OrderType.NONE_ORDER
         else:
+            # return OrderType.NONE_ORDER
             return OrderType.STOP_MARKET_SHORT
 
     def create_order_entry_long_stop_market_for_all_cash(self, cash, idx, last_exit_idx):

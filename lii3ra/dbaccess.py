@@ -200,6 +200,7 @@ class DbAccess:
                         ,spread_fee
                         ,leverage
                         ,regist_time
+                        ,max_drawdown
                         )
                         values
                         ( 
@@ -261,6 +262,7 @@ class DbAccess:
                         ,%s
                         ,%s
                         ,current_timestamp
+                        ,%s
                         )
                     """,
                             history

@@ -6,7 +6,7 @@ from lii3ra.mylogger import Logger
 from lii3ra.dbaccess import DbAccess
 
 
-class BacktestDumper():
+class BacktestDumper:
     def __init__(self, logger=None):
         if logger is None:
             self.logger = Logger().myLogger()
@@ -50,6 +50,7 @@ class BacktestDumper():
             , fee
             , spread_fee
             , regist_time
+            , max_drawdown
     ):
         params = {
             'symbol': symbol
@@ -87,6 +88,7 @@ class BacktestDumper():
             , 'fee': fee
             , 'spread_fee': spread_fee
             , 'regist_time': regist_time
+            , 'max_drawdown': max_drawdown
         }
         dba = DbAccess()
         dba.delete_backtest_result(symbol, leg, entry_strategy_title, exit_strategy_title)
@@ -181,6 +183,7 @@ class BacktestDumper():
             , self.round(self._check_float(trade_performance['fee']))
             , self.round(self._check_float(trade_performance['spread_fee']))
             , self.round(asset.leverage)
+            , self.round(asset.max_drawdown)
         )
         return t
 
@@ -189,7 +192,7 @@ class BacktestDumper():
         dba.delete_backtest_history(symbol, ashi, entry_strategy, exit_strategy)
         dba.insert_backtest_history(backtest_history)
 
-    def save_result(self, entry_strategy_title, exit_strategy_title, summary, ohlcv):
+    def save_result(self, entry_strategy_title, exit_strategy_title, summary, ohlcv, asset):
         if ohlcv.values.index.size == 0:
             return "\n"
         if summary['WinCount'] == 0 and summary['LoseCount'] == 0:
@@ -291,8 +294,8 @@ class BacktestDumper():
             , self.round(summary['Fee'])
             , self.round(summary['SpreadFee'])
             , regist_time
+            , asset.max_drawdown
         )
-        self._update_maxdrawdown(symbol, ashi, entry_strategy_title, exit_strategy_title, start_date, end_date)
         msg = f"{symbol}"
         msg += f",{ashi}"
         market_start_date = market_start_time.strftime("%Y%m%d")
@@ -313,52 +316,10 @@ class BacktestDumper():
         msg += f",1トレードあたりの利益率short(%%):{short_profit_rate_per_trade:.4f}"
         msg += f",売買手数料:{summary['Fee']:.2f}"
         msg += f",スプレッドによる差損:{summary['SpreadFee']:.4f}"
-        msg += f",最大ドローダウン:{self.max_drawdown:.2f}"
+        msg += f",最大ドローダウン:{asset.max_drawdown:.2f}"
         msg += f",{entry_strategy_title}"
         msg += f",{exit_strategy_title}"
         return msg
-
-    def _update_maxdrawdown(self, symbol, leg, entry_strategy, exit_strategy, start_date, end_date):
-        # ドローダウン算出
-        self.max_drawdown = self._get_maxdrawdown(symbol, leg, entry_strategy, exit_strategy, start_date, end_date)
-        # DB更新
-        dba = DbAccess()
-        dba.update_maxdrawdown(symbol, leg, entry_strategy, exit_strategy, self.max_drawdown)
-
-    def _get_maxdrawdown(self
-                         , symbol
-                         , leg
-                         , entry_strategy
-                         , exit_strategy
-                         , start_date
-                         , end_date
-                         ):
-        dba = DbAccess()
-        rs = dba.get_backtest_history(symbol, leg, entry_strategy, exit_strategy, start_date, end_date)
-        maxv = 0
-        minv = 0
-        max_drawdown = 0
-        count = 0
-        if rs:
-            for r in rs:
-                v = r[1] + (r[2] * r[3])
-                if count == 0:
-                    maxv = v
-                    minv = v
-                elif maxv < v:
-                    maxv = v
-                    minv = v
-                elif minv > v:
-                    minv = v
-                    diff = maxv - minv
-                    drawdown = self.round(diff / maxv)
-                    if max_drawdown < drawdown:
-                        max_drawdown = drawdown
-                count += 1
-            # self.logger.info(
-            #    f"maxdrawdown:{symbol},{leg},{entry_strategy},{exit_strategy}"\
-            #    f",{start_date},{end_date},{c_time},{max_drawdown}")
-        return max_drawdown
 
     def round(self, v):
         return round(v, 4)

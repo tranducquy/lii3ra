@@ -16,6 +16,8 @@ class Asset:
         self.unit = Unit.get_unit(symbol)
         self.last_fee = 0
         self.last_spread_fee = 0
+        self.max_drawdown = 0
+        self.max_cash = initial_cash
 
     def get_losscut_ratio(self, symbol):
         return self.losscut_ratio
@@ -53,6 +55,7 @@ class Asset:
         self.last_fee = abs(fee) + abs(fee_per_unit * int(vol / self.unit))
         self.last_spread_fee = abs(spread_fee)
         self.cash = round(self.cash + (price * vol) - self.last_spread_fee - self.last_fee, 2)
+        self._calc_drawdown()
 
     def exit_short(self, price, vol):
         fee = abs(Fee.get_fee(self.symbol))
@@ -62,3 +65,13 @@ class Asset:
         self.last_fee = abs(fee) + abs(fee_per_unit * int(vol / self.unit))
         self.last_spread_fee = spread_fee
         self.cash = round(self.cash + (price * vol) - self.last_spread_fee - self.last_fee, 2)
+        self._calc_drawdown()
+
+    def _calc_drawdown(self):
+        if self.cash > self.max_cash:
+            self.max_cash = self.cash
+        else:
+            drawdown = abs(self.cash - self.max_cash) / self.max_cash
+            if self.max_drawdown < drawdown:
+                self.max_drawdown = drawdown
+
