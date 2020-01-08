@@ -8,7 +8,7 @@ import lii3ra.mylogger
 from lii3ra.crawler.dbaccess import DbAccess
 
 
-class YfinanceCrawler():
+class YfinanceCrawler:
     def __init__(self, logger=None):
         if logger is None:
             self.logger = lii3ra.mylogger.Logger().myLogger()
