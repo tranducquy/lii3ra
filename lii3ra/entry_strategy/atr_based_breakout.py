@@ -36,6 +36,7 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
         strategies = []
         if rough:
             for p in self.rough_params:
+                #
                 strategies.append(ATRBasedBreakout(ohlcv
                                                    , p[0]
                                                    , p[1]

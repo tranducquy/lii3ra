@@ -227,11 +227,11 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # 日足
         # any
         # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                     # NEWVALUE
-        exit_strategy = TimedFactory().create_strategy(ohlcv)                        # TIMED
-        # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)             # CONTRACT GAIN AND LOSS
+        # exit_strategy = TimedFactory().create_strategy(ohlcv)                        # TIMED
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                   # PERCENTILE
-        # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                # GETTING IS GOOD
+        exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                     # END OF BAR
+        # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)             # CONTRACT GAIN AND LOSS
         # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)            # DON'T GIVE IT ALL BACK
         # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)              # PROFIT PROTECTOR
         # exit_strategy = ExitWhereYouLikeFactory().create_strategy(ohlcv)             # EXIT WHERE YOU LIKE
