@@ -92,10 +92,10 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # any
 
         # entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))   # ATR BASED BREAKOUT
-        entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
+        # entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
         # entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))   # ASYMMETRIC TRIPLE
         # entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))  # BREAKOUT WITH A TWIST
-        # entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
+        entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
         # entry_strategies.append(BreakoutKCFactory().create_strategy(ohlcv))         # BREAKOUT KC
         # entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))         # RSI TRIGGER
         # entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))    # STOCHASTIC CROSS
@@ -130,11 +130,11 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # exit_strategies.append(TimedByTimeFactory().create_strategy(ohlcv))             # TIMED BY TIME
         # 日足
         # any
-        # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
+        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
         # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))         # PERCENTILE
         # exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
         # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
-        exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
+        # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
         # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
         # exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))   # CONTRACT GAIN AND LOSS
         # exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))    # PROFIT PROTECTOR
@@ -365,10 +365,10 @@ if __name__ == '__main__':
     # from lii3ra.symbol.yuusha_volume10b import Symbol
     # symbol_list = Symbol.symbols
     # symbol_list = ["7717.T"]
-    # symbol_list = ["6753.T"]
+    symbol_list = ["6753.T"]
     # symbol_list = ["3288.T"]
     # symbol_list = ["4043.T"]
-    symbol_list = ["3038.T"]
+    # symbol_list = ["3038.T"]
 
     # ashi
     ashi = "1d"
@@ -384,8 +384,8 @@ if __name__ == '__main__':
     rough = False
 
     for symbol in symbol_list:
-        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
         # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 
 
