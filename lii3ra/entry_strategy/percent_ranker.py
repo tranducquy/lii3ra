@@ -9,7 +9,7 @@ class PercentRankerFactory(EntryStrategyFactory):
     params = {
         # percentile_lookback_span, long_percentile_ratio, long_adx_span, long_adx_ratio1, long_adx_ratio2, short_percentile_ratio, short_adx_span, short_adx_ratio1, short_adx_ratio2
         "default": [25, 75, 14, 0.20, 0.30, 25, 14, 0.20, 0.30]
-        # , "^N225": [3, 1.0, 3, 1.0]
+        , "6141.T": [20, 60, 20, 0.20, 0.45, 30, 10, 0.20, 0.30]
     }
 
     rough_params = [

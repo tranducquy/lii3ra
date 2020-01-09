@@ -11,6 +11,8 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
         # atr_span, atr_mult, trima_span, lookback_span
         "default": [15, 0.5, 10, 10]
         , "^N225": [10, 0.3, 25, 10]
+        , "6753.T": [25, 0.3, 5, 15]
+        , "1570.T": [5, 0.3, 10, 5]
     }
 
     rough_params = [

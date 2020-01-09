@@ -203,7 +203,7 @@ class ContractGainLoss(ExitStrategy):
     def get_indicators(self, idx, entry_idx):
         ind1 = self.profit_target if hasattr(self, "profit_target") else None
         ind2 = self.loss_target if hasattr(self, "loss_target") else None
-        ind3 = None
+        ind3 = self.atr.atr[idx]
         ind4 = None
         ind5 = None
         ind6 = None
