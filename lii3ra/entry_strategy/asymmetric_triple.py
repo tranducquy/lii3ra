@@ -13,10 +13,16 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
         , "^N225": [10, 0.3, 25, 10]
         , "6753.T": [25, 0.3, 5, 15]
         , "1570.T": [5, 0.3, 10, 5]
+        , "7974.T": [20, 0.3, 20, 10]
     }
 
     rough_params = [
-        [15, 0.5, 10, 10]
+        [5, 0.3, 10, 5]
+        , [10, 0.3, 20, 10]
+        , [10, 0.3, 25, 10]
+        , [15, 0.5, 10, 10]
+        , [20, 0.3, 10, 10]
+        , [25, 0.3, 5, 15]
     ]
 
     def create_strategy(self, ohlcv):
@@ -43,9 +49,9 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
                                                    , p[2]
                                                    , p[3]))
         else:
-            atr_spans = [i for i in range(5, 26, 5)]
+            atr_spans = [i for i in range(5, 21, 5)]
             atr_mults = [i for i in np.arange(0.3, 1.6, 0.3)]
-            trima_spans = [i for i in range(5, 26, 5)]
+            trima_spans = [i for i in range(5, 21, 5)]
             lookback_spans = [i for i in range(5, 16, 5)]
             for atr_span in atr_spans:
                 for atr_mult in atr_mults:

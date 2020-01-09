@@ -13,6 +13,7 @@ class AsymmetricAgainFactory(EntryStrategyFactory):
         , "3288.T": [15, 0.5]
         , "4043.T": [15, 0.5]
         , "3038.T": [20, 0.3]
+        , "7974.T": [10, 0.5]
     }
 
     rough_params = [
@@ -151,7 +152,7 @@ class AsymmetricAgain(EntryStrategy):
     def get_indicators(self, idx, last_exit_idx):
         ind1 = self.ohlcv.values['close'][idx] + self.atr.atr[idx] * self.atr_mult
         ind2 = self.ohlcv.values['low'][idx] - self.atr.atr[idx] * self.atr_mult
-        ind3 = None
+        ind3 = self.atr.atr[idx]
         ind4 = None
         ind5 = None
         ind6 = None

@@ -85,9 +85,21 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "6753.T" == symbol:
                 entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
                 exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+            elif "3288.T" == symbol:
+                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
+                exit_strategy = TimedFactory().create_strategy(ohlcv)
             elif "4043.T" == symbol:
-                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
+                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
+                exit_strategy = TimedFactory().create_strategy(ohlcv)
+            elif "3038.T" == symbol:
+                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
+                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+            elif "7974.T" == symbol:
+                entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)
                 exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+            elif "1570.T" == symbol:
+                entry_strategy = RSITriggerFactory().create_strategy(ohlcv)
+                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
             asset = Asset(symbol
                           , asset_values["initial_cash"]
                           , asset_values["leverage"]
@@ -118,9 +130,10 @@ if __name__ == '__main__':
     symbol_list = [
                     "7717.T"
                     , "6753.T"
-                    , "4043.T"
-                    , "3028.T"
+                    , "3038.T"
                     , "3288.T"
+                    , "4043.T"
+                    , "7974.T"
                     , "1570.T"
     ]
 
