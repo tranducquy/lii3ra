@@ -93,7 +93,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_strategy = TimedFactory().create_strategy(ohlcv)
             elif "3038.T" == symbol:
                 entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
             elif "7974.T" == symbol:
                 entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)
                 exit_strategy = NewvalueFactory().create_strategy(ohlcv)
