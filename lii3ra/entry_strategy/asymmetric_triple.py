@@ -14,6 +14,7 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
         , "6753.T": [25, 0.3, 5, 15]
         , "1570.T": [5, 0.3, 10, 5]
         , "7974.T": [20, 0.3, 20, 10]
+        , "9107.T": [15, 0.3, 10, 15]
     }
 
     rough_params = [

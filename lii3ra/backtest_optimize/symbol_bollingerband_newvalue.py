@@ -90,7 +90,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(SplitWeekFactory().create_strategy(ohlcv))  # SPLIT WEEK
         # entry_strategies.append(DayOfWeekFactory().create_strategy(ohlcv))  # DAY OF WEEK
         # any
-        # entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))   # ATR BASED BREAKOUT
+        entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))   # ATR BASED BREAKOUT
         # entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
         # entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))   # ASYMMETRIC TRIPLE
         # entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))  # BREAKOUT WITH A TWIST
@@ -106,7 +106,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(ClosingPatternOnly2Factory().create_strategy(ohlcv))  # CLOSING PATTERN ONLY2
         # entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
         # entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
-        entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))  # PERCENT RANKER
+        # entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))  # PERCENT RANKER
         # entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))  # RSI TRIGGER
         # entry_strategies.append(MAWithTwistFactory().create_strategy(ohlcv))  # MA WITH A TWIST
         # entry_strategies.append(IntroducingSerialCorrelationFactory().create_strategy(ohlcv))  # INTRO SERIAL
@@ -187,15 +187,15 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(SplitWeekFactory().optimization(ohlcv, rough))       # SPLIT WEEK
         # entry_strategies.extend(DayOfWeekFactory().optimization(ohlcv, rough))   # DAY OF WEEK
         # any
-        entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))    # BREAKOUT WITH A TWIST
+        # entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))    # BREAKOUT WITH A TWIST
         entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
         entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
-        entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
-        entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
-        entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
-        entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
-        entry_strategies.extend(RSITriggerFactory().optimization(ohlcv, rough))           # RSI TRIGGER
+        # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
+        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
+        # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
+        # entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
+        # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
+        # entry_strategies.extend(RSITriggerFactory().optimization(ohlcv, rough))           # RSI TRIGGER
 
         # entry_strategies.extend(ThreeAmigosFactory().optimization(ohlcv, rough))          # THREE AMIGOS
         # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))             # GO WITH THE FLOW
@@ -226,10 +226,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                  # TIMED BY TIME
         # 日足
         # any
-        # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                     # NEWVALUE
+        exit_strategy = NewvalueFactory().create_strategy(ohlcv)                     # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                        # TIMED
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                   # PERCENTILE
-        exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                # GETTING IS GOOD
+        # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                     # END OF BAR
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)             # CONTRACT GAIN AND LOSS
         # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)            # DON'T GIVE IT ALL BACK
@@ -289,13 +289,13 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)            # BREAKOUT WITH A TWIST
         # entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)             # ATR BASED BREAKOUT
         # entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)                   # BREAKOUT KC
-        entry_strategy = PercentRankerFactory().create_strategy(ohlcv)                # PERCENT RANKER
+        # entry_strategy = PercentRankerFactory().create_strategy(ohlcv)                # PERCENT RANKER
         # entry_strategy = RSITriggerFactory().create_strategy(ohlcv)                   # RSI TRIGGER
         # entry_strategy = MAWithTwistFactory().create_strategy(ohlcv)                  # MA WITH A TWIST
         # entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv) # INTRO SERIAL
         # entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                  # BACK IN STYLE
         # entry_strategy = ExponentiallyBetterFactory().create_strategy(ohlcv)          # EXPONENTIALLY BETTER
-        # entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)             # ASYMMETRIC TRIPLE
+        entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)             # ASYMMETRIC TRIPLE
         # entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)              # ASYMMETRIC AGAIN
         # entry_strategy = StochasticCrossFactory().create_strategy(ohlcv)              # STOCHASTIC CROSS
         # entry_strategy = ShowMeTheMoneyFactory().create_strategy(ohlcv)               # SHOW ME THE MONEY
@@ -365,7 +365,8 @@ if __name__ == '__main__':
     # symbol_list = Symbol.symbols
     # symbol_list = ["6753.T"]
     # symbol_list = ["1570.T"]
-    symbol_list = ["6141.T"]
+    # symbol_list = ["6141.T"]
+    symbol_list = ["9107.T"]
 
     # ashi
     ashi = "1d"
@@ -381,7 +382,7 @@ if __name__ == '__main__':
     rough = False
 
     for symbol in symbol_list:
-        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
         # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 
