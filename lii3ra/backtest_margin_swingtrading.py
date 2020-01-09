@@ -100,6 +100,9 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "1570.T" == symbol:
                 entry_strategy = RSITriggerFactory().create_strategy(ohlcv)
                 exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+            elif "^N225" == symbol:
+                entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
+                exit_strategy = PercentileFactory().create_strategy(ohlcv)
             asset = Asset(symbol
                           , asset_values["initial_cash"]
                           , asset_values["leverage"]
