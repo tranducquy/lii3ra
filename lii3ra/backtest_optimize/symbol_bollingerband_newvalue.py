@@ -90,8 +90,8 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(SplitWeekFactory().create_strategy(ohlcv))  # SPLIT WEEK
         # entry_strategies.append(DayOfWeekFactory().create_strategy(ohlcv))  # DAY OF WEEK
         # any
-        entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))   # ATR BASED BREAKOUT
-        # entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
+        # entry_strategies.append(ATRBasedBreakoutFactory().create_strategy(ohlcv))   # ATR BASED BREAKOUT
+        entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
         # entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))   # ASYMMETRIC TRIPLE
         # entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))  # BREAKOUT WITH A TWIST
         # entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
@@ -295,8 +295,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = IntroducingSerialCorrelationFactory().create_strategy(ohlcv) # INTRO SERIAL
         # entry_strategy = BackInStyleFactory().create_strategy(ohlcv)                  # BACK IN STYLE
         # entry_strategy = ExponentiallyBetterFactory().create_strategy(ohlcv)          # EXPONENTIALLY BETTER
-        entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)             # ASYMMETRIC TRIPLE
-        # entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)              # ASYMMETRIC AGAIN
+        # entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)             # ASYMMETRIC TRIPLE
+        entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)              # ASYMMETRIC AGAIN
         # entry_strategy = StochasticCrossFactory().create_strategy(ohlcv)              # STOCHASTIC CROSS
         # entry_strategy = ShowMeTheMoneyFactory().create_strategy(ohlcv)               # SHOW ME THE MONEY
         # entry_strategy = ClassicBollingerbandsFactory().create_strategy(ohlcv)        # CLASSIC BOLLINGERBANDS
@@ -366,7 +366,8 @@ if __name__ == '__main__':
     # symbol_list = ["6753.T"]
     # symbol_list = ["1570.T"]
     # symbol_list = ["6141.T"]
-    symbol_list = ["9107.T"]
+    # symbol_list = ["9107.T"]
+    symbol_list = ["9104.T"]
 
     # ashi
     ashi = "1d"
@@ -382,7 +383,7 @@ if __name__ == '__main__':
     rough = False
 
     for symbol in symbol_list:
-        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
         # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 

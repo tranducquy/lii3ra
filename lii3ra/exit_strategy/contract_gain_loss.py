@@ -12,6 +12,7 @@ class ContractGainLossFactory(ExitStrategyFactory):
         "default": [1, 0.06, 0.02, 14, 0.30, 0.10]
         # , "3038.T": [1, 0.09, 0.03, 14, 0.30, 0.10]
         , "3038.T": [2, 1.00, 0.10, 15, 0.06, 0.01]
+        , "6920.T": [1, 0.09, 0.06, 14, 0.09, 0.03]
     }
 
     rough_params = [
@@ -54,10 +55,11 @@ class ContractGainLossFactory(ExitStrategyFactory):
             imethod = 1
             for profit_ratio in profit_ratio_list:
                 for loss_ratio in loss_ratio_list:
-                    strategies.append(ContractGainLoss(ohlcv
-                                                       , imethod
-                                                       , profit_ratio
-                                                       , loss_ratio))
+                    if profit_ratio > loss_ratio:
+                        strategies.append(ContractGainLoss(ohlcv
+                                                           , imethod
+                                                           , profit_ratio
+                                                           , loss_ratio))
             imethod_list = [2, 3, 4]
             profit_ratio_list = [0.25, 0.50, 1.00]
             loss_ratio_list = [0.10, 0.30, 0.60]
@@ -70,13 +72,15 @@ class ContractGainLossFactory(ExitStrategyFactory):
                         for atr_span in atr_span_list:
                             for specified_profit_ratio in specified_profit_ratio_list:
                                 for specified_loss_ratio in specified_loss_ratio_list:
-                                    strategies.append(ContractGainLoss(ohlcv
-                                                                       , imethod
-                                                                       , profit_ratio
-                                                                       , loss_ratio
-                                                                       , atr_span
-                                                                       , specified_profit_ratio
-                                                                       , specified_loss_ratio))
+                                    if profit_ratio > loss_ratio:
+                                        if specified_profit_ratio > specified_loss_ratio:
+                                            strategies.append(ContractGainLoss(ohlcv
+                                                                               , imethod
+                                                                               , profit_ratio
+                                                                               , loss_ratio
+                                                                               , atr_span
+                                                                               , specified_profit_ratio
+                                                                               , specified_loss_ratio))
         return strategies
 
 

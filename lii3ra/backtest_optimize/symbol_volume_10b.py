@@ -98,16 +98,16 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
         entry_strategies.append(BreakoutKCFactory().create_strategy(ohlcv))         # BREAKOUT KC
         entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))         # RSI TRIGGER
-        entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))    # STOCHASTIC CROSS
+        # entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))    # STOCHASTIC CROSS
         entry_strategies.append(ThreeAmigosFactory().create_strategy(ohlcv))        # THREE AMIGOS
         entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))          # TWO AMIGOS
-        entry_strategies.append(TheUltimateFactory().create_strategy(ohlcv))        # THE ULTIMATE
+        # entry_strategies.append(TheUltimateFactory().create_strategy(ohlcv))        # THE ULTIMATE
         entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))      # PERCENT RANKER
-        entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))  # START AWESOME
-        entry_strategies.append(QuickPullbackPatternFactory().create_strategy(ohlcv))        # QUICK PULLBACK PATTERN
-        entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))     # SHOW ME THE MONEY
-        entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
-        entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))  # EXPONENTIALLY BETTER
+        # entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))  # START AWESOME
+        # entry_strategies.append(QuickPullbackPatternFactory().create_strategy(ohlcv))        # QUICK PULLBACK PATTERN
+        # entry_strategies.append(ShowMeTheMoneyFactory().create_strategy(ohlcv))     # SHOW ME THE MONEY
+        # entry_strategies.append(EntryCommodityChannelIndexFactory().create_strategy(ohlcv))  # ENTRY CCI
+        # entry_strategies.append(ExponentiallyBetterFactory().create_strategy(ohlcv))  # EXPONENTIALLY BETTER
         entry_strategies.append(GoWithTheFlowFactory().create_strategy(ohlcv))  # GO WITH THE FLOW
 
         # entry_strategies.append(NewHighWithConsecutiveHighsFactory().create_strategy(ohlcv))  # NEW HIGH
@@ -135,11 +135,11 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
         exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
         exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
-        exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
+        # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
         exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))   # CONTRACT GAIN AND LOSS
-        exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))    # PROFIT PROTECTOR
-        exit_strategies.append(ExitWhereYouLikeFactory().create_strategy(ohlcv))   # EXIT WHERE YOU LIKE
-        exit_strategies.append(TieredFactory().create_strategy(ohlcv))             # TIERED
+        # exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))    # PROFIT PROTECTOR
+        # exit_strategies.append(ExitWhereYouLikeFactory().create_strategy(ohlcv))   # EXIT WHERE YOU LIKE
+        # exit_strategies.append(TieredFactory().create_strategy(ohlcv))             # TIERED
         thread_pool = list()
         for entry_strategy in entry_strategies:
             for exit_strategy in exit_strategies:
@@ -371,7 +371,8 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2010-01-01"
-    start_date = "2004-01-01"
+    # start_date = "2004-01-01"
+    start_date = "2019-01-01"
     end_date = "2019-12-31"
 
     # その他

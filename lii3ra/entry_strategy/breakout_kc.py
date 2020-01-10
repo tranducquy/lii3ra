@@ -14,6 +14,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "7717.T": [18, 1.2, 8, 0.6]
         , "4043.T": [15, 0.5, 15, 0.5]
         # , "4043.T": [18, 0.3, 23, 0.6]
+        , "6920.T": [13, 0.6, 3, 1.5]
     }
 
     rough_params = [

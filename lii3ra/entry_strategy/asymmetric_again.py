@@ -14,6 +14,8 @@ class AsymmetricAgainFactory(EntryStrategyFactory):
         , "4043.T": [15, 0.5]
         , "3038.T": [20, 0.3]
         , "7974.T": [10, 0.5]
+        # , "9104.T": [20, 0.3]
+        , "9104.T": [10, 0.3]
     }
 
     rough_params = [
