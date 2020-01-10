@@ -194,10 +194,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
         # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
-        # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
+        entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
         # entry_strategies.extend(ThreeAmigosFactory().optimization(ohlcv, rough))          # THREE AMIGOS
         # entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
-        entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
+        # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
         # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))             # GO WITH THE FLOW
         # entry_strategies.extend(BooksCanBeGreatFactory().optimization(ohlcv, rough))       # BOOKS CAN BE GREAT
         # entry_strategies.extend(RSITriggerFactory().optimization(ohlcv, rough))       # RSI TRIGGER
@@ -370,7 +370,8 @@ if __name__ == '__main__':
     # symbol_list = ["4043.T"]
     # symbol_list = ["3038.T"]
     # symbol_list = ["7974.T"]
-    symbol_list = ["6920.T"]
+    # symbol_list = ["6920.T"]
+    symbol_list = ["9424.T"]
 
     # ashi
     ashi = "1d"
@@ -387,7 +388,7 @@ if __name__ == '__main__':
 
     for symbol in symbol_list:
         # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-        # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 
 
