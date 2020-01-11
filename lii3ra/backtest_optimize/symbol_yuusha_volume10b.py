@@ -95,12 +95,12 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(AsymmetricAgainFactory().create_strategy(ohlcv))    # ASYMMETRIC AGAIN
         # entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))   # ASYMMETRIC TRIPLE
         # entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))  # BREAKOUT WITH A TWIST
-        # entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
+        entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
         # entry_strategies.append(BreakoutKCFactory().create_strategy(ohlcv))         # BREAKOUT KC
         # entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))         # RSI TRIGGER
         # entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))    # STOCHASTIC CROSS
         # entry_strategies.append(ThreeAmigosFactory().create_strategy(ohlcv))        # THREE AMIGOS
-        entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))          # TWO AMIGOS
+        # entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))          # TWO AMIGOS
         # entry_strategies.append(TheUltimateFactory().create_strategy(ohlcv))        # THE ULTIMATE
         # entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))      # PERCENT RANKER
         # entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))  # START AWESOME
@@ -132,9 +132,9 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # any
         # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
         # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))         # PERCENTILE
-        exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
+        # exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
         # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
-        # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
+        exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
         # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
         # exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))   # CONTRACT GAIN AND LOSS
         # exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))    # PROFIT PROTECTOR
@@ -193,10 +193,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
         # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
         # entry_strategies.extend(ThreeAmigosFactory().optimization(ohlcv, rough))          # THREE AMIGOS
-        entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
+        # entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
         # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
         # entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))          # THE ULTIMATE
         # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))        # GO WITH THE FLOW
@@ -228,10 +228,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # 日足
         # any
         # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                         # NEWVALUE
-        exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
+        # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                 # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                       # PERCENTILE
-        # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                    # GETTING IS GOOD
+        exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                    # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                         # END OF BAR
         # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)                # DON'T GIVE IT ALL BACK
         # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                  # PROFIT PROTECTOR
@@ -284,7 +284,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = EveryoneLovesFridayFactory().create_strategy(ohlcv)          # EVERYONE LOVES FRIDAY
         # entry_strategy = SplitWeekFactory().create_strategy(ohlcv)                    # SPLIT WEEK
         # any
-        # entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)               # BREAKOUT SIGMA1
+        entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)               # BREAKOUT SIGMA1
         # entry_strategy = GoWithTheFlowFactory().create_strategy(ohlcv)                # GO WITH THE FLOW
         # entry_strategy = BooksCanBeGreatFactory().create_strategy(ohlcv)              # BOOKS CAN BE GREAT
         # entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)            # BREAKOUT WITH A TWIST
@@ -304,7 +304,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = ClassicBollingerbandsFactory().create_strategy(ohlcv)        # CLASSIC BOLLINGERBANDS
         # entry_strategy = ClassicKeltnerChannelFactory().create_strategy(ohlcv)        # CLASSIC KC
         # entry_strategy = ThreeAmigosFactory().create_strategy(ohlcv)                  # THREE AMIGOS
-        entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)                    # TWO AMIGOS
+        # entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)                    # TWO AMIGOS
         # entry_strategy = PitterPatterPatternFactory().create_strategy(ohlcv)          # PITTER PATTER PATTERN
         # entry_strategy = PitterPatterPattern2Factory().create_strategy(ohlcv)         # PITTER PATTER PATTERN2
         # entry_strategy = ClosingPatternOnlyFactory().create_strategy(ohlcv)           # CLOSING PATTERN ONLY
@@ -323,10 +323,10 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # 日足
         # any
         # exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))          # NEWVALUE
-        exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED
+        # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED
         # exit_strategies.extend(ContractGainLossFactory().optimization(ohlcv, rough))  # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().optimization(ohlcv, rough))        # PERCENTILE
-        # exit_strategies.extend(GettingIsGoodFactory().optimization(ohlcv, rough))     # GETTING IS GOOD
+        exit_strategies.extend(GettingIsGoodFactory().optimization(ohlcv, rough))     # GETTING IS GOOD
         # exit_strategies.extend(EndOfBarFactory().optimization(ohlcv, rough))          # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().optimization(ohlcv, rough)) # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().optimization(ohlcv, rough))   # PROFIT PROTECTOR
@@ -380,8 +380,8 @@ if __name__ == '__main__':
     # symbol_list = ["2427.T"]
     # symbol_list = ["9983.T"]
     # symbol_list = ["8876.T"]
-    symbol_list = ["6047.T"]
-    # symbol_list = ["1568.T"]
+    # symbol_list = ["6047.T"]
+    symbol_list = ["1568.T"]
     # symbol_list = ["6619.T"]
     # symbol_list = ["6762.T"]
     # symbol_list = ["4911.T"]

@@ -15,6 +15,7 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         # , "6753.T": [4, 0.8, 8, 1.4]
         , "6141.T": [4, 1.0, 5, 1.7]
         , "5706.T": [23, 0.5, 21, 0.2]
+        , "1568.T": [3, 1.0, 3, 1.0]
     }
 
     rough_params = [
@@ -53,14 +54,16 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         else:
             long_spans = [i for i in range(3, 25, 5)]
             long_ratios = [i for i in np.arange(0.2, 2.5, 0.3)]
-            short_spans = [i for i in range(3, 25, 2)]
+            short_spans = [i for i in range(3, 25, 5)]
             short_ratios = [i for i in np.arange(0.2, 2.5, 0.3)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
-                    strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0))
-            for short_span in short_spans:
-                for short_ratio in short_ratios:
-                    strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
+                    for short_span in short_spans:
+                        for short_ratio in short_ratios:
+                            strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, short_span, short_ratio))
+            # for short_span in short_spans:
+            #    for short_ratio in short_ratios:
+            #        strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
         return strategies
 
 
