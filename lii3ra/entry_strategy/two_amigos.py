@@ -9,6 +9,8 @@ class TwoAmigosFactory(EntryStrategyFactory):
     params = {
         # adx_span, adx_threshold, lookback
         "default": [14, 0.20, 20]
+        , "9616.T": [5, 0.10, 25]
+        , "6047.T": [14, 0.20, 20]
     }
 
     rough_params = [
@@ -37,12 +39,12 @@ class TwoAmigosFactory(EntryStrategyFactory):
                                             , p[1]
                                             , p[2]))
         else:
-            adx_span_ary = [i for i in range(5, 26, 5)]
-            adx_threshold_ary = [i for i in np.arange(0.10, 0.9, 0.1)]
-            lookback_ary = [i for i in range(5, 26, 5)]
-            for adx_span in adx_span_ary:
-                for adx_threshold in adx_threshold_ary:
-                    for lookback in lookback_ary:
+            adx_span_list = [i for i in range(5, 26, 5)]
+            adx_threshold_list = [i for i in np.arange(0.10, 0.9, 0.1)]
+            lookback_list = [i for i in range(5, 26, 5)]
+            for adx_span in adx_span_list:
+                for adx_threshold in adx_threshold_list:
+                    for lookback in lookback_list:
                         strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback))
         return strategies
 
@@ -51,6 +53,7 @@ class TwoAmigos(EntryStrategy):
     """
     ADX、短期および長期のモメンタムを使用してエントリーする。
     最適化しすぎないほうが良いらしい。
+     - 注文方法:寄成
     """
     def __init__(self
                  , ohlcv
@@ -58,7 +61,7 @@ class TwoAmigos(EntryStrategy):
                  , adx_threshold
                  , lookback
                  , order_vol_ratio=0.01):
-        self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.0f},{lookback:.0f}]"
+        self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.2f},{lookback:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.adx = AverageDirectionalIndex(ohlcv, adx_span)

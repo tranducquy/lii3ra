@@ -15,6 +15,10 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "4043.T": [15, 0.5, 15, 0.5]
         # , "4043.T": [18, 0.3, 23, 0.6]
         , "6920.T": [13, 0.6, 3, 1.5]
+        , "6753.T": [8, 0.6, 8, 0.3]
+        # , "5706.T": [3, 0.3, 3, 0.3]
+        , "5706.T": [15, 0.5, 15, 0.5]
+        , "9616.T": [3, 0.3, 23, 0.3]
     }
 
     rough_params = [
@@ -59,10 +63,9 @@ class BreakoutKCFactory(EntryStrategyFactory):
             short_ratios = [i for i in np.arange(0.3, 1.6, 0.3)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
-                    strategies.append(BreakoutKC(ohlcv, long_span, long_ratio, 3, 100))
-            for short_span in short_spans:
-                for short_ratio in short_ratios:
-                    strategies.append(BreakoutKC(ohlcv, 3, 100, short_span, short_ratio))
+                    for short_span in short_spans:
+                        for short_ratio in short_ratios:
+                            strategies.append(BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio))
         return strategies
 
 

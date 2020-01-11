@@ -13,6 +13,8 @@ class ContractGainLossFactory(ExitStrategyFactory):
         # , "3038.T": [1, 0.09, 0.03, 14, 0.30, 0.10]
         , "3038.T": [2, 1.00, 0.10, 15, 0.06, 0.01]
         , "6920.T": [1, 0.09, 0.06, 14, 0.09, 0.03]
+        , "9424.T": [4, 1.00, 0.30, 5, 0.06, 0.03]
+        , "2412.T": [1, 0.06, 0.02, 14, 0.30, 0.10]
     }
 
     rough_params = [
@@ -86,7 +88,8 @@ class ContractGainLossFactory(ExitStrategyFactory):
 
 class ContractGainLoss(ExitStrategy):
     """
-    終値が指定した利益率を超えている場合、成行でクローズする
+    終値が指定した利益率を超えている場合、Exit
+     - 注文方法:寄成
     """
 
     def __init__(self

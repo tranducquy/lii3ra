@@ -10,6 +10,8 @@ class PercentRankerFactory(EntryStrategyFactory):
         # percentile_lookback_span, long_percentile_ratio, long_adx_span, long_adx_ratio1, long_adx_ratio2, short_percentile_ratio, short_adx_span, short_adx_ratio1, short_adx_ratio2
         "default": [25, 75, 14, 0.20, 0.30, 25, 14, 0.20, 0.30]
         , "6141.T": [20, 60, 20, 0.20, 0.45, 30, 10, 0.20, 0.30]
+        , "9424.T": [25, 75, 14, 0.20, 0.30, 25, 14, 0.20, 0.30]
+        # , "9424.T": [10, 50, 5, 0.20, 0.30, 0, 1, 0.00, 0.00]
     }
 
     rough_params = [
@@ -66,9 +68,9 @@ class PercentRankerFactory(EntryStrategyFactory):
                                                 , p[8]
                                                 ))
         else:
-            lookback_span_list = [5, 10, 15, 20]
-            percentile_ratio_list = [30, 40, 50, 60, 70]
-            adx_span_list = [5, 10, 15, 20]
+            lookback_span_list = [5, 10, 15, 20, 25]
+            percentile_ratio_list = [25, 35, 45, 55, 65, 75]
+            adx_span_list = [10, 15, 20, 25]
             adx_ratio1_list = [0.20]
             adx_ratio2_list = [0.30, 0.45]
             for lookback in lookback_span_list:

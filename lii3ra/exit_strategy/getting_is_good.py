@@ -9,6 +9,8 @@ class GettingIsGoodFactory(ExitStrategyFactory):
         "default": [3, 3, 0.05]
         , "^N225": [2, 1, 0.05]
         , "1570.T": [3, 3, 0.05]
+        , "4523.T": [1, 1, 0.03]
+        , "8876.T": [2, 4, 0.05]
     }
 
     rough_params = [
@@ -61,6 +63,7 @@ class GettingIsGoodFactory(ExitStrategyFactory):
 class GettingIsGood(ExitStrategy):
     """
     ポジションオープンから指定の回数連続して高値または安値を更新した場合、次のバーでExitする。
+     - 注文方法:寄成
     """
 
     def __init__(self

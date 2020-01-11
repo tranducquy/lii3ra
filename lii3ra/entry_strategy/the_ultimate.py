@@ -9,6 +9,7 @@ class TheUltimateFactory(EntryStrategyFactory):
     params = {
         # lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3
         "default": [10, 7, 14, 28]
+        , "3088.T": [10, 7, 14, 28]
     }
 
     rough_params = [
@@ -56,6 +57,7 @@ class TheUltimateFactory(EntryStrategyFactory):
 class TheUltimate(EntryStrategy):
     """
     THE ULTIMATE
+     - 注文方法:寄成
     """
     def __init__(self
                  , ohlcv

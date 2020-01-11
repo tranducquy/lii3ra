@@ -10,6 +10,7 @@ class PercentileFactory(ExitStrategyFactory):
         "default": [5, 50, 5, 50, 0.05]
         , "^N225": [10, 30, 5, 50, 0.05]
         , "7717.T": [5, 50, 20, 60, 0.05]
+        , "9983.T": [5, 50, 5, 30, 0.05]
     }
 
     rough_params = [

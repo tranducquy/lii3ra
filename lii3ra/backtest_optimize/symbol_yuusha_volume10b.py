@@ -96,11 +96,11 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(AsymmetricTripleFactory().create_strategy(ohlcv))   # ASYMMETRIC TRIPLE
         # entry_strategies.append(BreakoutWithTwistFactory().create_strategy(ohlcv))  # BREAKOUT WITH A TWIST
         # entry_strategies.append(BreakoutSigma1Factory().create_strategy(ohlcv))     # BREAKOUT SIGMA1
-        entry_strategies.append(BreakoutKCFactory().create_strategy(ohlcv))         # BREAKOUT KC
+        # entry_strategies.append(BreakoutKCFactory().create_strategy(ohlcv))         # BREAKOUT KC
         # entry_strategies.append(RSITriggerFactory().create_strategy(ohlcv))         # RSI TRIGGER
         # entry_strategies.append(StochasticCrossFactory().create_strategy(ohlcv))    # STOCHASTIC CROSS
         # entry_strategies.append(ThreeAmigosFactory().create_strategy(ohlcv))        # THREE AMIGOS
-        # entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))          # TWO AMIGOS
+        entry_strategies.append(TwoAmigosFactory().create_strategy(ohlcv))          # TWO AMIGOS
         # entry_strategies.append(TheUltimateFactory().create_strategy(ohlcv))        # THE ULTIMATE
         # entry_strategies.append(PercentRankerFactory().create_strategy(ohlcv))      # PERCENT RANKER
         # entry_strategies.append(StartWithAwesomeOscillatorFactory().create_strategy(ohlcv))  # START AWESOME
@@ -130,9 +130,9 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # exit_strategies.append(TimedByTimeFactory().create_strategy(ohlcv))             # TIMED BY TIME
         # 日足
         # any
-        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
+        # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
         # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))         # PERCENTILE
-        # exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
+        exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
         # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
         # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
         # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
@@ -194,42 +194,42 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
         # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
-        entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
+        # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
         # entry_strategies.extend(ThreeAmigosFactory().optimization(ohlcv, rough))          # THREE AMIGOS
-        # entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
+        entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
         # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
-        # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))             # GO WITH THE FLOW
-        # entry_strategies.extend(BooksCanBeGreatFactory().optimization(ohlcv, rough))       # BOOKS CAN BE GREAT
-        # entry_strategies.extend(RSITriggerFactory().optimization(ohlcv, rough))       # RSI TRIGGER
-        # entry_strategies.extend(MAWithTwistFactory().optimization(ohlcv, rough))       # MA WITH A TWIST
-        # entry_strategies.extend(IntroducingSerialCorrelationFactory().optimization(ohlcv, rough))       # INTRO SERIAL
-        # entry_strategies.extend(BackInStyleFactory().optimization(ohlcv, rough))       # BACK IN STYLE
-        # entry_strategies.extend(ExponentiallyBetterFactory().optimization(ohlcv, rough))      # EXPONENTIALLY BETTER
+        # entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))          # THE ULTIMATE
+        # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))        # GO WITH THE FLOW
+        # entry_strategies.extend(BooksCanBeGreatFactory().optimization(ohlcv, rough))      # BOOKS CAN BE GREAT
+        # entry_strategies.extend(RSITriggerFactory().optimization(ohlcv, rough))           # RSI TRIGGER
+        # entry_strategies.extend(MAWithTwistFactory().optimization(ohlcv, rough))          # MA WITH A TWIST
+        # entry_strategies.extend(IntroducingSerialCorrelationFactory().optimization(ohlcv, rough)) # INTRO SERIAL
+        # entry_strategies.extend(BackInStyleFactory().optimization(ohlcv, rough))          # BACK IN STYLE
+        # entry_strategies.extend(ExponentiallyBetterFactory().optimization(ohlcv, rough))  # EXPONENTIALLY BETTER
         # entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
-        # entry_strategies.extend(ShowMeTheMoneyFactory().optimization(ohlcv, rough))      # SHOW ME THE MONEY
-        # entry_strategies.extend(ClassicBollingerbandsFactory().optimization(ohlcv, rough))      # CLASSIC BOLLINGERBANDS
-        # entry_strategies.extend(ClassicKeltnerChannelFactory().optimization(ohlcv, rough))      # CLASSIC KC
-        # entry_strategies.extend(PitterPatterPatternFactory().optimization(ohlcv, rough))        # PITTER PATTER PATTERN
-        # entry_strategies.extend(PitterPatterPattern2Factory().optimization(ohlcv, rough))       # PITTER PATTER PATTERN2
-        # entry_strategies.extend(ClosingPatternOnlyFactory().optimization(ohlcv, rough))       # CLOSING PATTERN ONLY
-        # entry_strategies.extend(ClosingPatternOnly2Factory().optimization(ohlcv, rough))       # CLOSING PATTERN ONLY2
-        # entry_strategies.extend(QuickPullbackPatternFactory().optimization(ohlcv, rough))       # QUICK PULLBACK PATTERN
-        # entry_strategies.extend(BreakdownDeadAheadFactory().optimization(ohlcv, rough))       # BREAKDOWN DEAD A HEAD
-        # entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
-        # entry_strategies.extend(BigTailBarsFactory().optimization(ohlcv, rough))               # BIG TAIL BARS
-        # entry_strategies.extend(NewHighWithConsecutiveHighsFactory().optimization(ohlcv, rough))   # NEW HIGH
-        # entry_strategies.extend(StartWithAwesomeOscillatorFactory().optimization(ohlcv, rough))   # START AWESOME
+        # entry_strategies.extend(ShowMeTheMoneyFactory().optimization(ohlcv, rough))       # SHOW ME THE MONEY
+        # entry_strategies.extend(ClassicBollingerbandsFactory().optimization(ohlcv, rough))  # CLASSIC BOLLINGERBANDS
+        # entry_strategies.extend(ClassicKeltnerChannelFactory().optimization(ohlcv, rough))  # CLASSIC KC
+        # entry_strategies.extend(PitterPatterPatternFactory().optimization(ohlcv, rough))    # PITTER PATTER PATTERN
+        # entry_strategies.extend(PitterPatterPattern2Factory().optimization(ohlcv, rough))   # PITTER PATTER PATTERN2
+        # entry_strategies.extend(ClosingPatternOnlyFactory().optimization(ohlcv, rough))     # CLOSING PATTERN ONLY
+        # entry_strategies.extend(ClosingPatternOnly2Factory().optimization(ohlcv, rough))    # CLOSING PATTERN ONLY2
+        # entry_strategies.extend(QuickPullbackPatternFactory().optimization(ohlcv, rough))   # QUICK PULLBACK PATTERN
+        # entry_strategies.extend(BreakdownDeadAheadFactory().optimization(ohlcv, rough))     # BREAKDOWN DEAD A HEAD
+        # entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))  # ENTRY CCI
+        # entry_strategies.extend(BigTailBarsFactory().optimization(ohlcv, rough))                 # BIG TAIL BARS
+        # entry_strategies.extend(NewHighWithConsecutiveHighsFactory().optimization(ohlcv, rough)) # NEW HIGH
+        # entry_strategies.extend(StartWithAwesomeOscillatorFactory().optimization(ohlcv, rough))  # START AWESOME
         # entry_strategies.extend(SecondVerseSameAsTheFirstFactory().optimization(ohlcv, rough))   # SECOND VERSE
-        # entry_strategies.extend(FilteredEntryFactory().optimization(ohlcv, rough))   # FILTERED ENTRY
-        # entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))   # THE ULTIMATE
+        # entry_strategies.extend(FilteredEntryFactory().optimization(ohlcv, rough))        # FILTERED ENTRY
         # EXIT
         # 分足
-        # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                            # TIMED BY TIME
+        # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                       # TIMED BY TIME
         # 日足
         # any
         # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                         # NEWVALUE
-        # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
-        exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                 # CONTRACT GAIN AND LOSS
+        exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
+        # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                 # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                       # PERCENTILE
         # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                    # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                         # END OF BAR
@@ -289,7 +289,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = BooksCanBeGreatFactory().create_strategy(ohlcv)              # BOOKS CAN BE GREAT
         # entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)            # BREAKOUT WITH A TWIST
         # entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)             # ATR BASED BREAKOUT
-        entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)                   # BREAKOUT KC
+        # entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)                   # BREAKOUT KC
         # entry_strategy = PercentRankerFactory().create_strategy(ohlcv)                # PERCENT RANKER
         # entry_strategy = RSITriggerFactory().create_strategy(ohlcv)                   # RSI TRIGGER
         # entry_strategy = MAWithTwistFactory().create_strategy(ohlcv)                  # MA WITH A TWIST
@@ -298,12 +298,13 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = ExponentiallyBetterFactory().create_strategy(ohlcv)          # EXPONENTIALLY BETTER
         # entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)             # ASYMMETRIC TRIPLE
         # entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)              # ASYMMETRIC AGAIN
+        # entry_strategy = TheUltimateFactory().create_strategy(ohlcv)                  # THE ULTIMATE
         # entry_strategy = StochasticCrossFactory().create_strategy(ohlcv)              # STOCHASTIC CROSS
         # entry_strategy = ShowMeTheMoneyFactory().create_strategy(ohlcv)               # SHOW ME THE MONEY
         # entry_strategy = ClassicBollingerbandsFactory().create_strategy(ohlcv)        # CLASSIC BOLLINGERBANDS
         # entry_strategy = ClassicKeltnerChannelFactory().create_strategy(ohlcv)        # CLASSIC KC
         # entry_strategy = ThreeAmigosFactory().create_strategy(ohlcv)                  # THREE AMIGOS
-        # entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)                    # TWO AMIGOS
+        entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)                    # TWO AMIGOS
         # entry_strategy = PitterPatterPatternFactory().create_strategy(ohlcv)          # PITTER PATTER PATTERN
         # entry_strategy = PitterPatterPattern2Factory().create_strategy(ohlcv)         # PITTER PATTER PATTERN2
         # entry_strategy = ClosingPatternOnlyFactory().create_strategy(ohlcv)           # CLOSING PATTERN ONLY
@@ -316,15 +317,14 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = StartWithAwesomeOscillatorFactory().create_strategy(ohlcv)   # START AWESOME
         # entry_strategy = SecondVerseSameAsTheFirstFactory().create_strategy(ohlcv)    # SECOND VERSE
         # entry_strategy = FilteredEntryFactory().create_strategy(ohlcv)                # FILTERED ENTRY
-        # entry_strategy = TheUltimateFactory().create_strategy(ohlcv)                  # THE ULTIMATE
         # EXIT
         # 分足
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED BY TIME
         # 日足
         # any
         # exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))          # NEWVALUE
-        # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED
-        exit_strategies.extend(ContractGainLossFactory().optimization(ohlcv, rough))  # CONTRACT GAIN AND LOSS
+        exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED
+        # exit_strategies.extend(ContractGainLossFactory().optimization(ohlcv, rough))  # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().optimization(ohlcv, rough))        # PERCENTILE
         # exit_strategies.extend(GettingIsGoodFactory().optimization(ohlcv, rough))     # GETTING IS GOOD
         # exit_strategies.extend(EndOfBarFactory().optimization(ohlcv, rough))          # END OF BAR
@@ -371,7 +371,32 @@ if __name__ == '__main__':
     # symbol_list = ["3038.T"]
     # symbol_list = ["7974.T"]
     # symbol_list = ["6920.T"]
-    symbol_list = ["9424.T"]
+    # symbol_list = ["9424.T"]
+    # symbol_list = ["5706.T"]
+    # symbol_list = ["9616.T"]
+    # symbol_list = ["4523.T"]
+    # symbol_list = ["3088.T"]  # ドローダウンおおきい
+    # symbol_list = ["2412.T"]
+    # symbol_list = ["2427.T"]
+    # symbol_list = ["9983.T"]
+    # symbol_list = ["8876.T"]
+    symbol_list = ["6047.T"]
+    # symbol_list = ["1568.T"]
+    # symbol_list = ["6619.T"]
+    # symbol_list = ["6762.T"]
+    # symbol_list = ["4911.T"]
+    # symbol_list = ["8267.T"]
+    # symbol_list = ["4967.T"]
+    # symbol_list = ["6141.T"]
+    # symbol_list = ["8306.T"]
+    # symbol_list = ["5411.T"]
+    # symbol_list = ["6473.T"]
+    # symbol_list = ["5713.T"]
+    # symbol_list = ["6479.T"]
+    # symbol_list = ["2503.T"]
+    # symbol_list = ["1802.T"]
+    # symbol_list = ["3141.T"]
+    # symbol_list = ["9007.T"]
 
     # ashi
     ashi = "1d"
@@ -388,7 +413,7 @@ if __name__ == '__main__':
 
     for symbol in symbol_list:
         # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-        optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 
 

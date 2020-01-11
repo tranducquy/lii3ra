@@ -10,6 +10,7 @@ class RSITriggerFactory(EntryStrategyFactory):
         # rsi_span, rsi_threshold, ema_span
         "default": [5, 80, 5]
         , "1570.T": [15, 60, 5]
+        , "2427.T": [15, 80, 5]
     }
 
     rough_params = [

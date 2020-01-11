@@ -8,8 +8,10 @@ class TimedFactory(ExitStrategyFactory):
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
         "default": [1, 3, 3, 0.03]
         , "^N225": [1, 3, 3, 0.03]
-        , "6753.T": [1, 3, 3, 0.10]
+        , "6753.T": [1, 3, 1, 0.05]
         , "4043.T": [1, 3, 1, 0.03]
+        , "5706.T": [1, 3, 1, 0.06]
+        , "6704.T": [1, 3, 3, 0.03]
     }
 
     rough_params = [
@@ -41,8 +43,8 @@ class TimedFactory(ExitStrategyFactory):
                 strategies.append(Timed(ohlcv, p[0], p[1], p[2], p[3]))
         else:
             imethods = [1, 2, 3]
-            long_spans = [i for i in range(1, 6, 2)]
-            short_spans = [i for i in range(1, 6, 2)]
+            long_spans = [i for i in range(1, 5, 1)]
+            short_spans = [i for i in range(1, 5, 1)]
             losscut_ratios = [0.03, 0.06]
             for imethod in imethods:
                 for long_span in long_spans:
