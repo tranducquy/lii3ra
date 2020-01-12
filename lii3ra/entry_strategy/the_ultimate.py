@@ -10,6 +10,7 @@ class TheUltimateFactory(EntryStrategyFactory):
         # lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3
         "default": [10, 7, 14, 28]
         , "3088.T": [10, 7, 14, 28]
+        , "6619.T": [15, 7, 16, 28]
     }
 
     rough_params = [
