@@ -65,25 +65,34 @@ class BreakoutSigma1IntroSerialFactory(EntryStrategyFactory):
                                                             , p[5]))
         else:
             long_spans = [i for i in range(3, 25, 5)]
-            long_ratios = [i for i in np.arange(0.2, 2.5, 0.3)]
-            short_spans = [i for i in range(3, 25, 2)]
-            short_ratios = [i for i in np.arange(0.2, 2.5, 0.3)]
+            long_ratios = [i for i in np.arange(0.3, 2.0, 0.3)]
+            short_spans = [i for i in range(3, 25, 5)]
+            short_ratios = [i for i in np.arange(0.3, 2.0, 0.3)]
             winner_wait_period_list = [i for i in range(3, 16, 3)]
             loser_wait_period_list = [i for i in range(5, 31, 5)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
                     for winner_wait_period in winner_wait_period_list:
                         for loser_wait_period in loser_wait_period_list:
-                            strategies.append(
-                                BreakoutSigma1IntroSerial(ohlcv, long_span, long_ratio, 0, 0, winner_wait_period,
-                                                          loser_wait_period))
+                            strategies.append(BreakoutSigma1IntroSerial(ohlcv, long_span, long_ratio, 0, 0.0
+                                                                        , winner_wait_period, loser_wait_period))
             for short_span in short_spans:
                 for short_ratio in short_ratios:
                     for winner_wait_period in winner_wait_period_list:
                         for loser_wait_period in loser_wait_period_list:
-                            strategies.append(
-                                BreakoutSigma1IntroSerial(ohlcv, 0, 0, short_span, short_ratio, winner_wait_period,
-                                                          loser_wait_period))
+                            strategies.append(BreakoutSigma1IntroSerial(ohlcv, 0, 0, short_span, short_ratio
+                                                                        , winner_wait_period, loser_wait_period))
+            for long_span in long_spans:
+                for long_ratio in long_ratios:
+                    for short_span in short_spans:
+                        for short_ratio in short_ratios:
+                            for winner_wait_period in winner_wait_period_list:
+                                for loser_wait_period in loser_wait_period_list:
+                                    strategies.append(BreakoutSigma1IntroSerial(ohlcv
+                                                                                , long_span, long_ratio
+                                                                                , short_span, short_ratio
+                                                                                , winner_wait_period
+                                                                                , loser_wait_period))
         return strategies
 
 

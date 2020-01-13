@@ -10,6 +10,8 @@ class DontGiveItAllBackFactory(ExitStrategyFactory):
         "default": [3, 0.20, 3, 0.20]
         , "^N225": [13, 0.10, 13, 0.20]
         , "4043.T": [6, 0.20, 6, 0.20]
+        , "8306.T": [18, 0.25, 18, 0.25]
+        , "1802.T": [3, 0.20, 3, 0.20]
     }
 
     rough_params = [

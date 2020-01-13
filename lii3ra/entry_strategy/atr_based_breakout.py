@@ -12,6 +12,7 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
         , "^N225": [23, 0.6, 28, 0.3]
         , "9107.T": [28, 0.3, 23, 0.3]
         , "9104.T": [13, 0.3, 28, 0.3]
+        , "8306.T": [13, 0.3, 1, 0.0]
     }
 
     rough_params = [
@@ -50,16 +51,21 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
                                                    , p[2]
                                                    , p[3]))
         else:
-            long_spans = [i for i in range(3, 30, 5)]
+            long_spans = [i for i in range(3, 25, 5)]
             long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
-            short_spans = [i for i in range(3, 30, 5)]
+            short_spans = [i for i in range(3, 25, 5)]
             short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
-                    strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, 3, 100))
+                    strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, 1, 0.0))
             for short_span in short_spans:
                 for short_ratio in short_ratios:
-                    strategies.append(ATRBasedBreakout(ohlcv, 3, 100, short_span, short_ratio))
+                    strategies.append(ATRBasedBreakout(ohlcv, 1, 0.0, short_span, short_ratio))
+            for long_span in long_spans:
+                for long_ratio in long_ratios:
+                    for short_span in short_spans:
+                        for short_ratio in short_ratios:
+                            strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, short_span, short_ratio))
         return strategies
 
 

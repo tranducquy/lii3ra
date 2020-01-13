@@ -11,6 +11,7 @@ class GettingIsGoodFactory(ExitStrategyFactory):
         , "1570.T": [3, 3, 0.05]
         , "4523.T": [1, 1, 0.03]
         , "8876.T": [2, 4, 0.05]
+        , "1568.T": [3, 1, 0.05]
     }
 
     rough_params = [

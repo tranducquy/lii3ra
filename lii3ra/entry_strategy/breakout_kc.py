@@ -19,6 +19,8 @@ class BreakoutKCFactory(EntryStrategyFactory):
         # , "5706.T": [3, 0.3, 3, 0.3]
         , "5706.T": [15, 0.5, 15, 0.5]
         , "9616.T": [3, 0.3, 23, 0.3]
+        # , "6479.T": [10, 0.5, 10, 0.7]
+        , "6479.T": [15, 0.5, 15, 0.5]
     }
 
     rough_params = [
@@ -57,10 +59,10 @@ class BreakoutKCFactory(EntryStrategyFactory):
                                              , p[2]
                                              , p[3]))
         else:
-            long_spans = [i for i in range(3, 25, 5)]
-            long_ratios = [i for i in np.arange(0.3, 1.6, 0.3)]
-            short_spans = [i for i in range(3, 25, 5)]
-            short_ratios = [i for i in np.arange(0.3, 1.6, 0.3)]
+            long_spans = [i for i in range(5, 26, 5)]
+            long_ratios = [i for i in np.arange(0.3, 1.6, 0.2)]
+            short_spans = [i for i in range(5, 26, 5)]
+            short_ratios = [i for i in np.arange(0.3, 1.6, 0.2)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
                     for short_span in short_spans:

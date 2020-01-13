@@ -10,6 +10,7 @@ class BreakoutWithTwistFactory(EntryStrategyFactory):
         # long_lookback_span, long_adx_span, long_adx_value, short_lookback_span, short_adx_span, short_adx_value
         "default": [10, 15, 0.2, 10, 15, 0.2]
         , "^N225": [10, 24, 0.3, 10, 6, 0.5]
+        , "2503.T": [10, 15, 0.2, 10, 15, 0.2]
     }
 
     rough_params = [
@@ -86,6 +87,15 @@ class BreakoutWithTwistFactory(EntryStrategyFactory):
                     for adx_value in adx_value_list:
                         strategies.append(BreakoutWithTwist(ohlcv, 0, 1, 0
                                                             , lookback_span, adx_span, adx_value))
+            for lookback_span in lookback_span_list:
+                for adx_span in adx_span_list:
+                    for adx_value in adx_value_list:
+                        for lookback_span2 in lookback_span_list:
+                            for adx_span2 in adx_span_list:
+                                for adx_value2 in adx_value_list:
+                                    # strategies.append(BreakoutWithTwist(ohlcv, lookback_span, adx_span, adx_value
+                                    #                                     , lookback_span2, adx_span2, adx_value2))
+                                    pass
         return strategies
 
 
@@ -127,6 +137,7 @@ class BreakoutWithTwist(EntryStrategy):
     def check_entry_long(self, idx, last_exit_idx):
         """
         当日高値が指定バー数分の高値を更新した場合、次のバーで成行買
+         - 注文方法:寄成
         """
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER

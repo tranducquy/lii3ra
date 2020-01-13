@@ -9,6 +9,7 @@ class StochasticCrossFactory(EntryStrategyFactory):
     params = {
         # atr_span, atr_mult
         "default": [8, 22, 23]
+        , "6473.T": [8, 22, 23]
     }
 
     rough_params = [
