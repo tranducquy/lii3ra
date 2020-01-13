@@ -159,7 +159,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
             elif '6479.T' == symbol:  # [x] 電機・精密
                 entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                exit_strategy = PercentileFactory().create_strategy(ohlcv)
             elif '6619.T' == symbol:  # [x] 電機・精密
                 entry_strategy = TheUltimateFactory().create_strategy(ohlcv)
                 exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
@@ -191,15 +191,16 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 # entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
                 entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
                 exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
-            asset = Asset(symbol
-                          , asset_values["initial_cash"]
-                          , asset_values["leverage"]
-                          , asset_values["losscut_ratio"])
-            thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
-                                                                                     , entry_strategy
-                                                                                     , exit_strategy
-                                                                                     , asset
-                                                                                     )))
+            if entry_strategy is not None:
+                asset = Asset(symbol
+                              , asset_values["initial_cash"]
+                              , asset_values["leverage"]
+                              , asset_values["losscut_ratio"])
+                thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
+                                                                                         , entry_strategy
+                                                                                         , exit_strategy
+                                                                                         , asset
+                                                                                         )))
         thread_join_cnt = 0
         thread_pool_cnt = len(thread_pool)
         split_num = (thread_pool_cnt / 16) + 1
