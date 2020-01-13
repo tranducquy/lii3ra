@@ -104,7 +104,7 @@ class Crawler:
 
 
 def crawl_daily_all_leg(symbol, start_date, end_date):
-    s = mylogger.Logger()
+    s = lii3ra.mylogger.Logger()
     logger = s.myLogger('test')
     logger.info('crawl_daily_all_leg().')
     crawler = Crawler()
