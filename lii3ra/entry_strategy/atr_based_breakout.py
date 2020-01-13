@@ -12,7 +12,8 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
         , "^N225": [23, 0.6, 28, 0.3]
         , "9107.T": [28, 0.3, 23, 0.3]
         , "9104.T": [13, 0.3, 28, 0.3]
-        , "8306.T": [13, 0.3, 1, 0.0]
+        , "8306.T": [23, 0.9, 3, 1.2]
+        , "5411.T": [18, 0.3, 1, 0.0]
     }
 
     rough_params = [
@@ -51,9 +52,9 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
                                                    , p[2]
                                                    , p[3]))
         else:
-            long_spans = [i for i in range(3, 25, 5)]
+            long_spans = [i for i in range(3, 30, 5)]
             long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
-            short_spans = [i for i in range(3, 25, 5)]
+            short_spans = [i for i in range(3, 30, 5)]
             short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
             for long_span in long_spans:
                 for long_ratio in long_ratios:

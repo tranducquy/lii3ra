@@ -16,6 +16,7 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         , "5706.T": [23, 0.5, 21, 0.2]
         , "1568.T": [3, 1.2, 18, 1.2]
         , "6141.T": [3, 0.9, 3, 0.3]
+        , "9104.T": [13, 0.6, 8, 0.9]
     }
 
     rough_params = [
