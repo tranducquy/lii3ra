@@ -4,20 +4,20 @@ from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 
 
-class NewvalueFactory(ExitStrategyFactory):
+class LastValueFactory(ExitStrategyFactory):
 
     def create_strategy(self, ohlcv):
-        return Newvalue(ohlcv)
+        return LastValue(ohlcv)
 
     def optimization(self, ohlcv, rough=True):
-        strategies = [Newvalue(ohlcv)]
+        strategies = [LastValue(ohlcv)]
         return strategies
 
 
-class Newvalue(ExitStrategy):
-    """現在のバーの高値または安値に1tick加算または減算した価格で逆指値注文する"""
+class LastValue(ExitStrategy):
+    """直前のバーの高値または安値に1tick加算または減算した価格で逆指値注文する"""
     def __init__(self, ohlcv):
-        self.title = "NewValue"
+        self.title = "LastValue"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.tick = Tick.get_tick(self.symbol)
@@ -39,16 +39,16 @@ class Newvalue(ExitStrategy):
     def create_order_exit_long_stop_market(self, idx, entry_idx):
         if not self._is_valid(idx):
             return 0.00
-        # 安値取得
-        price = self.ohlcv.values['low'][idx]
+        # 前のバーの安値取得
+        price = self.ohlcv.values['low'][idx - 1]
         price -= self.tick
         return price
 
     def create_order_exit_short_stop_market(self, idx, entry_idx):
         if not self._is_valid(idx):
             return 0.00
-        # 高値取得
-        price = self.ohlcv.values['high'][idx]
+        # 前のバーの高値取得
+        price = self.ohlcv.values['high'][idx - 1]
         price += self.tick
         return price
 

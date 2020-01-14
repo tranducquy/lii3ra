@@ -1,5 +1,5 @@
 
---drop table ohlcv;
+-- drop table ohlcv;
 create table ohlcv
 (
     symbol text,
