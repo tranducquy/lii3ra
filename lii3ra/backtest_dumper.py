@@ -107,6 +107,8 @@ class BacktestDumper:
             , exit_strategy_title
             , idx
             , order_info
+            , order_info_oco1
+            , order_info_oco2
             , call_order_info
             , execution_order_info
             , execution_order_info2
@@ -155,19 +157,31 @@ class BacktestDumper:
             , self.round(self._check_float(entry_vol_indicators[2]))
             , self.round(self._check_float(entry_vol_indicators[3]))
             , self.round(self._check_float(entry_vol_indicators[4]))
+            # order_info
             , order_info['create_time']
             , order_info['order_type']
             , self.round(self._check_float(order_info['vol']))
             , self.round(self._check_float(order_info['price']))
+            # order_info_oco1
+            , order_info_oco1['order_type']
+            , self.round(self._check_float(order_info_oco1['vol']))
+            , self.round(self._check_float(order_info_oco1['price']))
+            # order_info_oco2
+            , order_info_oco2['order_type']
+            , self.round(self._check_float(order_info_oco2['vol']))
+            , self.round(self._check_float(order_info_oco2['price']))
+            # call_order_info
             , call_order_info['order_time']
             , call_order_info['order_type']
             , self.round(self._check_float(call_order_info['vol']))
             , self.round(self._check_float(call_order_info['price']))
+            # executino_order_info
             , execution_order_info['exit_order_time']
             , execution_order_info['order_type']
             , execution_order_info['order_status']
             , self.round(self._check_float(execution_order_info['vol']))
             , self.round(self._check_float(execution_order_info['price']))
+            # executino_order_info2
             , execution_order_info2['exit_order_time']
             , execution_order_info2['order_type']
             , execution_order_info2['order_status']

@@ -60,53 +60,16 @@ def crawler(symbols, start_date, end_date):
     logger.info('crawler_yfinance.crawler() end.')
 
 
-default_symbols = [
-    "1321.T"
-    , "1356.T"
-    , "1357.T"
-    , "1568.T"
-    , "1570.T"
-    , "1571.T"
-    , "3038.T"
-    , "3288.T"
-    , "4043.T"
-    , "6141.T"
-    , "6753.T"
-    , "7717.T"
-    , "7974.T"
-    , "9104.T"
+# symbol
+from lii3ra.symbol.yuusha_volume10b import Symbol
+symbol_list = Symbol.symbols
+temp_list = [
+    "1570.T"
     , "9107.T"
-    , "9424.T"
-    , "5706.T"
-    , "9616.T"
-    , "4523.T"
-    , "3088.T"
-    , "2412.T"
-    , "2427.T"
-    , "9983.T"
-    , "8876.T"
-    , "6047.T"
-    , "1568.T"
-    , "6619.T"
-    , "6762.T"
-    , "4911.T"
-    , "8267.T"
-    , "4967.T"
-    , "6141.T"
-    , "8306.T"
-    , "5411.T"
-    , "6473.T"
-    , "5713.T"
-    , "6479.T"
-    , "2503.T"
-    , "1802.T"
-    , "3141.T"
-    , "9007.T"
-    , "1570.T"
     , "9104.T"
-    , "9107.T"
     , "^N225"
 ]
+symbol_list.extend(temp_list)
 
 
 if __name__ == '__main__':
@@ -120,7 +83,7 @@ if __name__ == '__main__':
     else:
         end_date = args.end_date
     if args.symbol is None:
-        symbols = default_symbols
+        symbols = symbol_list
     else:
         s = args.symbol
         symbols = s.split(',')

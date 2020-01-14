@@ -53,6 +53,7 @@ from lii3ra.entry_strategy.economic_calender import EconomicCalenderFactory  # B
 from lii3ra.entry_strategy.breakout_kc import BreakoutKCFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
+from lii3ra.exit_strategy.lastvalue import LastValueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
 from lii3ra.exit_strategy.timed_by_time import TimedByTimeFactory
 from lii3ra.exit_strategy.contract_gain_loss import ContractGainLossFactory
@@ -131,6 +132,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # 日足
         # any
         # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
+        # exit_strategies.append(LastValueFactory().create_strategy(ohlcv))          # LASTVALUE
         # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))         # PERCENTILE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
         # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
@@ -228,6 +230,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # 日足
         # any
         # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                         # NEWVALUE
+        # exit_strategy = LastValueFactory().create_strategy(ohlcv)                        # LASTVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                 # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                       # PERCENTILE
@@ -323,6 +326,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # 日足
         # any
         # exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))          # NEWVALUE
+        # exit_strategies.extend(LastValueFactory().optimization(ohlcv, rough))         # LASTVALUE
         exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED
         # exit_strategies.extend(ContractGainLossFactory().optimization(ohlcv, rough))  # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().optimization(ohlcv, rough))        # PERCENTILE

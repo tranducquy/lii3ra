@@ -54,6 +54,7 @@ from lii3ra.entry_strategy.breakout_kc import BreakoutKCFactory
 from lii3ra.entry_strategy.breakout_sigma1_introserial import BreakoutSigma1IntroSerialFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
+from lii3ra.exit_strategy.lastvalue import LastValueFactory
 from lii3ra.exit_strategy.timed import TimedFactory
 from lii3ra.exit_strategy.timed_by_time import TimedByTimeFactory
 from lii3ra.exit_strategy.contract_gain_loss import ContractGainLossFactory
@@ -150,7 +151,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
             elif '9616.T' == symbol:  # [x] 情報通信サービス・その他
                 entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                exit_strategy = LastValueFactory().create_strategy(ohlcv)
             elif '6141.T' == symbol:  # [x] 機械
                 entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
                 exit_strategy = NewvalueFactory().create_strategy(ohlcv)

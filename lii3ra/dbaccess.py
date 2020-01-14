@@ -175,6 +175,12 @@ class DbAccess:
                         ,order_type
                         ,order_vol
                         ,order_price
+                        ,order_type_oco1
+                        ,order_vol_oco1
+                        ,order_price_oco1
+                        ,order_type_oco2
+                        ,order_vol_oco2
+                        ,order_price_oco2
                         ,call_order_time
                         ,call_order_type
                         ,call_order_vol
@@ -205,6 +211,12 @@ class DbAccess:
                         values
                         ( 
                          %s
+                        ,%s
+                        ,%s
+                        ,%s
+                        ,%s
+                        ,%s
+                        ,%s
                         ,%s
                         ,%s
                         ,%s
