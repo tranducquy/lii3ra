@@ -40,8 +40,7 @@ class Newvalue(ExitStrategy):
         if not self._is_valid(idx):
             return 0.00
         # 前のバーの安値取得
-        # price = self.ohlcv.values['low'][idx]
-        price = self.ohlcv.values['low'][idx - 1]
+        price = self.ohlcv.values['low'][idx]
         price -= self.tick
         return price
 
@@ -49,8 +48,7 @@ class Newvalue(ExitStrategy):
         if not self._is_valid(idx):
             return 0.00
         # 前のバーの高値取得
-        # price = self.ohlcv.values['high'][idx]
-        price = self.ohlcv.values['high'][idx - 1]
+        price = self.ohlcv.values['high'][idx]
         price += self.tick
         return price
 
