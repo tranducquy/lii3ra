@@ -23,14 +23,17 @@ class Unit:
                 or '1630.T' in symbol
                 or '1631.T' in symbol
                 or '1632.T' in symbol
-                or '1633.T' in symbol
-        ):
+                or '1633.T' in symbol):
             unit = 1
         elif '.T' in symbol:
             unit = 100
         elif 'N225minif' in symbol:
             unit = 100
         elif 'N225f' in symbol:
+            unit = 1000
+        elif 'JPX400f' in symbol:
+            unit = 1000
+        elif 'Mothersf' in symbol:
             unit = 1000
         else:
             unit = 1
@@ -43,7 +46,17 @@ class Unit:
                 or 'USDJPY' == symbol
                 or 'GBPJPY' == symbol
                 or 'EURJPY' == symbol
-                or 'EURUSD' == symbol):
+                or 'EURUSD' == symbol
+                or 'N225minif' == symbol
+                or 'N225f' == symbol
+                or 'Topixf' == symbol
+                or 'Topixminif' == symbol
+                or 'JPX400f' == symbol
+                or 'Mothersf' == symbol
+                or '^N225' == symbol
+                or 'Topix' == symbol
+                or 'JPX400' == symbol
+                or 'Mothers' == symbol):
             return True
         else:
             return False

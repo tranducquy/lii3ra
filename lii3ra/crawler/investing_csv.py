@@ -42,6 +42,8 @@ def read_csv(symbol, csv_file, ashi):
         elif 'B' in temp:
             temp = temp.replace('K', '').replace('M', '').replace('B', '').replace('-', '')
             temp_volume = pd.to_numeric(temp) * 1000000000
+        else:
+            temp_volume = None
         volume = pd.to_numeric(temp_volume)
         data.append([
             symbol
