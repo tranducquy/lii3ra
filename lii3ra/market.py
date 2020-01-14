@@ -31,6 +31,10 @@ class Market:
             candle_time = ohlcv.values['time'][idx]
             order_info = {'create_time': None, 'order_time': None, 'order_type': 0, 'order_status': 0, 'vol': 0.00,
                           'price': 0.00}
+            order_info_oco1 = {'create_time': None, 'order_time': None, 'order_type': 0, 'order_status': 0, 'vol': 0.00,
+                               'price': 0.00}
+            order_info_oco2 = {'create_time': None, 'order_time': None, 'order_type': 0, 'order_status': 0, 'vol': 0.00,
+                               'price': 0.00}
             call_order_info = {'create_time': None, 'order_time': None, 'order_type': 0, 'order_status': 0, 'vol': 0.00,
                                'price': 0.00}
             execution_order_info = {'exit_order_time': None, 'order_type': 0, 'order_status': 0, 'vol': 0.00,
@@ -345,6 +349,8 @@ class Market:
                         margin_cash, idx, p.last_exit_idx)
                     p.create_order_oco(idx, candle_time, stop_market_price_long, stop_market_price_short, vol_long)
                     self.set_order_info(order_info, p.order)
+                    self.set_order_info(order_info_oco1, p.order.oco_order1)
+                    self.set_order_info(order_info_oco2, p.order.oco_order2)
                 elif long_order_type == OrderType.LIMIT_LONG:
                     # TODO:
                     (margin_cash, _) = asset.get_margin_cash(symbol)
@@ -444,6 +450,8 @@ class Market:
                 , exit_strategy.title
                 , idx
                 , order_info
+                , order_info_oco1
+                , order_info_oco2
                 , call_order_info
                 , execution_order_info
                 , execution_order_info2
