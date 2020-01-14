@@ -14,6 +14,7 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
         , "9104.T": [13, 0.3, 28, 0.3]
         , "8306.T": [23, 0.9, 3, 1.2]
         , "5411.T": [18, 0.3, 1, 0.0]
+        , "Mothers": [8, 0.6, 8, 0.3]
     }
 
     rough_params = [
