@@ -189,7 +189,15 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
                 exit_strategy = NewvalueFactory().create_strategy(ohlcv)
             elif "^N225" == symbol:
-                # entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
+                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
+                exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
+            elif "Topix" == symbol:
+                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
+                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+            elif "Mothers" == symbol:
+                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
+                exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
+            elif "JPX400" == symbol:
                 entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
                 exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
             if entry_strategy is not None:
@@ -227,6 +235,9 @@ if __name__ == '__main__':
                     , "9107.T"
                     , "9104.T"
                     , "^N225"
+                    , "Topix"
+                    , "Mothers"
+                    , "JPX400"
     ]
     symbol_list.extend(temp_list)
 

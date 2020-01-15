@@ -129,11 +129,11 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # exit_strategies.append(TimedByTimeFactory().create_strategy(ohlcv))             # TIMED BY TIME
         # 日足
         # any
-        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
+        # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
         # exit_strategies.append(LastValueFactory().create_strategy(ohlcv))           # LASTVALUE
         # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))         # PERCENTILE
         # exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
-        # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
+        exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
         # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
         # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
         # exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))  # CONTRACT GAIN AND LOSS

@@ -80,12 +80,15 @@ class GettingIsGood(ExitStrategy):
         self.num_of_bars_long = num_of_bars_long
         self.num_of_bars_short = num_of_bars_short
         self.losscut_ratio = losscut_ratio
+        self.up_count = 0
+        self.down_count = 0
 
     def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         exit_long = True
         # 連騰チェック
+        self.up_count = 0
         for i in range(self.num_of_bars_long):
             if entry_idx + self.num_of_bars_long <= idx:
                 current_price = self.ohlcv.values['close'][idx - i]
@@ -93,6 +96,7 @@ class GettingIsGood(ExitStrategy):
                 if current_price < last_price:
                     exit_long = False
                     break
+                self.up_count += 1
             else:
                 exit_long = False
                 break
@@ -112,6 +116,7 @@ class GettingIsGood(ExitStrategy):
             return OrderType.NONE_ORDER
         exit_short = True
         # 続落チェック
+        self.down_count = 0
         for i in range(self.num_of_bars_short):
             if entry_idx + self.num_of_bars_short <= idx:
                 current_price = self.ohlcv.values['close'][idx - i]
@@ -119,6 +124,7 @@ class GettingIsGood(ExitStrategy):
                 if current_price > last_price:
                     exit_short = False
                     break
+                self.down_count += 1
             else:
                 exit_short = False
                 break
@@ -150,3 +156,13 @@ class GettingIsGood(ExitStrategy):
 
     def create_order_exit_short_market(self, idx, entry_idx):
         return 0.00
+
+    def get_indicators(self, idx, entry_idx):
+        ind1 = self.num_of_bars_long
+        ind2 = self.up_count
+        ind3 = self.num_of_bars_short
+        ind4 = self.down_count
+        ind5 = None
+        ind6 = None
+        ind7 = None
+        return ind1, ind2, ind3, ind4, ind5, ind6, ind7
