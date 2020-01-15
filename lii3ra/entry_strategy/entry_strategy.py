@@ -83,7 +83,10 @@ class EntryStrategy:
         temp_vol = current_vol * self.order_vol_ratio
         order_vol_from_now = math.floor(temp_vol / unit) * unit
         if Unit.is_order_vol_infinity(self.symbol):
-            vol = order_vol_from_cash
+            if order_vol_from_cash > 1000000000000:
+                vol = 1000000000000  # saidai 1tyou de iiyone.
+            else:
+                vol = order_vol_from_cash
         elif current_vol == -1:
             vol = 0
         elif order_vol_from_cash < order_vol_from_now:

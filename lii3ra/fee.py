@@ -5,11 +5,19 @@ class Fee:
         """売買の往復手数料"""
         fee = 0
         if '.T' in symbol:
-            fee = 1500 # 仮
+            fee = 1500  # 仮
+        elif '^N225' in symbol:
+            fee = 1500  # 仮
+        elif 'Topix' in symbol:
+            fee = 1500  # 仮
+        elif 'JPX400' in symbol:
+            fee = 1500  # 仮
+        elif 'Mothers' in symbol:
+            fee = 1500  # 仮
         elif ('USD' in symbol
                 or 'JPY' in symbol):
             fee = 0
-        elif ('N225mini' in symbol):
+        elif 'N225mini' in symbol:
             fee = 0
         else:
             fee = 0

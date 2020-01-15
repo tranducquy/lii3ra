@@ -27,12 +27,26 @@ def read_csv(symbol, csv_file, ashi):
     data = []
     for idx in range(len(df)):
         candle_time = pd.to_datetime(df['Date'][idx]).strftime("%Y-%m-%d")
-        open_price = pd.to_numeric(df['Open'][idx].replace(',', ''))
-        high_price = pd.to_numeric(df['High'][idx].replace(',', ''))
-        low_price = pd.to_numeric(df['Low'][idx].replace(',', ''))
-        close_price = pd.to_numeric(df['Price'][idx].replace(',', ''))
-        vol = df['Vol.'][idx]
-        temp = vol.replace(',', '')
+        if type(df['Open'][idx]) is str:
+            open_price = pd.to_numeric(df['Open'][idx].replace(',', ''))
+        else:
+            open_price = pd.to_numeric(df['Open'][idx])
+        if type(df['High'][idx]) is str:
+            high_price = pd.to_numeric(df['High'][idx].replace(',', ''))
+        else:
+            high_price = pd.to_numeric(df['High'][idx])
+        if type(df['Low'][idx]) is str:
+            low_price = pd.to_numeric(df['Low'][idx].replace(',', ''))
+        else:
+            low_price = pd.to_numeric(df['Low'][idx])
+        if type(df['Low'][idx]) is str:
+            close_price = pd.to_numeric(df['Price'][idx].replace(',', ''))
+        else:
+            close_price = pd.to_numeric(df['Price'][idx])
+        temp = ''
+        if type(df['Vol.'][idx]) is str:
+            vol = df['Vol.'][idx]
+            temp = vol.replace(',', '')
         if 'K' in temp:
             temp = temp.replace('K', '').replace('M', '').replace('B', '').replace('-', '')
             temp_volume = pd.to_numeric(temp) * 1000
@@ -85,3 +99,4 @@ if __name__ == '__main__':
         insert_investing_csv(symbol, csv_file, "1d")
     except Exception as e:
         logger.error(e)
+

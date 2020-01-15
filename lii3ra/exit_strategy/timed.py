@@ -145,3 +145,13 @@ class Timed(ExitStrategy):
 
     def create_order_exit_short_market(self, idx, entry_idx):
         return 0.00
+
+    def get_indicators(self, idx, entry_idx):
+        ind1 = self.num_of_bars_long
+        ind2 = idx - entry_idx
+        ind3 = self.num_of_bars_short
+        ind4 = idx - entry_idx
+        ind5 = None
+        ind6 = None
+        ind7 = None
+        return ind1, ind2, ind3, ind4, ind5, ind6, ind7
