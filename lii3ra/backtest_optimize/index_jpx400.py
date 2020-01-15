@@ -139,7 +139,7 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))  # CONTRACT GAIN AND LOSS
         exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))  # PROFIT PROTECTOR
         # exit_strategies.append(ExitWhereYouLikeFactory().create_strategy(ohlcv))  # EXIT WHERE YOU LIKE
-        # exit_strategies.append(TieredFactory().create_strategy(ohlcv))  # TIERED
+        exit_strategies.append(TieredFactory().create_strategy(ohlcv))  # TIERED
         thread_pool = list()
         for entry_strategy in entry_strategies:
             for exit_strategy in exit_strategies:
@@ -195,8 +195,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
         # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
         # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))   # BREAKOUT KC
-        # entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
-        entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
+        entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
+        # entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
         # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))             # GO WITH THE FLOW
         # entry_strategies.extend(BooksCanBeGreatFactory().optimization(ohlcv, rough))       # BOOKS CAN BE GREAT
         # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))             # PERCENT RANKER
@@ -227,11 +227,11 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                            # TIMED BY TIME
         # 日足
         # any
-        exit_strategy = NewvalueFactory().create_strategy(ohlcv)  # NEWVALUE
+        # exit_strategy = NewvalueFactory().create_strategy(ohlcv)  # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                   # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                   # PERCENTILE
-        # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                   # GETTING IS GOOD
+        exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                   # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                   # END OF BAR
         # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)                   # DON'T GIVE IT ALL BACK
         # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                   # PROFIT PROTECTOR
@@ -379,7 +379,7 @@ if __name__ == '__main__':
     rough = False
 
     for symbol in symbol_list:
-        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-        # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
         # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 
