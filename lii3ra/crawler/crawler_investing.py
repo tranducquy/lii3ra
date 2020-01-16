@@ -80,12 +80,17 @@ def crawler(symbol_list, start_date, end_date):
 
 
 symbol_list = [
-    # ["^N225", "Nikkei 225", "japan", "index"]
-    # , ["Topix", "TOPIX", "japan", "index"]
-    # , ["JPX400", "JPX-Nikkei 400", "japan", "index"]
-    # , ["Mothers", "Topix Mother Market", "japan", "index"]
-    # , ["1321.T", "Nomura Nikkei 225 Listed", "japan", "etf"]
-    ["1321.T", "Nomura Nikkei 225 Listed", "japan", "etf"]
+    ["^N225", "Nikkei 225", "japan", "index"]
+    , ["Topix", "TOPIX", "japan", "index"]
+    , ["JPX400", "JPX-Nikkei 400", "japan", "index"]
+    , ["Mothers", "Topix Mother Market", "japan", "index"]
+    , ["1321.T", "Nomura Nikkei 225 Listed", "japan", "etf"]
+    , ["1570.T", "NEXT FUNDS Nikkei 225 Leveraged", "japan", "etf"]
+    , ["1357.T", "NEXT FUNDS Nikkei 225 Double Inverse", "japan", "etf"]
+    , ["1568.T", "Simplex TOPIX Bull 2x", "japan", "etf"]
+    , ["1356.T", "Simplex TOPIX Bear -2x", "japan", "etf"]
+    , ["1591.T", "NEXT FUNDS JPX-Nikkei 400", "japan", "etf"]
+    , ["2516.T", "TSE Mothers", "japan", "etf"]
 ]
 
 

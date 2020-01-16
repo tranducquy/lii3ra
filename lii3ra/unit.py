@@ -51,13 +51,19 @@ class Unit:
                 or 'N225minif' == symbol
                 or '^N225' == symbol
                 or '1321.T' == symbol
+                or '1570.T' == symbol
+                or '1357.T' == symbol
                 or 'Topixf' == symbol
                 or 'Topixminif' == symbol
                 or 'Topix' == symbol
+                or '1568.T' == symbol
+                or '1356.T' == symbol
                 or 'JPX400f' == symbol
                 or 'JPX400' == symbol
+                or '1591.T' == symbol
                 or 'Mothersf' == symbol
-                or 'Mothers' == symbol):
+                or 'Mothers' == symbol
+                or '2516.T' == symbol):
             return True
         else:
             return False
