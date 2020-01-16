@@ -190,10 +190,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(DayOfWeekFactory().optimization(ohlcv, rough))   # DAY OF WEEK
         # any
         # entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))     # BREAKOUT WITH A TWIST
-        entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))          # ATR BASED BREAKOUT
+        # entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))          # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))      # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
         # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))   # BREAKOUT KC
         # entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
         # entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
@@ -285,10 +285,10 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = EveryoneLovesFridayFactory().create_strategy(ohlcv)          # EVERYONE LOVES FRIDAY
         # entry_strategy = SplitWeekFactory().create_strategy(ohlcv)                    # SPLIT WEEK
         # any
-        # entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)               # BREAKOUT SIGMA1
+        entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)               # BREAKOUT SIGMA1
         # entry_strategy = GoWithTheFlowFactory().create_strategy(ohlcv)                # GO WITH THE FLOW
         # entry_strategy = BooksCanBeGreatFactory().create_strategy(ohlcv)              # BOOKS CAN BE GREAT
-        entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)            # BREAKOUT WITH A TWIST
+        # entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)            # BREAKOUT WITH A TWIST
         # entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)             # ATR BASED BREAKOUT
         # entry_strategy = PercentRankerFactory().create_strategy(ohlcv)                # PERCENT RANKER
         # entry_strategy = RSITriggerFactory().create_strategy(ohlcv)                   # RSI TRIGGER
@@ -323,7 +323,7 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED BY TIME
         # 日足
         # any
-        exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))          # NEWVALUE
+        # exit_strategies.extend(NewvalueFactory().optimization(ohlcv, rough))          # NEWVALUE
         # exit_strategies.extend(LastValueFactory().optimization(ohlcv, rough))          # LASTVALUE
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))             # TIMED
         # exit_strategies.extend(ContractGainLossFactory().optimization(ohlcv, rough))  # CONTRACT GAIN AND LOSS
@@ -367,8 +367,9 @@ if __name__ == '__main__':
     # symbol_list = ["^N225"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["N225f"]
-    symbol_list = ["1321.T"]
-    # symbol_list = ["1570.T"]
+    # symbol_list = ["1321.T"]
+    symbol_list = ["1570.T"]
+    # symbol_list = ["1357.T"]
 
     # ashi
     ashi = "1d"
@@ -376,7 +377,7 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2010-01-01"
-    start_date = "2004-03-19"
+    start_date = "2004-01-01"
     end_date = "2020-12-31"
 
     # その他
@@ -384,7 +385,7 @@ if __name__ == '__main__':
     rough = False
 
     for symbol in symbol_list:
-        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
         # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 

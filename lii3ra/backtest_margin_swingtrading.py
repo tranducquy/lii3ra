@@ -180,7 +180,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_strategy = TheUltimateFactory().create_strategy(ohlcv)
                 exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
             elif "1570.T" == symbol:  # ETF
-                entry_strategy = RSITriggerFactory().create_strategy(ohlcv)
+                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
                 exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
             elif '9104.T' == symbol:  # 海運
                 entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)

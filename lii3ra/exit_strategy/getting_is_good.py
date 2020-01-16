@@ -8,7 +8,7 @@ class GettingIsGoodFactory(ExitStrategyFactory):
         # num_of_bars_long, num_of_bars_short, losscut_ratio
         "default": [3, 3, 0.05]
         , "^N225": [2, 1, 0.05]
-        , "1570.T": [3, 3, 0.05]
+        , "1570.T": [3, 2, 0.05]
         , "4523.T": [1, 1, 0.03]
         , "8876.T": [2, 4, 0.05]
         , "1568.T": [3, 1, 0.05]
