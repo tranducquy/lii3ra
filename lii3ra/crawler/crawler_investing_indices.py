@@ -15,21 +15,31 @@ class InvestingCrawler:
         else:
             self.logger = logger
 
-    def download_index(self, symbol_list, start_date, end_date):
+    def download_historycal_data(self, symbol_list, start_date, end_date):
         from_date = dt.strptime(start_date, "%Y-%m-%d").strftime("%d/%m/%Y")
         to_date = dt.strptime(end_date, "%Y-%m-%d").strftime("%d/%m/%Y")
         for symbol_ary in symbol_list:
-            data = investpy.get_index_historical_data(index=symbol_ary[1]
-                                                      , country=symbol_ary[2]
-                                                      , from_date=from_date
-                                                      , to_date=to_date)
+            data = None
+            if symbol_ary[3] == "index":
+                data = investpy.get_index_historical_data(index=symbol_ary[1]
+                                                          , country=symbol_ary[2]
+                                                          , from_date=from_date
+                                                          , to_date=to_date)
+            if symbol_ary[3] == "etf":
+                data = investpy.get_etf_historical_data(etf=symbol_ary[1]
+                                                        , country=symbol_ary[2]
+                                                        , from_date=from_date
+                                                        , to_date=to_date)
             idx = data.index.size
             max_date = ''
             min_date = ''
             quotes = list()
             for i in range(idx):
                 business_date = (data.index[i]).strftime("%Y-%m-%d")
-                volume = int((data['Volume'][i]).astype('int64'))
+                if symbol_ary[3] == "etf":
+                    volume = 0
+                else:
+                    volume = int((data['Volume'][i]).astype('int64'))
                 open_price = data['Open'][i]
                 high_price = data['High'][i]
                 low_price = data['Low'][i]
@@ -64,16 +74,20 @@ def get_option():
 def crawler(symbol_list, start_date, end_date):
     s = lii3ra.mylogger.Logger()
     logger = s.myLogger('test')
-    logger.info('crawler_yfinance.crawler() start.')
-    InvestingCrawler().download_index(symbol_list, start_date, end_date)
-    logger.info('crawler_yfinance.crawler() end.')
+    logger.info('crawler_investing.crawler() start.')
+    InvestingCrawler().download_historycal_data(symbol_list, start_date, end_date)
+    logger.info('crawler_investing.crawler() end.')
+
 
 symbol_list = [
-    ["^N225", "Nikkei 225", "japan"]
-    , ["Topix", "TOPIX", "japan"]
-    , ["JPX400", "JPX-Nikkei 400", "japan"]
-    , ["Mothers", "Topix Mother Market", "japan"]
+    # ["^N225", "Nikkei 225", "japan", "index"]
+    # , ["Topix", "TOPIX", "japan", "index"]
+    # , ["JPX400", "JPX-Nikkei 400", "japan", "index"]
+    # , ["Mothers", "Topix Mother Market", "japan", "index"]
+    # , ["1321.T", "Nomura Nikkei 225 Listed", "japan", "etf"]
+    ["1321.T", "Nomura Nikkei 225 Listed", "japan", "etf"]
 ]
+
 
 if __name__ == '__main__':
     args = get_option()

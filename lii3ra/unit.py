@@ -50,6 +50,7 @@ class Unit:
                 or 'N225f' == symbol
                 or 'N225minif' == symbol
                 or '^N225' == symbol
+                or '1321.T' == symbol
                 or 'Topixf' == symbol
                 or 'Topixminif' == symbol
                 or 'Topix' == symbol

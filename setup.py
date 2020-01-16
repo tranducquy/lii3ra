@@ -18,7 +18,7 @@ setup(
         "yfinance",
         "oandapyV20",
         "iso8601",
-        'investpy',
+        'investpy'
         ],
 )
 

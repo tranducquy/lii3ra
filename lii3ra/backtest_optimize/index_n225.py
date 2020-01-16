@@ -130,12 +130,12 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # 日足
         # any
         exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))           # NEWVALUE
-        exit_strategies.append(LastValueFactory().create_strategy(ohlcv))          # LASTVALUE
+        # exit_strategies.append(LastValueFactory().create_strategy(ohlcv))          # LASTVALUE
         exit_strategies.append(PercentileFactory().create_strategy(ohlcv))         # PERCENTILE
         exit_strategies.append(TimedFactory().create_strategy(ohlcv))              # TIMED
         exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))           # END OF BAR
         exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))      # GETTING IS GOOD
-        exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
+        # exit_strategies.append(DontGiveItAllBackFactory().create_strategy(ohlcv))  # DON'T GIVE IT ALL BACK
         exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))  # CONTRACT GAIN AND LOSS
         # exit_strategies.append(ProfitProtectorFactory().create_strategy(ohlcv))  # PROFIT PROTECTOR
         # exit_strategies.append(ExitWhereYouLikeFactory().create_strategy(ohlcv))  # EXIT WHERE YOU LIKE
@@ -364,10 +364,10 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
 
 if __name__ == '__main__':
     # symbol
-    symbol_list = ["^N225"]
+    # symbol_list = ["^N225"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["N225f"]
-    # symbol_list = ["1321.T"]
+    symbol_list = ["1321.T"]
     # symbol_list = ["1570.T"]
 
     # ashi
@@ -376,7 +376,7 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2010-01-01"
-    start_date = "2018-03-19"
+    start_date = "2004-03-19"
     end_date = "2020-12-31"
 
     # その他
