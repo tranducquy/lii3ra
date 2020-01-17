@@ -9,11 +9,11 @@ class TriangularMovingAverage:
         self.ohlcv      = ohlcv.values
         self.ma_span    = ma_span
         s = pd.Series(self.ohlcv['close'])
-        self.sma = s.rolling(window=self.ma_span).mean()
-        sma_sum = self.sma.rolling(window=self.ma_span).sum()
-        self.trima = pd.Series(sma_sum / self.ma_span)
+        self.ma = s.rolling(window=self.ma_span).mean()
+        ma_sum = self.ma.rolling(window=self.ma_span).sum()
+        self.trima = pd.Series(ma_sum / self.ma_span)
         s = pd.Series(self.ohlcv['low'])
-        self.sma_low = s.rolling(window=self.ma_span).mean()
-        sma_sum = self.sma_low.rolling(window=self.ma_span).sum()
-        self.trima_low = pd.Series(sma_sum / self.ma_span)
+        self.ma_low = s.rolling(window=self.ma_span).mean()
+        ma_sum = self.ma_low.rolling(window=self.ma_span).sum()
+        self.trima_low = pd.Series(ma_sum / self.ma_span)
 
