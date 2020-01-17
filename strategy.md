@@ -3,13 +3,16 @@
 # Strategyの検討
 
 ## テクニカルインジケーターを使ってみる
-- [ ] Simple Moving Average 'SMA'
+- [x] Simple Moving Average 'SMA'
 - [ ] Simple Moving Median 'SMM'
 - [ ] Smoothed Simple Moving Average 'SSMA'
 - [ ] Exponential Moving Average 'EMA'
+  - [x] 移動平均乖離率による日足Entry寄成 一応増える
+  - [x] 移動平均乖離率による日足Entry逆指値 一応寄成より増える
+  - [ ] 移動平均乖離率による寄り逆張りのデイトレード
 - [ ] Double Exponential Moving Average 'DEMA'
 - [ ] Triple Exponential Moving Average 'TEMA'
-- [ ] Triangular Moving Average 'TRIMA'
+- [x] Triangular Moving Average 'TRIMA'
 - [ ] Triple Exponential Moving Average Oscillator 'TRIX'
 - [ ] Volume Adjusted Moving Average 'VAMA'
 - [ ] Kaufman Efficiency Indicator 'ER'
@@ -26,26 +29,26 @@
 - [ ] Elastic-Volume weighted MACD 'EV_MACD'
 - [ ] Market Momentum 'MOM'
 - [ ] Rate-of-Change 'ROC'
-- [ ] Relative Strenght Index 'RSI'
+- [x] Relative Strenght Index 'RSI'
 - [ ] Inverse Fisher Transform RSI 'IFT_RSI'
 - [ ] True Range 'TR'
-- [ ] Average True Range 'ATR'
+- [x] Average True Range 'ATR'
 - [ ] Stop-and-Reverse 'SAR'
-- [ ] Bollinger Bands 'BBANDS'
+- [x] Bollinger Bands 'BBANDS'
 - [ ] Bollinger Bands Width 'BBWIDTH'
 - [ ] Percent B 'PERCENT_B'
-- [ ] Keltner Channels 'KC'
+- [x] Keltner Channels 'KC'
 - [ ] Donchian Channel 'DO'
 - [ ] Directional Movement Indicator 'DMI'
-- [ ] Average Directional Index 'ADX'
+- [x] Average Directional Index 'ADX'
 - [ ] Pivot Points 'PIVOT'
 - [ ] Fibonacci Pivot Points 'PIVOT_FIB'
 - [ ] Stochastic Oscillator %K 'STOCH'
 - [ ] Stochastic oscillator %D 'STOCHD'
 - [ ] Stochastic RSI 'STOCHRSI'
 - [ ] Williams %R 'WILLIAMS'
-- [ ] Ultimate Oscillator 'UO'
-- [ ] Awesome Oscillator 'AO'
+- [x] Ultimate Oscillator 'UO'
+- [x] Awesome Oscillator 'AO'
 - [ ] Mass Index 'MI'
 - [ ] Vortex Indicator 'VORTEX'
 - [ ] Know Sure Thing 'KST'
@@ -84,9 +87,15 @@
  
 
 ## 組み合わせ
-|No.|title|GAP|INTRO SERIAL|Momentom|ADX|NewValue|
-|---|---|---|---|---|---|---|
-|1|Breakout Sigma1| | | | |
-|2|Breakout KC| | | | |
-|3| | | | | |
+|No.|Title|1.GAP|2.INTRO SERIAL|3.ADX|4.NewValue|5.Big Bar|6.Flow|
+|---|---|---|---|---|---|---|---|
+|1|Breakout Sigma1| | | | | | |
+|2|Breakout KC| | | | | | |
+|3|ATR Based Breakout| | | | | | |
+|4|Asymmetric Again| | | | | | |
+|5|Asymmetric Triple| | | | | | |
+|6|RSI Trigger| | | | | | |
+|7|The Ultimate| | | | | | |
+|8|Two Amigos| | | | | | |
+
 
