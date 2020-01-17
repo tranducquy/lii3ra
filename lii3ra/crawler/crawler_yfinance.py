@@ -64,8 +64,7 @@ def crawler(symbols, start_date, end_date):
 from lii3ra.symbol.yuusha_volume10b import Symbol
 symbol_list = Symbol.symbols
 temp_list = [
-    "1570.T"
-    , "9107.T"
+    "9107.T"
     , "9104.T"
     , "^N225"
 ]

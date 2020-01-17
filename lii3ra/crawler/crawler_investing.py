@@ -25,11 +25,16 @@ class InvestingCrawler:
                                                           , country=symbol_ary[2]
                                                           , from_date=from_date
                                                           , to_date=to_date)
-            if symbol_ary[3] == "etf":
+            elif symbol_ary[3] == "etf":
                 data = investpy.get_etf_historical_data(etf=symbol_ary[1]
                                                         , country=symbol_ary[2]
                                                         , from_date=from_date
                                                         , to_date=to_date)
+            elif symbol_ary[3] == "stock":
+                data = investpy.get_stock_historical_data(stock=symbol_ary[1]
+                                                          , country=symbol_ary[2]
+                                                          , from_date=from_date
+                                                          , to_date=to_date)
             idx = data.index.size
             max_date = ''
             min_date = ''
@@ -91,6 +96,8 @@ symbol_list = [
     , ["1356.T", "Simplex TOPIX Bear -2x", "japan", "etf"]
     , ["1591.T", "NEXT FUNDS JPX-Nikkei 400", "japan", "etf"]
     , ["2516.T", "TSE Mothers", "japan", "etf"]
+    , ["4755.T", "4755", "japan", "stock"]
+    , ["8766.T", "8766", "japan", "stock"]
 ]
 
 
