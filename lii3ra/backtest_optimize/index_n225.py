@@ -51,6 +51,7 @@ from lii3ra.entry_strategy.range_breakout import RangeBreakoutFactory  # 20
 from lii3ra.entry_strategy.the_ultimate import TheUltimateFactory  # Bonus 1
 from lii3ra.entry_strategy.economic_calender import EconomicCalenderFactory  # Bonus 2
 from lii3ra.entry_strategy.breakout_kc import BreakoutKCFactory
+from lii3ra.entry_strategy.asymmetric_two_amigos import AsymmetricTwoAmigosFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.lastvalue import LastValueFactory
@@ -190,10 +191,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(DayOfWeekFactory().optimization(ohlcv, rough))   # DAY OF WEEK
         # any
         # entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))     # BREAKOUT WITH A TWIST
-        # entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))          # ATR BASED BREAKOUT
+        entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))          # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))      # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
+        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
         # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))   # BREAKOUT KC
         # entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
         # entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
@@ -222,6 +223,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(SecondVerseSameAsTheFirstFactory().optimization(ohlcv, rough))   # SECOND VERSE
         # entry_strategies.extend(FilteredEntryFactory().optimization(ohlcv, rough))   # FILTERED ENTRY
         # entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))   # THE ULTIMATE
+        # entry_strategies.extend(AsymmetricTwoAmigosFactory().optimization(ohlcv, rough))   # ASYMMETRIC TWO AMIGOS
         # EXIT
         # 分足
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                            # TIMED BY TIME
@@ -364,11 +366,11 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
 
 if __name__ == '__main__':
     # symbol
-    # symbol_list = ["^N225"]
+    symbol_list = ["^N225"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["N225f"]
     # symbol_list = ["1321.T"]
-    symbol_list = ["1570.T"]
+    # symbol_list = ["1570.T"]
     # symbol_list = ["1357.T"]
 
     # ashi
@@ -386,6 +388,6 @@ if __name__ == '__main__':
 
     for symbol in symbol_list:
         # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-        # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
-        optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
+        optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+        # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 

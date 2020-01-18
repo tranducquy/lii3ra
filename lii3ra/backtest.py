@@ -402,7 +402,7 @@ if __name__ == '__main__':
     rough = False
 
     for symbol in symbol_list:
-        combination_strategy(symbol, ashi, start_date, end_date, asset_values)
-        # optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
+        # combination_strategy(symbol, ashi, start_date, end_date, asset_values)
+        optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough)
         # optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough)
 

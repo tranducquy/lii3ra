@@ -46,7 +46,7 @@ class AsymmetricTwoAmigosFactory(EntryStrategyFactory):
             atr_span_list = [i for i in range(3, 20, 3)]
             atr_mult_list = [i for i in np.arange(0.3, 1.5, 0.2)]
             adx_span_list = [i for i in range(3, 20, 3)]
-            adx_threshold_list = [i for i in np.arange(0.2, 1.0, 0.2)]
+            adx_threshold_list = [i for i in np.arange(0.0, 1.0, 0.2)]
             for atr_span in atr_span_list:
                 for atr_mult in atr_mult_list:
                     for adx_span in adx_span_list:
@@ -66,7 +66,7 @@ class AsymmetricTwoAmigos(EntryStrategy):
                  , adx_span
                  , adx_threshold
                  , order_vol_ratio=0.01):
-        self.title = f"AsymmetricAgain[{atr_span:.0f},{atr_mult:.2f}]"
+        self.title = f"AsymmetricTwoAmigos[{atr_span:.0f},{atr_mult:.2f}][{adx_span:.0f},{adx_threshold:.2f}]"
         self.ohlcv = ohlcv
         self.atr = AverageTrueRange(ohlcv, atr_span)
         self.atr_mult = atr_mult
