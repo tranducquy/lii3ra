@@ -83,8 +83,6 @@
 - [ ] Finite Volume Element 'FVE'
 - [ ] Volume Flow Indicator 'VFI'
 - [ ] Moving Standard deviation 'MSD'
- 
- 
 
 ## 組み合わせ
 |No.|Title|1.GAP|2.INTRO SERIAL|3.ADX|4.NewValue|5.Big Bar|6.Flow|
@@ -92,10 +90,51 @@
 |1|Breakout Sigma1| | | | | | |
 |2|Breakout KC| | | | | | |
 |3|ATR Based Breakout| | | | | | |
-|4|Asymmetric Again| | | | | | |
+|4|Asymmetric Again| | |x| | | |
 |5|Asymmetric Triple| | | | | | |
 |6|RSI Trigger| | | | | | |
 |7|The Ultimate| | | | | | |
-|8|Two Amigos| | | | | | |
+ 
+## Entry判定
+ - ATR
+   - [x] ATRブレイク ATR Based Breakout
+   - [x] ATRブレイク後の新値更新 Breakout KC
+   - [ ] ATRブレイク後のレンジブレイク
+ - 新値
+ - BollingerBand
+   - [ ] Sigma1のレンジブレイク後の新値更新
+ - Flow
+ - Big Bar
+ - RSI
+ - ADX
+ - 日時
+ 
+## Entry注文
+ - 逆指値
+ - 指値
+ - OCO逆指値,逆指値
+ - 寄成
+ 
+## Exit判定
+ - 新値
+ - パーセンタイル
+ - 期間指定高値/安値
+ - フィボナッチ
+ - 利益率指定
+ - OCO利益率指定,逆指値ロスカット
+ - 利益率指定
+ - 逆指値ロスカット
+ - OCO指値固定利益,逆指値固定損失
+ - 固定利益額
+ - 固定損失額
+ - End of Bar
+ - 期間
 
+## Exit注文
+ - 逆指値指値
+ - 逆指値成行
+ - 指値
+ - 寄成
+ - 引成
+ - OCO指値,逆指値
 
