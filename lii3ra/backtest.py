@@ -53,6 +53,7 @@ from lii3ra.entry_strategy.economic_calender import EconomicCalenderFactory  # B
 from lii3ra.entry_strategy.breakout_sigma1_introserial import BreakoutSigma1IntroSerialFactory
 from lii3ra.entry_strategy.peeling import PeelingFactory
 from lii3ra.entry_strategy.peeling_stop import PeelingStopFactory
+from lii3ra.entry_strategy.asymmetric_two_amigos import AsymmetricTwoAmigosFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.lastvalue import LastValueFactory
@@ -127,16 +128,17 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(FilteredEntryFactory().create_strategy(ohlcv))  # FILTERED ENTRY
         # entry_strategies.append(BreakoutSigma1IntroSerialFactory().create_strategy(ohlcv))  # BREAKOUT SIGMA1 INTRO
         # entry_strategies.append(PeelingFactory().create_strategy(ohlcv))                      # PEELING
-        entry_strategies.append(PeelingStopFactory().create_strategy(ohlcv))                      # PEELING STOP
+        # entry_strategies.append(PeelingStopFactory().create_strategy(ohlcv))                      # PEELING STOP
+        entry_strategies.append(AsymmetricTwoAmigosFactory().create_strategy(ohlcv))            # ASYMMETRIC TWO AMIGOS
         # EXIT
         # 分足
         # exit_strategies.append(TimedByTimeFactory().create_strategy(ohlcv))             # TIMED BY TIME
         # 日足
         # any
-        # exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))  # NEWVALUE
+        exit_strategies.append(NewvalueFactory().create_strategy(ohlcv))  # NEWVALUE
         # exit_strategies.append(LastValueFactory().create_strategy(ohlcv))  # LASTVALUE
         # exit_strategies.append(TimedFactory().create_strategy(ohlcv))  # TIMED
-        exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))  # CONTRACT GAIN AND LOSS
+        # exit_strategies.append(ContractGainLossFactory().create_strategy(ohlcv))  # CONTRACT GAIN AND LOSS
         # exit_strategies.append(PercentileFactory().create_strategy(ohlcv))  # PERCENTILE
         # exit_strategies.append(GettingIsGoodFactory().create_strategy(ohlcv))  # GETTING IS GOOD
         # exit_strategies.append(EndOfBarFactory().create_strategy(ohlcv))  # END OF BAR
@@ -226,7 +228,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(FilteredEntryFactory().optimization(ohlcv, rough))   # FILTERED ENTRY
         # entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))   # THE ULTIMATE
         # entry_strategies.extend(PeelingFactory().optimization(ohlcv, rough))         # PEELING
-        entry_strategies.extend(PeelingStopFactory().optimization(ohlcv, rough))         # PEELING STOP
+        # entry_strategies.extend(PeelingStopFactory().optimization(ohlcv, rough))         # PEELING STOP
+        entry_strategies.extend(AsymmetricTwoAmigosFactory().optimization(ohlcv, rough))   # ASYMMETRIC TWO AMIGOS
         # EXIT
         # 分足
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                            # TIMED BY TIME
@@ -322,8 +325,9 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = SecondVerseSameAsTheFirstFactory().create_strategy(ohlcv)    # SECOND VERSE
         # entry_strategy = FilteredEntryFactory().create_strategy(ohlcv)                # FILTERED ENTRY
         # entry_strategy = TheUltimateFactory().create_strategy(ohlcv)                  # THE ULTIMATE
-        # entry_strategy = PeelingFactory().create_strategy(ohlcv)                        # PEELING
-        entry_strategy = PeelingStopFactory().create_strategy(ohlcv)                        # PEELING STOP
+        # entry_strategy = PeelingFactory().create_strategy(ohlcv)                      # PEELING
+        # entry_strategy = PeelingStopFactory().create_strategy(ohlcv)                  # PEELING STOP
+        entry_strategy = AsymmetricTwoAmigosFactory().create_strategy(ohlcv)            # ASYMMETRIC TWO AMIGOS
         # EXIT
         # 分足
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED BY TIME
