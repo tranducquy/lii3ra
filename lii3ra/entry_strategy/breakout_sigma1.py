@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.tick import Tick
@@ -9,25 +10,25 @@ from lii3ra.technical_indicator.bollingerband import Bollingerband
 class BreakoutSigma1Factory(EntryStrategyFactory):
     params = {
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        "default": [3, 1.0, 3, 1.0]
-        , "^N225": [10, 0.9, 3, 1.4]
-        , "6753.T": [8, 0.5, 7, 1.1]
-        # , "6753.T": [4, 0.8, 8, 1.4]
-        , "5706.T": [23, 0.5, 21, 0.2]
-        , "1568.T": [3, 1.2, 18, 1.2]
-        , "6141.T": [3, 0.9, 3, 0.3]
-        , "9104.T": [13, 0.6, 8, 0.9]
-        , "1570.T": [3, 1.2, 3, 1.8]
+        "default": [3, 1.0, 3, 1.0, 1]
+        , "^N225": [10, 0.9, 3, 1.4, 1]
+        , "6753.T": [8, 0.5, 7, 1.1, 1]
+        # , "6753.T": [4, 0.8, 8, 1.4, 1]
+        , "5706.T": [23, 0.5, 21, 0.2, 1]
+        , "1568.T": [3, 1.2, 18, 1.2, 1]
+        , "6141.T": [3, 0.9, 3, 0.3, 1]
+        , "9104.T": [13, 0.6, 8, 0.9, 1]
+        , "1570.T": [3, 1.2, 3, 1.8, 1]
     }
 
     rough_params = [
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        [3, 1.0, 3, 1.0]
-        , [6, 1.0, 6, 1.0]
-        , [9, 1.0, 9, 1.0]
-        , [12, 1.0, 12, 1.0]
-        , [15, 1.0, 15, 1.0]
-        , [18, 1.0, 18, 1.0]
+        [3, 1.0, 3, 1.0, 1]
+        , [6, 1.0, 6, 1.0, 1]
+        , [9, 1.0, 9, 1.0, 1]
+        , [12, 1.0, 12, 1.0, 1]
+        , [15, 1.0, 15, 1.0, 1]
+        , [18, 1.0, 18, 1.0, 1]
     ]
 
     def create_strategy(self, ohlcv):
@@ -37,49 +38,68 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
             long_bb_ratio = self.params[s][1]
             short_bb_span = self.params[s][2]
             short_bb_ratio = self.params[s][3]
+            stop_order = self.params[s][4]
         else:
             long_bb_span = self.params["default"][0]
             long_bb_ratio = self.params["default"][1]
             short_bb_span = self.params["default"][2]
             short_bb_ratio = self.params["default"][3]
-        return BreakoutSigma1(ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio)
+            stop_order = self.params["default"][4]
+        return BreakoutSigma1(ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio, stop_order)
 
     def optimization(self, ohlcv, rough=True):
         strategies = []
         if rough:
+            #
             for p in self.rough_params:
                 strategies.append(BreakoutSigma1(ohlcv
                                                  , p[0]
                                                  , p[1]
                                                  , p[2]
-                                                 , p[3]))
+                                                 , p[3]
+                                                 , p[4]))
         else:
             long_spans = [i for i in range(3, 25, 5)]
-            long_ratios = [i for i in np.arange(0.3, 2.0, 0.3)]
+            long_ratios = [i for i in np.arange(0.4, 1.7, 0.2)]
             short_spans = [i for i in range(3, 25, 5)]
-            short_ratios = [i for i in np.arange(0.3, 2.0, 0.3)]
+            short_ratios = [i for i in np.arange(0.4, 1.7, 0.2)]
+            stop_order_list = [1, 2]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
-                    strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0.0))
+                    for stop_order in stop_order_list:
+                        strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0.0, stop_order))
             for short_span in short_spans:
                 for short_ratio in short_ratios:
-                    strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio))
+                    for stop_order in stop_order_list:
+                        strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio, stop_order))
             for long_span in long_spans:
                 for long_ratio in long_ratios:
                     for short_span in short_spans:
                         for short_ratio in short_ratios:
-                            strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, short_span, short_ratio))
+                            for stop_order in stop_order_list:
+                                strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio
+                                                                 , short_span, short_ratio, stop_order))
         return strategies
 
 
 class BreakoutSigma1(EntryStrategy):
-    """高値または安値がボリンジャーバンドのシグマ1を超えた場合に逆指値注文する"""
+    """
+    高値または安値がボリンジャーバンドのシグマ1を超えた場合に逆指値注文する
+    """
 
-    def __init__(self, ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio, order_vol_ratio=0.01):
-        self.title = f"BreakOutSigma1[{long_bb_span:.0f},{long_bb_ratio:.1f}][{short_bb_span:.0f},{short_bb_ratio:.1f}]"
+    def __init__(self
+                 , ohlcv
+                 , long_bb_span
+                 , long_bb_ratio
+                 , short_bb_span
+                 , short_bb_ratio
+                 , stop_order=1
+                 , order_vol_ratio=0.01):
+        self.title = f"BreakOutSigma1[{stop_order:.0f}][{long_bb_span:.0f},{long_bb_ratio:.1f}][{short_bb_span:.0f},{short_bb_ratio:.1f}]"
         self.ohlcv = ohlcv
         self.long_bb = Bollingerband(ohlcv, long_bb_span, long_bb_ratio)
         self.short_bb = Bollingerband(ohlcv, short_bb_span, short_bb_ratio)
+        self.stop_order = stop_order
         self.symbol = self.ohlcv.symbol
         self.tick = Tick.get_tick(self.symbol)
         self.order_vol_ratio = order_vol_ratio
@@ -137,14 +157,20 @@ class BreakoutSigma1(EntryStrategy):
     def create_order_entry_long_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
-        price = self.ohlcv.values['high'][idx] + self.tick
-        return price
+        if self.stop_order == 1:
+            price = self.ohlcv.values['high'][idx] + self.tick
+        else:
+            price = self.long_bb.upper_sigma1[idx]
+        return math.ceil(price)
 
     def create_order_entry_short_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
-        price = self.ohlcv.values['low'][idx] - self.tick
-        return price
+        if self.stop_order == 1:
+            price = self.ohlcv.values['low'][idx] - self.tick
+        else:
+            price = self.short_bb.lower_sigma1[idx]
+        return math.floor(price)
 
     def create_order_entry_long_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:

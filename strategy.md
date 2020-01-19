@@ -94,15 +94,18 @@
 |5|Asymmetric Triple| | | | | | |
 |6|RSI Trigger| | | | | | |
 |7|The Ultimate| | | | | | |
+|8|Breakout Sigma1 Twice| | | | | | |
  
 ## Entry判定
  - ATR
    - [x] ATRブレイク ATR Based Breakout
-   - [x] ATRブレイク後の新値更新 Breakout KC
-   - [ ] ATRブレイク後のレンジブレイク
+ - Keltner Channels
+   - [x] KCブレイク後の新値更新 Breakout KC
+   - [x] KCブレイク2回 Breakout KC Twice
  - 新値
  - BollingerBand
-   - [ ] Sigma1のレンジブレイク後の新値更新
+   - [x] Sigma1ブレイク後の新値更新 Breakout Sigma1
+   - [x] Sigma1ブレイク2回 Breakout Sigma1 Twice
  - Flow
  - Big Bar
  - RSI

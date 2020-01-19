@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.technical_indicator.average_true_range import AverageTrueRange
@@ -140,14 +141,14 @@ class AsymmetricAgain(EntryStrategy):
         if not self._is_valid(idx):
             return -1
         close = self.ohlcv.values['close'][idx]
-        price = close + self.atr_mult * self.atr.atr[idx]
+        price = math.ceil(close + self.atr_mult * self.atr.atr[idx])
         return price
 
     def create_order_entry_short_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
         low = self.ohlcv.values['low'][idx]
-        price = low - self.atr_mult * self.atr.atr[idx]
+        price = math.floor(low - self.atr_mult * self.atr.atr[idx])
         return price
 
     def create_order_entry_long_market_for_all_cash(self, cash, idx, last_exit_idx):

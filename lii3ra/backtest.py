@@ -54,6 +54,7 @@ from lii3ra.entry_strategy.breakout_sigma1_introserial import BreakoutSigma1Intr
 from lii3ra.entry_strategy.peeling import PeelingFactory
 from lii3ra.entry_strategy.peeling_stop import PeelingStopFactory
 from lii3ra.entry_strategy.asymmetric_two_amigos import AsymmetricTwoAmigosFactory
+from lii3ra.entry_strategy.breakout_kc import BreakoutKCFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.lastvalue import LastValueFactory
@@ -129,7 +130,9 @@ def combination_strategy(symbol, ashi, start_date, end_date, asset_values):
         # entry_strategies.append(BreakoutSigma1IntroSerialFactory().create_strategy(ohlcv))  # BREAKOUT SIGMA1 INTRO
         # entry_strategies.append(PeelingFactory().create_strategy(ohlcv))                      # PEELING
         # entry_strategies.append(PeelingStopFactory().create_strategy(ohlcv))                      # PEELING STOP
-        entry_strategies.append(AsymmetricTwoAmigosFactory().create_strategy(ohlcv))            # ASYMMETRIC TWO AMIGOS
+        # entry_strategies.append(AsymmetricTwoAmigosFactory().create_strategy(ohlcv))            # ASYMMETRIC TWO AMIGOS
+        # entry_strategies.append(BreakoutSigma1TwiceFactory().create_strategy(ohlcv))          # BREAKOUT SIGMA1 TWICE
+        entry_strategies.append(BreakoutKCFactory().create_strategy(ohlcv))          # BREAKOUT KC
         # EXIT
         # 分足
         # exit_strategies.append(TimedByTimeFactory().create_strategy(ohlcv))             # TIMED BY TIME
@@ -229,7 +232,8 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(TheUltimateFactory().optimization(ohlcv, rough))   # THE ULTIMATE
         # entry_strategies.extend(PeelingFactory().optimization(ohlcv, rough))         # PEELING
         # entry_strategies.extend(PeelingStopFactory().optimization(ohlcv, rough))         # PEELING STOP
-        entry_strategies.extend(AsymmetricTwoAmigosFactory().optimization(ohlcv, rough))   # ASYMMETRIC TWO AMIGOS
+        # entry_strategies.extend(AsymmetricTwoAmigosFactory().optimization(ohlcv, rough))   # ASYMMETRIC TWO AMIGOS
+        entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))   # BREAKOUT KC
         # EXIT
         # 分足
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                            # TIMED BY TIME
@@ -327,7 +331,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
         # entry_strategy = TheUltimateFactory().create_strategy(ohlcv)                  # THE ULTIMATE
         # entry_strategy = PeelingFactory().create_strategy(ohlcv)                      # PEELING
         # entry_strategy = PeelingStopFactory().create_strategy(ohlcv)                  # PEELING STOP
-        entry_strategy = AsymmetricTwoAmigosFactory().create_strategy(ohlcv)            # ASYMMETRIC TWO AMIGOS
+        # entry_strategy = AsymmetricTwoAmigosFactory().create_strategy(ohlcv)            # ASYMMETRIC TWO AMIGOS
+        entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)            # BREAKOUT KC
         # EXIT
         # 分足
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                 # TIMED BY TIME
@@ -380,9 +385,9 @@ if __name__ == '__main__':
     # from lii3ra.symbol.n225 import Symbol
     # from lii3ra.symbol.n225_topix import Symbol
     # symbol_list = Symbol.symbols
-    symbol_list = ["^N225"]
+    # symbol_list = ["^N225"]
     # symbol_list = ["N225minif"]
-    # symbol_list = ["6753.T"]
+    symbol_list = ["6753.T"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
     # symbol_list = ["6981.T"]
     # symbol_list = ["2516.T"]

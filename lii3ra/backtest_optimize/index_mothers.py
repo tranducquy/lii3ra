@@ -191,10 +191,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # any
         # entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))     # BREAKOUT WITH A TWIST
         entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))          # ATR BASED BREAKOUT
-        entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))      # ASTMETRIC TRIPLE
+        # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))      # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
-        entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))   # BREAKOUT KC
+        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))  # BREAKOUT SIGMA1
+        # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))   # BREAKOUT KC
         # entry_strategies.extend(StochasticCrossFactory().optimization(ohlcv, rough))      # STOCHASTIC CROSS
         # entry_strategies.extend(EntryCommodityChannelIndexFactory().optimization(ohlcv, rough))    # ENTRY CCI
         # entry_strategies.extend(GoWithTheFlowFactory().optimization(ohlcv, rough))             # GO WITH THE FLOW
@@ -366,13 +366,14 @@ if __name__ == '__main__':
     # symbol
     # symbol_list = ["Mothersf"]
     symbol_list = ["Mothers"]
+    # symbol_list = ["2516.T"]
 
     # ashi
     ashi = "1d"
 
     # range
-    # start_date = "2010-01-01"
-    start_date = "2004-01-01"
+    # start_date = "2004-01-01"
+    start_date = "2012-01-01"
     end_date = "2020-12-31"
 
     # その他

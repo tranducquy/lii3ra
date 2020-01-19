@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.technical_indicator.keltner_channels import KeltnerChannels
@@ -9,30 +10,30 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class BreakoutKCFactory(EntryStrategyFactory):
     params = {
         # long_atr_span, long_kc_ratio, short_atr_span, short_kc_ratio
-        "default": [15, 0.5, 15, 0.5]
-        , "^N225": [3, 0.3, 8, 0.3]
-        , "7717.T": [18, 1.2, 8, 0.6]
-        , "4043.T": [15, 0.5, 15, 0.5]
-        # , "4043.T": [18, 0.3, 23, 0.6]
-        , "6920.T": [13, 0.6, 3, 1.5]
-        , "6753.T": [8, 0.6, 8, 0.3]
-        # , "5706.T": [3, 0.3, 3, 0.3]
-        , "5706.T": [15, 0.5, 15, 0.5]
-        , "9616.T": [3, 0.3, 23, 0.3]
-        # , "6479.T": [10, 0.5, 10, 0.7]
-        , "6479.T": [15, 0.5, 15, 0.5]
+        "default": [15, 0.5, 15, 0.5, 1]
+        , "^N225": [3, 0.3, 8, 0.3, 1]
+        , "7717.T": [18, 1.2, 8, 0.6, 1]
+        , "4043.T": [15, 0.5, 15, 0.5, 1]
+        # , "4043.T": [18, 0.3, 23, 0.6, 1]
+        , "6920.T": [13, 0.6, 3, 1.5, 1]
+        , "6753.T": [8, 0.6, 8, 0.3, 1]
+        # , "5706.T": [3, 0.3, 3, 0.3, 1]
+        , "5706.T": [15, 0.5, 15, 0.5, 1]
+        , "9616.T": [3, 0.3, 23, 0.3, 1]
+        # , "6479.T": [10, 0.5, 10, 0.7, 1]
+        , "6479.T": [15, 0.5, 15, 0.5, 1]
     }
 
     rough_params = [
-        [10, 0.3, 10, 0.3]
-        , [15, 0.3, 15, 0.3]
-        , [20, 0.3, 20, 0.3]
-        , [10, 0.5, 10, 0.5]
-        , [15, 0.5, 15, 0.5]
-        , [20, 0.5, 20, 0.5]
-        , [10, 0.7, 10, 0.7]
-        , [15, 0.7, 15, 0.7]
-        , [20, 0.7, 20, 0.7]
+        [10, 0.3, 10, 0.3, 1]
+        , [15, 0.3, 15, 0.3, 1]
+        , [20, 0.3, 20, 0.3, 1]
+        , [10, 0.5, 10, 0.5, 1]
+        , [15, 0.5, 15, 0.5, 1]
+        , [20, 0.5, 20, 0.5, 1]
+        , [10, 0.7, 10, 0.7, 1]
+        , [15, 0.7, 15, 0.7, 1]
+        , [20, 0.7, 20, 0.7, 1]
     ]
 
     def create_strategy(self, ohlcv):
@@ -42,12 +43,14 @@ class BreakoutKCFactory(EntryStrategyFactory):
             long_ratio = self.params[s][1]
             short_span = self.params[s][2]
             short_ratio = self.params[s][3]
+            stop_order = self.params[s][4]
         else:
             long_span = self.params["default"][0]
             long_ratio = self.params["default"][1]
             short_span = self.params["default"][2]
             short_ratio = self.params["default"][3]
-        return BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio)
+            stop_order = self.params["default"][4]
+        return BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio, stop_order)
 
     def optimization(self, ohlcv, rough=True):
         strategies = []
@@ -57,22 +60,37 @@ class BreakoutKCFactory(EntryStrategyFactory):
                                              , p[0]
                                              , p[1]
                                              , p[2]
-                                             , p[3]))
+                                             , p[3]
+                                             , p[4]))
         else:
-            long_spans = [i for i in range(5, 26, 5)]
-            long_ratios = [i for i in np.arange(0.3, 1.6, 0.2)]
-            short_spans = [i for i in range(5, 26, 5)]
-            short_ratios = [i for i in np.arange(0.3, 1.6, 0.2)]
-            for long_span in long_spans:
-                for long_ratio in long_ratios:
-                    for short_span in short_spans:
-                        for short_ratio in short_ratios:
-                            strategies.append(BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio))
+            long_span_list = [i for i in range(1, 20, 2)]
+            long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
+            short_span_list = [i for i in range(1, 20, 2)]
+            short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
+            # stop_order_list = [1, 2]
+            stop_order_list = [2]
+            for long_span in long_span_list:
+                for long_ratio in long_ratio_list:
+                    for stop_order in stop_order_list:
+                        strategies.append(BreakoutKC(ohlcv, long_span, long_ratio, 3, 100.0, stop_order))
+            for short_span in short_span_list:
+                for short_ratio in short_ratio_list:
+                    for stop_order in stop_order_list:
+                        strategies.append(BreakoutKC(ohlcv, 3, 100.0, short_span, short_ratio, stop_order))
+            for long_span in long_span_list:
+                for long_ratio in long_ratio_list:
+                    for short_span in short_span_list:
+                        for short_ratio in short_ratio_list:
+                            for stop_order in stop_order_list:
+                                strategies.append(BreakoutKC(ohlcv, long_span, long_ratio
+                                                             , short_span, short_ratio, stop_order))
         return strategies
 
 
 class BreakoutKC(EntryStrategy):
-    """高値または安値がバンドを超えた場合に逆指値注文する"""
+    """
+    高値または安値がバンドを超えた場合に逆指値注文する
+    """
 
     def __init__(self
                  , ohlcv
@@ -80,11 +98,13 @@ class BreakoutKC(EntryStrategy):
                  , long_kc_ratio
                  , short_atr_span
                  , short_kc_ratio
+                 , stop_order=1
                  , order_vol_ratio=0.01):
-        self.title = f"BreakoutKC[{long_atr_span:.0f},{long_kc_ratio:.1f}][{short_atr_span:.0f},{short_kc_ratio:.1f}]"
+        self.title = f"BreakoutKC[{stop_order:.0f}][{long_atr_span:.0f},{long_kc_ratio:.1f}][{short_atr_span:.0f},{short_kc_ratio:.1f}]"
         self.ohlcv = ohlcv
         self.long_kc = KeltnerChannels(ohlcv, long_atr_span, long_kc_ratio)
         self.short_kc = KeltnerChannels(ohlcv, short_atr_span, short_kc_ratio)
+        self.stop_order = stop_order
         self.symbol = self.ohlcv.symbol
         self.tick = Tick.get_tick(self.symbol)
         self.order_vol_ratio = order_vol_ratio
@@ -152,16 +172,20 @@ class BreakoutKC(EntryStrategy):
     def create_order_entry_long_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
-        price = self.ohlcv.values['high'][idx] + self.tick
-        # price = self.ohlcv.values['close'][idx] + self.long_kc.atr[idx] + self.tick
-        return price
+        if self.stop_order == 1:
+            price = self.ohlcv.values['high'][idx] + self.tick
+        else:
+            price = self.long_kc.upper_band[idx]
+        return math.ceil(price)
 
     def create_order_entry_short_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
-        price = self.ohlcv.values['low'][idx] - self.tick
-        # price = self.ohlcv.values['close'][idx] + self.short_kc.atr[idx] - self.tick
-        return price
+        if self.stop_order == 1:
+            price = self.ohlcv.values['low'][idx] - self.tick
+        else:
+            price = self.short_kc.lower_band[idx]
+        return math.floor(price)
 
     def create_order_entry_long_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:

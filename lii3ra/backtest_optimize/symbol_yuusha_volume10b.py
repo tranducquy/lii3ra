@@ -192,7 +192,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(DayOfWeekFactory().optimization(ohlcv, rough))   # DAY OF WEEK
         # any
         # entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))    # BREAKOUT WITH A TWIST
-        entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
+        # entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
         # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
@@ -224,19 +224,20 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(StartWithAwesomeOscillatorFactory().optimization(ohlcv, rough))  # START AWESOME
         # entry_strategies.extend(SecondVerseSameAsTheFirstFactory().optimization(ohlcv, rough))   # SECOND VERSE
         # entry_strategies.extend(FilteredEntryFactory().optimization(ohlcv, rough))        # FILTERED ENTRY
+        entry_strategies.extend(BreakoutSigma1TwiceFactory().optimization(ohlcv, rough))        # BREAKOUT SIGMA1 TWICE
         # EXIT
         # 分足
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                       # TIMED BY TIME
         # 日足
         # any
-        # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                         # NEWVALUE
+        exit_strategy = NewvalueFactory().create_strategy(ohlcv)                         # NEWVALUE
         # exit_strategy = LastValueFactory().create_strategy(ohlcv)                        # LASTVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                            # TIMED
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)                 # CONTRACT GAIN AND LOSS
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                       # PERCENTILE
         # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                    # GETTING IS GOOD
         # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                         # END OF BAR
-        exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)                # DON'T GIVE IT ALL BACK
+        # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)                # DON'T GIVE IT ALL BACK
         # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)                  # PROFIT PROTECTOR
         # exit_strategy = ExitWhereYouLikeFactory().create_strategy(ohlcv)                 # EXIT WHERE YOU LIKE
         # exit_strategy = TieredFactory().create_strategy(ohlcv)                           # TIERED
@@ -369,7 +370,7 @@ if __name__ == '__main__':
     # from lii3ra.symbol.yuusha_volume10b import Symbol
     # symbol_list = Symbol.symbols
     # symbol_list = ["7717.T"]
-    # symbol_list = ["6753.T"]
+    symbol_list = ["6753.T"]
     # symbol_list = ["3288.T"]
     # symbol_list = ["4043.T"]
     # symbol_list = ["3038.T"]
@@ -392,7 +393,7 @@ if __name__ == '__main__':
     # symbol_list = ["8267.T"]
     # symbol_list = ["4967.T"]
     # symbol_list = ["6141.T"]
-    symbol_list = ["8306.T"]
+    # symbol_list = ["8306.T"]
     # symbol_list = ["5411.T"]
     # symbol_list = ["6473.T"]
     # symbol_list = ["5713.T"]

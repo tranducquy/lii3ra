@@ -10,6 +10,8 @@ class AsymmetricTwoAmigosFactory(EntryStrategyFactory):
     params = {
         # atr_span, atr_mult, adx_span, adx_threshold
         "default": [15, 0.5, 14, 0.20]
+        , "^N225": [18, 0.7, 3, 0.00]
+        , "1570.T": [3, 0.5, 3, 0.60]
     }
 
     rough_params = [

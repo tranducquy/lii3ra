@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.technical_indicator.average_true_range import AverageTrueRange
@@ -14,8 +15,11 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
         , "9104.T": [13, 0.3, 28, 0.3]
         , "8306.T": [23, 0.9, 3, 1.2]
         , "5411.T": [18, 0.3, 1, 0.0]
-        , "Mothers": [8, 0.6, 8, 0.3]
-        , "2516.T": [8, 0.6, 8, 0.3]
+        # , "Mothers": [8, 0.6, 8, 0.3]
+        , "Mothers": [28, 0.3, 3, 0.3]  # End of Bar 20120101-
+        , "2516.T": [28, 0.3, 3, 0.3]
+        # , "1570.T": [13, 0.6, 18, 0.3]  # NewValue
+        , "1570.T": [28, 0.3, 13, 0.3]  # End of Bar
     }
 
     rough_params = [
@@ -134,7 +138,7 @@ class ATRBasedBreakout(EntryStrategy):
         if not self._is_valid(idx):
             return -1
         close = self.ohlcv.values['close'][idx]
-        atrband = self.long_atr.atr[idx] * self.long_atr_ratio
+        atrband = math.ceil(self.long_atr.atr[idx] * self.long_atr_ratio)
         price = close + atrband
         return price
 
@@ -142,7 +146,7 @@ class ATRBasedBreakout(EntryStrategy):
         if not self._is_valid(idx):
             return -1
         close = self.ohlcv.values['close'][idx]
-        atrband = self.short_atr.atr[idx] * self.short_atr_ratio
+        atrband = math.floor(self.short_atr.atr[idx] * self.short_atr_ratio)
         price = close - atrband
         return price
 
