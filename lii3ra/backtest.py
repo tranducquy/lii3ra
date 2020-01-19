@@ -265,6 +265,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         thread_pool_cnt = len(thread_pool)
         split_num = (thread_pool_cnt / 16) + 1
         thread_pools = list(np.array_split(thread_pool, split_num))
+        logger.info("*** thread pool cnt[%d] ***" % thread_pool_cnt)
         for p in thread_pools:
             for t in p:
                 t.start()
