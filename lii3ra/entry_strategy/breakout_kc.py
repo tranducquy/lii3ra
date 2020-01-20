@@ -15,7 +15,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "7717.T": [18, 1.2, 8, 0.6, 1]
         , "4043.T": [15, 0.5, 15, 0.5, 1]
         # , "4043.T": [18, 0.3, 23, 0.6, 1]
-        , "6920.T": [13, 0.6, 3, 1.5, 1]
+        , "6920.T": [13, 0.6, 3, 1.5, 1]  # 2020.01.06
         , "6753.T": [8, 0.6, 8, 0.3, 1]
         # , "5706.T": [3, 0.3, 3, 0.3, 1]
         , "5706.T": [15, 0.5, 15, 0.5, 1]
@@ -27,6 +27,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
     def create(self, ohlcv, optimization=False):
         strategies = []
         if not optimization:
+            #
             s = ohlcv.symbol
             if s in self.params:
                 long_span = self.params[s][0]

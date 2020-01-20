@@ -78,138 +78,139 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
         for symbol in symbol_list:
             logger.info(f"parameter symbol={symbol}, ashi={ashi}, start_date={start_date}, end_date={end_date}")
             ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
-            entry_strategy = None
-            exit_strategy = None
+            entry_list = None
+            exit_list = None
             if "7717.T" == symbol:  # 電機・精密
-                entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
-                exit_strategy = PercentileFactory().create_strategy(ohlcv)
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = PercentileFactory().create(ohlcv)
             elif "6753.T" == symbol:  # 電機・精密
-                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif "3288.T" == symbol:  # 不動産
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif "4043.T" == symbol:  # 素材・化学
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif "3038.T" == symbol:  # 商社・卸
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = GettingIsGoodFactory().create(ohlcv)
             elif "7974.T" == symbol:  # 情報通信サービス・その他
-                entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricTripleFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '1568.T' == symbol:  # [x] ETF
-                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
-                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = GettingIsGoodFactory().create(ohlcv)
             elif '1802.T' == symbol:  # [x] 建設
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = DontGiveItAllBackFactory().create(ohlcv)
             elif '2503.T' == symbol:  # [x] 食品
-                entry_strategy = BreakoutWithTwistFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                entry_list = BreakoutWithTwistFactory().create(ohlcv)
+                exit_list = ContractGainLossFactory().create(ohlcv)
             elif '3141.T' == symbol:  # [x] 小売
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '8267.T' == symbol:  # [x] 小売
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '9983.T' == symbol:  # [x] 小売
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = PercentileFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = PercentileFactory().create(ohlcv)
             elif '4911.T' == symbol:  # [x] 素材・化学
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '4967.T' == symbol:  # [x] 素材・化学
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = ContractGainLossFactory().create(ohlcv)
             elif '4523.T' == symbol:  # [x] 医薬品
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = GettingIsGoodFactory().create(ohlcv)
             elif '5411.T' == symbol:  # [x] 製鋼・非鉄
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '5706.T' == symbol:  # [x] 製鋼・非鉄
-                entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '5713.T' == symbol:  # [x] 製鋼・非鉄
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '2412.T' == symbol:  # [x] 情報通信サービス・その他
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = ContractGainLossFactory().create(ohlcv)
             elif '2427.T' == symbol:  # [x] 情報通信サービス・その他
-                entry_strategy = RSITriggerFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = RSITriggerFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '6047.T' == symbol:  # [x] 情報通信サービス・その他
-                entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = TwoAmigosFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '8876.T' == symbol:  # [x] 情報通信サービス・その他
-                entry_strategy = AsymmetricAgainFactory().create_strategy(ohlcv)
-                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
+                exit_list = GettingIsGoodFactory().create(ohlcv)
             elif '9424.T' == symbol:  # [x] 情報通信サービス・その他
-                entry_strategy = PercentRankerFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                entry_list = PercentRankerFactory().create(ohlcv)
+                exit_list = ContractGainLossFactory().create(ohlcv)
             elif '9616.T' == symbol:  # [x] 情報通信サービス・その他
-                entry_strategy = TwoAmigosFactory().create_strategy(ohlcv)
-                exit_strategy = LastValueFactory().create_strategy(ohlcv)
+                entry_list = TwoAmigosFactory().create(ohlcv)
+                exit_list = LastValueFactory().create(ohlcv)
             elif '6141.T' == symbol:  # [x] 機械
-                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '6473.T' == symbol:  # [x] 機械
-                entry_strategy = StochasticCrossFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                entry_list = StochasticCrossFactory().create(ohlcv)
+                exit_list = ContractGainLossFactory().create(ohlcv)
             elif '6479.T' == symbol:  # [x] 電機・精密
-                entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
-                exit_strategy = PercentileFactory().create_strategy(ohlcv)
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = PercentileFactory().create(ohlcv)
             elif '6619.T' == symbol:  # [x] 電機・精密
-                entry_strategy = TheUltimateFactory().create_strategy(ohlcv)
-                exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
+                entry_list = TheUltimateFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
             elif '6762.T' == symbol:  # [x] 電機・精密
-                entry_strategy = PercentRankerFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = PercentRankerFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '6920.T' == symbol:  # [x] 電機・精密
-                entry_strategy = BreakoutKCFactory().create_strategy(ohlcv)
-                exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = ContractGainLossFactory().create(ohlcv)
             elif '8306.T' == symbol:  # [x] 銀行
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = DontGiveItAllBackFactory().create(ohlcv)
             elif '9007.T' == symbol:  # [x] 運輸・物流
-                entry_strategy = AsymmetricTripleFactory().create_strategy(ohlcv)
-                exit_strategy = TimedFactory().create_strategy(ohlcv)
+                entry_list = AsymmetricTripleFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             elif '3088.T' == symbol:  # [x] 小売
-                entry_strategy = TheUltimateFactory().create_strategy(ohlcv)
-                exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)
+                entry_list = TheUltimateFactory().create(ohlcv)
+                exit_list = GettingIsGoodFactory().create(ohlcv)
             elif "1570.T" == symbol:  # ETF
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '9104.T' == symbol:  # 海運
-                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif '9107.T' == symbol:  # 海運
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif "^N225" == symbol:
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
             elif "Topix" == symbol:
-                entry_strategy = BreakoutSigma1Factory().create_strategy(ohlcv)
-                exit_strategy = NewvalueFactory().create_strategy(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             elif "Mothers" == symbol:
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
             elif "JPX400" == symbol:
-                entry_strategy = ATRBasedBreakoutFactory().create_strategy(ohlcv)
-                exit_strategy = EndOfBarFactory().create_strategy(ohlcv)
-            if entry_strategy is not None:
-                asset = Asset(symbol
-                              , asset_values["initial_cash"]
-                              , asset_values["leverage"]
-                              , asset_values["losscut_ratio"])
-                thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
-                                                                                         , entry_strategy
-                                                                                         , exit_strategy
-                                                                                         , asset
-                                                                                         )))
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            for entry_strategy in entry_list:
+                for exit_strategy in exit_list:
+                    asset = Asset(symbol
+                                  , asset_values["initial_cash"]
+                                  , asset_values["leverage"]
+                                  , asset_values["losscut_ratio"])
+                    thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
+                                                                                             , entry_strategy
+                                                                                             , exit_strategy
+                                                                                             , asset
+                                                                                             )))
         thread_join_cnt = 0
         thread_pool_cnt = len(thread_pool)
         split_num = (thread_pool_cnt / 16) + 1
@@ -240,16 +241,12 @@ if __name__ == '__main__':
                     , "JPX400"
     ]
     symbol_list.extend(temp_list)
-
     # ashi
     ashi = "1d"
-
     # range
     start_date = "2012-10-01"
     end_date = "2020-12-31"
-
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
-
     swing_trading(symbol_list, ashi, start_date, end_date, asset_values)
 

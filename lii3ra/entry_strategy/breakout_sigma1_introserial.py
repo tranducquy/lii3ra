@@ -19,7 +19,7 @@ class BreakoutSigma1IntroSerialFactory(EntryStrategyFactory):
 
     def create(self, ohlcv, optimization=False):
         strategies = []
-        if optimization:
+        if not optimization:
             #
             s = ohlcv.symbol
             if s in self.params:

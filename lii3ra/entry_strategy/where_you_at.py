@@ -25,7 +25,7 @@ class WhereYouAtFactory(EntryStrategyFactory):
                 end_time = self.params["default"][1]
                 long_threshold = self.params["default"][2]
                 short_threshold = self.params["default"][3]
-            return WhereYouAt(ohlcv, start_time, end_time, long_threshold, short_threshold)
+            strategies.append(WhereYouAt(ohlcv, start_time, end_time, long_threshold, short_threshold))
         else:
             long_values = [i for i in np.arange(0.1, 1.0, 0.2)]
             short_values = [i for i in np.arange(0.1, 1.0, 0.2)]

@@ -6,7 +6,6 @@ from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 
 
 class ContractGainLossFactory(ExitStrategyFactory):
-
     params = {
         # imethod, profit_ratio, loss_ratio, atr_span, specified_profit_ratio, specified_loss_ratio
         "default": [1, 0.06, 0.02, 14, 0.30, 0.10]
@@ -40,13 +39,13 @@ class ContractGainLossFactory(ExitStrategyFactory):
                 atr_span = self.params["default"][3]
                 specified_profit_ratio = self.params["default"][4]
                 specified_loss_ratio = self.params["default"][5]
-            return ContractGainLoss(ohlcv
-                                    , imethod
-                                    , profit_ratio
-                                    , loss_ratio
-                                    , atr_span
-                                    , specified_profit_ratio
-                                    , specified_loss_ratio)
+            strategies.append(ContractGainLoss(ohlcv
+                                               , imethod
+                                               , profit_ratio
+                                               , loss_ratio
+                                               , atr_span
+                                               , specified_profit_ratio
+                                               , specified_loss_ratio))
         else:
             profit_ratio_list = [0.03, 0.06, 0.09]
             loss_ratio_list = [0.01, 0.03, 0.06]
@@ -96,7 +95,7 @@ class ContractGainLoss(ExitStrategy):
                  , atr_span=14
                  , specified_profit_ratio=0.09
                  , specified_loss_ratio=0.03):
-        self.title = f"Contract[{imethod:.0f}][{profit_ratio:.2f},{loss_ratio:.2f}][{atr_span:.0f}]"\
+        self.title = f"Contract[{imethod:.0f}][{profit_ratio:.2f},{loss_ratio:.2f}][{atr_span:.0f}]" \
                      f"[{specified_profit_ratio:.2f},{specified_loss_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol

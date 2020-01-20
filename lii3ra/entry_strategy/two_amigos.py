@@ -26,7 +26,7 @@ class TwoAmigosFactory(EntryStrategyFactory):
                 adx_span = self.params["default"][0]
                 adx_threshold = self.params["default"][1]
                 lookback = self.params["default"][2]
-            return TwoAmigos(ohlcv, adx_span, adx_threshold, lookback)
+            strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback))
         else:
             adx_span_list = [i for i in range(5, 26, 5)]
             adx_threshold_list = [i for i in np.arange(0.10, 0.9, 0.1)]

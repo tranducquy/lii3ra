@@ -30,11 +30,11 @@ class DontGiveItAllBackFactory(ExitStrategyFactory):
                 long_xatr = self.params["default"][1]
                 short_atr_span = self.params["default"][2]
                 short_xatr = self.params["default"][3]
-            return DontGiveItAllBack(ohlcv
-                                     , long_atr_span
-                                     , long_xatr
-                                     , short_atr_span
-                                     , short_xatr)
+            strategies.append(DontGiveItAllBack(ohlcv
+                                                , long_atr_span
+                                                , long_xatr
+                                                , short_atr_span
+                                                , short_xatr))
         else:
             atr_span_list = [i for i in range(3, 20, 3)]
             xatr_list = [0.10, 0.15, 0.20, 0.25, 0.30]

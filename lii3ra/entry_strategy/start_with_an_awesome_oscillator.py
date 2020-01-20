@@ -14,6 +14,7 @@ class StartWithAwesomeOscillatorFactory(EntryStrategyFactory):
     def create(self, ohlcv, optimization=False):
         strategies = []
         if not optimization:
+            #
             s = ohlcv.symbol
             if s in self.params:
                 slow_period = self.params[s][0]
