@@ -6,7 +6,7 @@ from lii3ra.exit_strategy.exit_strategy import ExitStrategyFactory
 from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 
 
-class Sigma1Factory(ExitStrategyFactory):
+class SigmaFactory(ExitStrategyFactory):
     params = {
         # span, sigma1_ratio
         "default": [3, 1.0]
@@ -23,7 +23,7 @@ class Sigma1Factory(ExitStrategyFactory):
             else:
                 span = self.params["default"][0]
                 sigma1_ratio = self.params["default"][1]
-            strategies.append(Sigma1(ohlcv
+            strategies.append(Sigma(ohlcv
                                      , span
                                      , sigma1_ratio))
         else:
@@ -33,14 +33,14 @@ class Sigma1Factory(ExitStrategyFactory):
             for span in span_list:
                 for sigma1_ratio in sigma1_ratio_list:
                     for losscut_ratio in losscut_ratio_list:
-                        strategies.append(Sigma1(ohlcv
+                        strategies.append(Sigma(ohlcv
                                                  , span
                                                  , sigma1_ratio
                                                  , losscut_ratio))
         return strategies
 
 
-class Sigma1(ExitStrategy):
+class Sigma(ExitStrategy):
     """
     BollingerBandによる逆指値
     """
@@ -50,16 +50,17 @@ class Sigma1(ExitStrategy):
                  , ohlcv
                  , span
                  , sigma1_ratio
-                 , num_of_bars_long
-                 , num_of_bars_short
+                 # , num_of_bars_long
+                 # , num_of_bars_short
                  , losscut_ratio=0.05):
-        self.title = f"Sigma1[{span:.0f},{sigma1_ratio:.2f}][{num_of_bars_long:0.f},{num_of_bars_short:.0f}]"
+        # self.title = f"Sigma1[{span:.0f},{sigma1_ratio:.2f}][{num_of_bars_long:0.f},{num_of_bars_short:.0f}]"
+        self.title = f"Sigma1[{span:.0f},{sigma1_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol
         self.bb = Bollingerband(ohlcv, span, sigma1_ratio)
         self.sigma1_ratio = sigma1_ratio
-        self.num_of_bars_long = num_of_bars_long
-        self.num_of_bars_short = num_of_bars_short
+        # self.num_of_bars_long = num_of_bars_long
+        # self.num_of_bars_short = num_of_bars_short
         self._last_price = 0
         self.pos_price = 0
         self.losscut_ratio = losscut_ratio
@@ -67,7 +68,7 @@ class Sigma1(ExitStrategy):
     def check_exit_long(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
-        if idx <= self.bb.sma_span:
+        if idx <= self.bb.span:
             return OrderType.NONE_ORDER
         self.pos_price = pos_price
         return OrderType.CLOSE_LONG_STOP_MARKET
@@ -75,7 +76,7 @@ class Sigma1(ExitStrategy):
     def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
-        if idx <= self.bb.sma_span:
+        if idx <= self.bb.span:
             return OrderType.NONE_ORDER
         self.pos_price = pos_price
         return OrderType.CLOSE_SHORT_STOP_MARKET
@@ -83,9 +84,9 @@ class Sigma1(ExitStrategy):
     def create_order_exit_long_stop_market(self, idx, entry_idx):
         if not self._is_valid(idx):
             return 0.00
-        # price = self.bb.lower_sigma1[idx]
+        # price = self.bb.ema_lower_sigma1[idx]
         num_of_bars = idx - entry_idx
-        price = self.bb.sma - (self.sigma[idx] * self.sigma1_ratio / num_of_bars)
+        price = self.bb.sma - (self.bb.sigma[idx] * self.sigma1_ratio / num_of_bars)
         # 最低losscut設定
         losscut_price = self.pos_price - (self.pos_price * self.losscut_ratio)
         if price < losscut_price:
@@ -95,12 +96,12 @@ class Sigma1(ExitStrategy):
     def create_order_exit_short_stop_market(self, idx, entry_idx):
         if not self._is_valid(idx):
             return 0.00
-        price = self.bb.upper_sigma1[idx]
+        price = self.bb.ema_upper_sigma1[idx]
         # 最低losscut設定
         losscut_price = self.pos_price + (self.pos_price * self.losscut_ratio)
         if price > losscut_price:
             price = losscut_price
-        return price
+        return math.ceil(price)
 
     def create_order_exit_long_market(self, idx, entry_idx):
         return 0.00

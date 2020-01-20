@@ -68,6 +68,7 @@ from lii3ra.exit_strategy.dont_give_it_all_back import DontGiveItAllBackFactory
 from lii3ra.exit_strategy.profit_protector import ProfitProtectorFactory
 from lii3ra.exit_strategy.exit_where_you_like import ExitWhereYouLikeFactory
 from lii3ra.exit_strategy.tiered import TieredFactory
+from lii3ra.exit_strategy.sigma import SigmaFactory
 
 
 s = Logger()
@@ -95,14 +96,14 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(SplitWeekFactory().create(ohlcv, entry_optimization))  # SPLIT WEEK
         # entry_strategies.extend(DayOfWeekFactory().create(ohlcv, entry_optimization))  # DAY OF WEEK
         # any
-        entry_strategies.extend(ATRBasedBreakoutFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT
+        # entry_strategies.extend(ATRBasedBreakoutFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricAgainFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN
         # entry_strategies.extend(AsymmetricTripleFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC TRIPLE
         # entry_strategies.extend(BackInStyleFactory().create(ohlcv, entry_optimization))  # BACK IN STYLE
         # entry_strategies.extend(BigTailBarsFactory().create(ohlcv, entry_optimization))  # BIG TAIL BARS
         # entry_strategies.extend(BooksCanBeGreatFactory().create(ohlcv, entry_optimization))  # BOOKS CAN BE GREAT
         # entry_strategies.extend(BreakoutWithTwistFactory().create(ohlcv, entry_optimization))  # BREAKOUT WITH A TWIST
-        # entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
         # entry_strategies.extend(TheUltimateFactory().create(ohlcv, entry_optimization))  # THE ULTIMATE
         # entry_strategies.extend(BreakdownDeadAheadFactory().create(ohlcv, entry_optimization))  # BREAKDOWN DEAD A HEAD
         # entry_strategies.extend(ClassicBollingerbandsFactory().create(ohlcv, entry_optimization))  # CLASSIC BOLLINGERBANDS
@@ -144,11 +145,12 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
         # exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
-        exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
+        # exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().create(ohlcv, exit_optimization))     # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().create(ohlcv, exit_optimization))       # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().create(ohlcv, exit_optimization))      # EXIT WHERE YOU LIKE
         # exit_strategies.extend(TieredFactory().create(ohlcv, exit_optimization))                # TIERED
+        exit_strategies.extend(SigmaFactory().create(ohlcv, exit_optimization))                  # SIGMA
         thread_pool = list()
         for entry_strategy in entry_strategies:
             for exit_strategy in exit_strategies:
@@ -191,14 +193,13 @@ if __name__ == '__main__':
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1619 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1620 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1621 import Symbol
-    from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
-    symbol_list = Symbol.symbols
-    # symbol_list = ["^N225"]
+    # from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
+    # symbol_list = Symbol.symbols
+    symbol_list = ["^N225"]
     # symbol_list = ["N225minif"]
-    # symbol_list = ["6753.T"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
+    # symbol_list = ["6753.T"]
     # symbol_list = ["6981.T"]
-    # symbol_list = ["2516.T"]
 
     # ashi
     ashi = "1d"
@@ -211,7 +212,7 @@ if __name__ == '__main__':
 
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
-    entry_optimization = True
+    entry_optimization = False
     exit_optimization = False
 
     for symbol in symbol_list:

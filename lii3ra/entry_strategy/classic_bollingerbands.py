@@ -70,7 +70,7 @@ if Close crosses under UpperBand and close<close[Length2] then SellShort next ba
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
             return OrderType.NONE_ORDER
-        if idx <= self.bb.sma_span:
+        if idx <= self.bb.span:
             return OrderType.NONE_ORDER
         if idx <= self.lookback:
             return OrderType.NONE_ORDER
@@ -92,7 +92,7 @@ if Close crosses under UpperBand and close<close[Length2] then SellShort next ba
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
             return OrderType.NONE_ORDER
-        if idx <= self.bb.sma_span:
+        if idx <= self.bb.span:
             return OrderType.NONE_ORDER
         if idx <= self.lookback:
             return OrderType.NONE_ORDER

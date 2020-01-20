@@ -117,7 +117,7 @@ class BreakoutSigma1IntroSerial(EntryStrategy):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
             return OrderType.NONE_ORDER
-        if idx <= self.long_bb.sma_span:
+        if idx <= self.long_bb.span:
             return OrderType.NONE_ORDER
         if len(self.position.exit_positions_profit) == 0:
             initial_trade = True
@@ -142,7 +142,7 @@ class BreakoutSigma1IntroSerial(EntryStrategy):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
             return OrderType.NONE_ORDER
-        if idx <= self.short_bb.sma_span:
+        if idx <= self.short_bb.span:
             return OrderType.NONE_ORDER
         if len(self.position.exit_positions_profit) == 0:
             initial_trade = True
