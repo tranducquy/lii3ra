@@ -193,7 +193,14 @@ if __name__ == '__main__':
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1619 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1620 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1621 import Symbol
-    from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1622 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1623 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1624 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1625 import Symbol
+    from lii3ra.symbol.topix17etf.volume10b.topix17etf_1626 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1627 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1628 import Symbol
+    # from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
     symbol_list = Symbol.symbols
     # symbol_list = ["^N225"]
     # symbol_list = ["N225minif"]

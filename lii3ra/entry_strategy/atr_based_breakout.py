@@ -90,6 +90,8 @@ class ATRBasedBreakout(EntryStrategy):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
             return OrderType.NONE_ORDER
+        if idx <= self.long_atr.atr_span:
+            return OrderType.NONE_ORDER
         if self.long_atr_ratio == 0:
             return OrderType.NONE_ORDER
         else:
@@ -97,6 +99,10 @@ class ATRBasedBreakout(EntryStrategy):
 
     def check_entry_short(self, idx, last_exit_idx):
         if not self._is_valid(idx):
+            return OrderType.NONE_ORDER
+        if not self._is_indicator_valid(idx):
+            return OrderType.NONE_ORDER
+        if idx <= self.short_atr.atr_span:
             return OrderType.NONE_ORDER
         if self.short_atr_ratio == 0:
             return OrderType.NONE_ORDER
