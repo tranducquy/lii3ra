@@ -11,30 +11,19 @@ class ClassicBollingerbandsFactory(EntryStrategyFactory):
         "default": [20, 2.0, 10]
     }
 
-    rough_params = [
-        [20, 2.0, 10]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            bb_period = self.params[s][0]
-            sigma1_ratio = self.params[s][1]
-            lookback = self.params[s][2]
-        else:
-            bb_period = self.params["default"][0]
-            sigma1_ratio = self.params["default"][1]
-            lookback = self.params["default"][2]
-        return ClassicBollingerbands(ohlcv, bb_period, sigma1_ratio, lookback)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(ClassicBollingerbands(ohlcv
-                                                        , p[0]
-                                                        , p[1]
-                                                        , p[2]))
+        if not optimization:
+            s = ohlcv.symbol
+            if s in self.params:
+                bb_period = self.params[s][0]
+                sigma1_ratio = self.params[s][1]
+                lookback = self.params[s][2]
+            else:
+                bb_period = self.params["default"][0]
+                sigma1_ratio = self.params["default"][1]
+                lookback = self.params["default"][2]
+            strategies.append(ClassicBollingerbands(ohlcv, bb_period, sigma1_ratio, lookback))
         else:
             bb_period_ary = [i for i in range(5, 25, 5)]
             sigma1_ratio_ary = [i for i in np.arange(0.3, 2.0, 0.2)]

@@ -13,66 +13,27 @@ class BreakoutWithTwistFactory(EntryStrategyFactory):
         , "2503.T": [10, 15, 0.2, 10, 15, 0.2]
     }
 
-    rough_params = [
-        [10, 15, 0.3, 0, 1, 0]
-        , [10, 15, 0.7, 0, 1, 0]
-        , [10, 25, 0.3, 0, 1, 0]
-        , [10, 25, 0.7, 0, 1, 0]
-        , [60, 15, 0.3, 0, 1, 0]
-        , [60, 25, 0.3, 0, 1, 0]
-        , [60, 15, 0.7, 0, 1, 0]
-        , [60, 25, 0.7, 0, 1, 0]
-        , [130, 15, 0.3, 0, 1, 0]
-        , [130, 25, 0.3, 0, 1, 0]
-        , [130, 15, 0.7, 0, 1, 0]
-        , [130, 25, 0.7, 0, 1, 0]
-        , [0, 1, 0, 10, 6, 0.40]
-        , [0, 1, 0, 10, 14, 0.40]
-        , [0, 1, 0, 10, 6, 0.70]
-        , [0, 1, 0, 10, 14, 0.70]
-        , [0, 1, 0, 60, 6, 0.40]
-        , [0, 1, 0, 60, 14, 0.40]
-        , [0, 1, 0, 60, 6, 0.70]
-        , [0, 1, 0, 60, 14, 0.70]
-        , [0, 1, 0, 130, 6, 0.40]
-        , [0, 1, 0, 130, 14, 0.40]
-        , [0, 1, 0, 130, 6, 0.70]
-        , [0, 1, 0, 130, 14, 0.70]
-        # , [10, 15, 0.3, 10, 15, 0.3]
-        # , [60, 15, 0.4, 60, 15, 0.4]
-        # , [130, 15, 0.7, 130, 15, 0.7]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_lookback_span = self.params[s][0]
-            long_adx_span = self.params[s][1]
-            long_adx_value = self.params[s][2]
-            short_lookback_span = self.params[s][3]
-            short_adx_span = self.params[s][4]
-            short_adx_value = self.params[s][5]
-        else:
-            long_lookback_span = self.params["default"][0]
-            long_adx_span = self.params["default"][1]
-            long_adx_value = self.params["default"][2]
-            short_lookback_span = self.params["default"][3]
-            short_adx_span = self.params["default"][4]
-            short_adx_value = self.params["default"][5]
-        return BreakoutWithTwist(ohlcv, long_lookback_span, long_adx_span, long_adx_value
-                                 , short_lookback_span, short_adx_span, short_adx_value)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(BreakoutWithTwist(ohlcv
-                                                    , p[0]
-                                                    , p[1]
-                                                    , p[2]
-                                                    , p[3]
-                                                    , p[4]
-                                                    , p[5]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                long_lookback_span = self.params[s][0]
+                long_adx_span = self.params[s][1]
+                long_adx_value = self.params[s][2]
+                short_lookback_span = self.params[s][3]
+                short_adx_span = self.params[s][4]
+                short_adx_value = self.params[s][5]
+            else:
+                long_lookback_span = self.params["default"][0]
+                long_adx_span = self.params["default"][1]
+                long_adx_value = self.params["default"][2]
+                short_lookback_span = self.params["default"][3]
+                short_adx_span = self.params["default"][4]
+                short_adx_value = self.params["default"][5]
+            strategies.append(BreakoutWithTwist(ohlcv, long_lookback_span, long_adx_span, long_adx_value
+                                                , short_lookback_span, short_adx_span, short_adx_value))
         else:
             lookback_span_list = [10, 25, 60, 120, 240]
             adx_span_list = [i for i in range(5, 26, 5)]

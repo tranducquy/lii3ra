@@ -17,52 +17,33 @@ class BreakoutSigma1IntroSerialFactory(EntryStrategyFactory):
         , "9107.T": [6, 0.4, 21, 1.9, 0, 0]
     }
 
-    rough_params = [
-        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        [3, 1.0, 3, 1.0, 3, 6]
-        , [6, 1.0, 6, 1.0, 3, 6]
-        , [9, 1.0, 9, 1.0, 3, 6]
-        , [12, 1.0, 12, 1.0, 3, 6]
-        , [15, 1.0, 15, 1.0, 3, 6]
-        , [18, 1.0, 18, 1.0, 3, 6]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_bb_span = self.params[s][0]
-            long_bb_ratio = self.params[s][1]
-            short_bb_span = self.params[s][2]
-            short_bb_ratio = self.params[s][3]
-            winner_wait_period = self.params[s][4]
-            loser_wait_period = self.params[s][5]
-        else:
-            long_bb_span = self.params["default"][0]
-            long_bb_ratio = self.params["default"][1]
-            short_bb_span = self.params["default"][2]
-            short_bb_ratio = self.params["default"][3]
-            winner_wait_period = self.params["default"][4]
-            loser_wait_period = self.params["default"][5]
-        return BreakoutSigma1IntroSerial(ohlcv
-                                         , long_bb_span
-                                         , long_bb_ratio
-                                         , short_bb_span
-                                         , short_bb_ratio
-                                         , winner_wait_period
-                                         , loser_wait_period
-                                         )
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(BreakoutSigma1IntroSerial(ohlcv
-                                                            , p[0]
-                                                            , p[1]
-                                                            , p[2]
-                                                            , p[3]
-                                                            , p[4]
-                                                            , p[5]))
+        if optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                long_bb_span = self.params[s][0]
+                long_bb_ratio = self.params[s][1]
+                short_bb_span = self.params[s][2]
+                short_bb_ratio = self.params[s][3]
+                winner_wait_period = self.params[s][4]
+                loser_wait_period = self.params[s][5]
+            else:
+                long_bb_span = self.params["default"][0]
+                long_bb_ratio = self.params["default"][1]
+                short_bb_span = self.params["default"][2]
+                short_bb_ratio = self.params["default"][3]
+                winner_wait_period = self.params["default"][4]
+                loser_wait_period = self.params["default"][5]
+            strategies.append(BreakoutSigma1IntroSerial(ohlcv
+                                                        , long_bb_span
+                                                        , long_bb_ratio
+                                                        , short_bb_span
+                                                        , short_bb_ratio
+                                                        , winner_wait_period
+                                                        , loser_wait_period
+                                                        ))
         else:
             long_spans = [i for i in range(3, 25, 5)]
             long_ratios = [i for i in np.arange(0.3, 2.0, 0.3)]

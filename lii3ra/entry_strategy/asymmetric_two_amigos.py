@@ -14,36 +14,22 @@ class AsymmetricTwoAmigosFactory(EntryStrategyFactory):
         , "1570.T": [3, 0.5, 3, 0.60]
     }
 
-    rough_params = [
-        [10, 0.5, 14, 0.20]
-        , [15, 0.5, 14, 0.20]
-        , [20, 0.5, 14, 0.20]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            atr_span = self.params[s][0]
-            atr_mult = self.params[s][1]
-            adx_span = self.params[s][2]
-            adx_threshold = self.params[s][3]
-        else:
-            atr_span = self.params["default"][0]
-            atr_mult = self.params["default"][1]
-            adx_span = self.params["default"][2]
-            adx_threshold = self.params["default"][3]
-        return AsymmetricTwoAmigos(ohlcv, atr_span, atr_mult, adx_span, adx_threshold)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(AsymmetricTwoAmigos(ohlcv
-                                                      , p[0]
-                                                      , p[1]
-                                                      , p[2]
-                                                      , p[3]))
+            s = ohlcv.symbol
+            if s in self.params:
+                atr_span = self.params[s][0]
+                atr_mult = self.params[s][1]
+                adx_span = self.params[s][2]
+                adx_threshold = self.params[s][3]
+            else:
+                atr_span = self.params["default"][0]
+                atr_mult = self.params["default"][1]
+                adx_span = self.params["default"][2]
+                adx_threshold = self.params["default"][3]
+            strategies.append(AsymmetricTwoAmigos(ohlcv, atr_span, atr_mult, adx_span, adx_threshold))
         else:
             atr_span_list = [i for i in range(3, 20, 3)]
             atr_mult_list = [i for i in np.arange(0.3, 1.5, 0.2)]

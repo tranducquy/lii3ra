@@ -7,13 +7,7 @@ class ClosingPatternOnly2Factory(EntryStrategyFactory):
     params = {
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        return ClosingPatternOnly2(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = [ClosingPatternOnly2(ohlcv)]
         return strategies
 

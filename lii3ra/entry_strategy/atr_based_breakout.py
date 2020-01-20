@@ -10,7 +10,8 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
     params = {
         # long_atr_span, long_atr_ratio, short_atr_span, short_atr_ratio
         "default": [15, 1.0, 15, 1.0]
-        , "^N225": [23, 0.6, 28, 0.3]
+        # , "^N225": [23, 0.6, 28, 0.3]  # 20200106-
+        , "^N225": [18, 0.3, 18, 0.3]  # End of Bar 20200120-
         , "9107.T": [28, 0.3, 23, 0.3]
         , "9104.T": [13, 0.3, 28, 0.3]
         , "8306.T": [23, 0.9, 3, 1.2]
@@ -22,41 +23,22 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
         , "1570.T": [28, 0.3, 13, 0.3]  # End of Bar
     }
 
-    rough_params = [
-        [5, 1.0, 5, 1.0]
-        , [10, 1.0, 10, 1.0]
-        , [15, 1.0, 15, 1.0]
-        , [20, 1.0, 20, 1.0]
-        , [5, 0.5, 5, 0.5]
-        , [10, 0.5, 10, 0.5]
-        , [15, 0.5, 15, 0.5]
-        , [20, 0.5, 20, 0.5]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_span = self.params[s][0]
-            long_ratio = self.params[s][1]
-            short_span = self.params[s][2]
-            short_ratio = self.params[s][3]
-        else:
-            long_span = self.params["default"][0]
-            long_ratio = self.params["default"][1]
-            short_span = self.params["default"][2]
-            short_ratio = self.params["default"][3]
-        return ATRBasedBreakout(ohlcv, long_span, long_ratio, short_span, short_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                #
-                strategies.append(ATRBasedBreakout(ohlcv
-                                                   , p[0]
-                                                   , p[1]
-                                                   , p[2]
-                                                   , p[3]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                long_span = self.params[s][0]
+                long_ratio = self.params[s][1]
+                short_span = self.params[s][2]
+                short_ratio = self.params[s][3]
+            else:
+                long_span = self.params["default"][0]
+                long_ratio = self.params["default"][1]
+                short_span = self.params["default"][2]
+                short_ratio = self.params["default"][3]
+            strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, short_span, short_ratio))
         else:
             long_spans = [i for i in range(3, 30, 5)]
             long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]

@@ -21,43 +21,29 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         , "1570.T": [3, 1.2, 3, 1.8, 1]
     }
 
-    rough_params = [
-        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        [3, 1.0, 3, 1.0, 1]
-        , [6, 1.0, 6, 1.0, 1]
-        , [9, 1.0, 9, 1.0, 1]
-        , [12, 1.0, 12, 1.0, 1]
-        , [15, 1.0, 15, 1.0, 1]
-        , [18, 1.0, 18, 1.0, 1]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_bb_span = self.params[s][0]
-            long_bb_ratio = self.params[s][1]
-            short_bb_span = self.params[s][2]
-            short_bb_ratio = self.params[s][3]
-            stop_order = self.params[s][4]
-        else:
-            long_bb_span = self.params["default"][0]
-            long_bb_ratio = self.params["default"][1]
-            short_bb_span = self.params["default"][2]
-            short_bb_ratio = self.params["default"][3]
-            stop_order = self.params["default"][4]
-        return BreakoutSigma1(ohlcv, long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio, stop_order)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(BreakoutSigma1(ohlcv
-                                                 , p[0]
-                                                 , p[1]
-                                                 , p[2]
-                                                 , p[3]
-                                                 , p[4]))
+            s = ohlcv.symbol
+            if s in self.params:
+                long_bb_span = self.params[s][0]
+                long_bb_ratio = self.params[s][1]
+                short_bb_span = self.params[s][2]
+                short_bb_ratio = self.params[s][3]
+                stop_order = self.params[s][4]
+            else:
+                long_bb_span = self.params["default"][0]
+                long_bb_ratio = self.params["default"][1]
+                short_bb_span = self.params["default"][2]
+                short_bb_ratio = self.params["default"][3]
+                stop_order = self.params["default"][4]
+            strategies.append(BreakoutSigma1(ohlcv
+                                             , long_bb_span
+                                             , long_bb_ratio
+                                             , short_bb_span
+                                             , short_bb_ratio
+                                             , stop_order))
         else:
             long_spans = [i for i in range(3, 25, 5)]
             long_ratios = [i for i in np.arange(0.4, 1.7, 0.2)]

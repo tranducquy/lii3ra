@@ -11,27 +11,18 @@ class ExponentiallyBetterFactory(EntryStrategyFactory):
         "default": [10, 20]
     }
 
-    rough_params = [
-        [10, 20]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            fast_ema_span = self.params[s][0]
-            slow_ema_span = self.params[s][1]
-        else:
-            fast_ema_span = self.params["default"][0]
-            slow_ema_span = self.params["default"][1]
-        return ExponentiallyBetter(ohlcv, fast_ema_span, slow_ema_span)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(ExponentiallyBetter(ohlcv
-                                                 , p[0]
-                                                 , p[1]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                fast_ema_span = self.params[s][0]
+                slow_ema_span = self.params[s][1]
+            else:
+                fast_ema_span = self.params["default"][0]
+                slow_ema_span = self.params["default"][1]
+            strategies.append(ExponentiallyBetter(ohlcv, fast_ema_span, slow_ema_span))
         else:
             fast_spans = [i for i in range(3, 20, 3)]
             slow_spans = [i for i in range(10, 40, 3)]

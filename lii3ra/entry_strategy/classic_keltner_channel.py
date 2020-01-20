@@ -11,30 +11,20 @@ class ClassicKeltnerChannelFactory(EntryStrategyFactory):
         "default": [20, 2.0, 10]
     }
 
-    rough_params = [
-        [20, 2.0, 10]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            atr_span = self.params[s][0]
-            kc_ratio = self.params[s][1]
-            lookback = self.params[s][2]
-        else:
-            atr_span = self.params["default"][0]
-            kc_ratio = self.params["default"][1]
-            lookback = self.params["default"][2]
-        return ClassicKeltnerChannel(ohlcv, atr_span, kc_ratio, lookback)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(ClassicKeltnerChannel(ohlcv
-                                                        , p[0]
-                                                        , p[1]
-                                                        , p[2]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                atr_span = self.params[s][0]
+                kc_ratio = self.params[s][1]
+                lookback = self.params[s][2]
+            else:
+                atr_span = self.params["default"][0]
+                kc_ratio = self.params["default"][1]
+                lookback = self.params["default"][2]
+            strategies.append(ClassicKeltnerChannel(ohlcv, atr_span, kc_ratio, lookback))
         else:
             atr_span_ary = [i for i in range(5, 25, 5)]
             kc_ratio_ary = [i for i in np.arange(0.3, 2.0, 0.2)]

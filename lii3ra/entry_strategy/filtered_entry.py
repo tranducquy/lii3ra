@@ -9,24 +9,16 @@ class FilteredEntryFactory(EntryStrategyFactory):
         "default": [25]
     }
 
-    rough_params = [
-        [25]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            lookback = self.params[s][0]
-        else:
-            lookback = self.params["default"][0]
-        return FilteredEntry(ohlcv, lookback)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(FilteredEntry(ohlcv, p[0]))
+            s = ohlcv.symbol
+            if s in self.params:
+                lookback = self.params[s][0]
+            else:
+                lookback = self.params["default"][0]
+            strategies.append(FilteredEntry(ohlcv, lookback))
         else:
             lookback_list = [i for i in range(5, 35, 5)]
             for lookback in lookback_list:

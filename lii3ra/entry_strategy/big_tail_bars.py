@@ -9,26 +9,18 @@ class BigTailBarsFactory(EntryStrategyFactory):
         "default": [10, 1]
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            lookback = self.params[s][0]
-            threshold = self.params[s][1]
-        else:
-            lookback = self.params["default"][0]
-            threshold = self.params["default"][1]
-        return BigTailBars(ohlcv, lookback, threshold)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(BigTailBars(ohlcv
-                                              , p[0]
-                                              , p[1]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                lookback = self.params[s][0]
+                threshold = self.params[s][1]
+            else:
+                lookback = self.params["default"][0]
+                threshold = self.params["default"][1]
+            strategies.append(BigTailBars(ohlcv, lookback, threshold))
         else:
             lookback_ary = [i for i in range(3, 25, 2)]
             threshold_ary = [i for i in range(2, 10, 2)]

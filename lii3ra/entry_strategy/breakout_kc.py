@@ -24,44 +24,23 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "6479.T": [15, 0.5, 15, 0.5, 1]
     }
 
-    rough_params = [
-        [10, 0.3, 10, 0.3, 1]
-        , [15, 0.3, 15, 0.3, 1]
-        , [20, 0.3, 20, 0.3, 1]
-        , [10, 0.5, 10, 0.5, 1]
-        , [15, 0.5, 15, 0.5, 1]
-        , [20, 0.5, 20, 0.5, 1]
-        , [10, 0.7, 10, 0.7, 1]
-        , [15, 0.7, 15, 0.7, 1]
-        , [20, 0.7, 20, 0.7, 1]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_span = self.params[s][0]
-            long_ratio = self.params[s][1]
-            short_span = self.params[s][2]
-            short_ratio = self.params[s][3]
-            stop_order = self.params[s][4]
-        else:
-            long_span = self.params["default"][0]
-            long_ratio = self.params["default"][1]
-            short_span = self.params["default"][2]
-            short_ratio = self.params["default"][3]
-            stop_order = self.params["default"][4]
-        return BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio, stop_order)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(BreakoutKC(ohlcv
-                                             , p[0]
-                                             , p[1]
-                                             , p[2]
-                                             , p[3]
-                                             , p[4]))
+        if not optimization:
+            s = ohlcv.symbol
+            if s in self.params:
+                long_span = self.params[s][0]
+                long_ratio = self.params[s][1]
+                short_span = self.params[s][2]
+                short_ratio = self.params[s][3]
+                stop_order = self.params[s][4]
+            else:
+                long_span = self.params["default"][0]
+                long_ratio = self.params["default"][1]
+                short_span = self.params["default"][2]
+                short_ratio = self.params["default"][3]
+                stop_order = self.params["default"][4]
+            strategies.append(BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio, stop_order))
         else:
             long_span_list = [i for i in range(3, 20, 5)]
             long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]

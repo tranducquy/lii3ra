@@ -11,29 +11,18 @@ class BooksCanBeGreatFactory(EntryStrategyFactory):
         # , "^N225": [3, 1.0, 3, 1.0]
     }
 
-    rough_params = [
-        [5, 10]
-        , [7, 14]
-        , [10, 20]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            fast_sma_span = self.params[s][0]
-            slow_sma_span = self.params[s][1]
-        else:
-            fast_sma_span = self.params["default"][0]
-            slow_sma_span = self.params["default"][1]
-        return BooksCanBeGreat(ohlcv, fast_sma_span, slow_sma_span)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(BooksCanBeGreat(ohlcv
-                                                  , p[0]
-                                                  , p[1]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                fast_sma_span = self.params[s][0]
+                slow_sma_span = self.params[s][1]
+            else:
+                fast_sma_span = self.params["default"][0]
+                slow_sma_span = self.params["default"][1]
+            strategies.append(BooksCanBeGreat(ohlcv, fast_sma_span, slow_sma_span))
         else:
             fast_spans = [i for i in range(3, 10, 2)]
             slow_spans = [i for i in range(10, 30, 4)]

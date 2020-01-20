@@ -11,37 +11,24 @@ class EnhancedEconomicCalenderFactory(EntryStrategyFactory):
         "default": [[2], "093000", [3], "093000", 10]
     }
 
-    rough_params = [
-        [[2], "093000", [3], "093000", 10]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_dayofweek = self.params[s][0]
-            long_time = self.params[s][1]
-            short_dayofweek = self.params[s][2]
-            short_time = self.params[s][3]
-            lookback = self.params[s][4]
-        else:
-            long_dayofweek = self.params["default"][0]
-            long_time = self.params["default"][1]
-            short_dayofweek = self.params["default"][2]
-            short_time = self.params["default"][3]
-            lookback = self.params["default"][4]
-        return EnhancedEconomicCalender(ohlcv, long_dayofweek, long_time, short_dayofweek, short_time, lookback)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(EnhancedEconomicCalender(ohlcv
-                                                           , p[0]
-                                                           , p[1]
-                                                           , p[2]
-                                                           , p[3]
-                                                           , p[4]))
+            s = ohlcv.symbol
+            if s in self.params:
+                long_dayofweek = self.params[s][0]
+                long_time = self.params[s][1]
+                short_dayofweek = self.params[s][2]
+                short_time = self.params[s][3]
+                lookback = self.params[s][4]
+            else:
+                long_dayofweek = self.params["default"][0]
+                long_time = self.params["default"][1]
+                short_dayofweek = self.params["default"][2]
+                short_time = self.params["default"][3]
+                lookback = self.params["default"][4]
+            strategies.append(EnhancedEconomicCalender(ohlcv, long_dayofweek, long_time, short_dayofweek, short_time, lookback))
         else:
             long_dayofweek_list = [i for i in range(7)]
             long_time_list = [f"{i:02.0f}0000" for i in range(25)]

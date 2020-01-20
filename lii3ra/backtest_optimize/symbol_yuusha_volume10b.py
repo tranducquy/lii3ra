@@ -195,7 +195,7 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
         # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
         # entry_strategies.extend(ThreeAmigosFactory().optimization(ohlcv, rough))          # THREE AMIGOS
         # entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
@@ -224,7 +224,6 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(StartWithAwesomeOscillatorFactory().optimization(ohlcv, rough))  # START AWESOME
         # entry_strategies.extend(SecondVerseSameAsTheFirstFactory().optimization(ohlcv, rough))   # SECOND VERSE
         # entry_strategies.extend(FilteredEntryFactory().optimization(ohlcv, rough))        # FILTERED ENTRY
-        entry_strategies.extend(BreakoutSigma1TwiceFactory().optimization(ohlcv, rough))        # BREAKOUT SIGMA1 TWICE
         # EXIT
         # 分足
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                       # TIMED BY TIME

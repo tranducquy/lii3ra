@@ -188,10 +188,10 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # entry_strategies.extend(DayOfWeekFactory().optimization(ohlcv, rough))   # DAY OF WEEK
         # any
         # entry_strategies.extend(BreakoutWithTwistFactory().optimization(ohlcv, rough))    # BREAKOUT WITH A TWIST
-        # entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
+        entry_strategies.extend(ATRBasedBreakoutFactory().optimization(ohlcv, rough))     # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricTripleFactory().optimization(ohlcv, rough))     # ASTMETRIC TRIPLE
         # entry_strategies.extend(AsymmetricAgainFactory().optimization(ohlcv, rough))      # ASTMETRIC AGAIN
-        entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
+        # entry_strategies.extend(BreakoutSigma1Factory().optimization(ohlcv, rough))       # BREAKOUT SIGMA1
         # entry_strategies.extend(PercentRankerFactory().optimization(ohlcv, rough))        # PERCENT RANKER
         # entry_strategies.extend(TwoAmigosFactory().optimization(ohlcv, rough))            # TWO AMIGOS
         # entry_strategies.extend(BreakoutKCFactory().optimization(ohlcv, rough))           # BREAKOUT KC
@@ -226,11 +226,11 @@ def optimization_entry(symbol, ashi, start_date, end_date, asset_values, rough=T
         # exit_strategy = TimedByTimeFactory().create_strategy(ohlcv)                  # TIMED BY TIME
         # 日足
         # any
-        exit_strategy = NewvalueFactory().create_strategy(ohlcv)                     # NEWVALUE
+        # exit_strategy = NewvalueFactory().create_strategy(ohlcv)                     # NEWVALUE
         # exit_strategy = TimedFactory().create_strategy(ohlcv)                        # TIMED
         # exit_strategy = PercentileFactory().create_strategy(ohlcv)                   # PERCENTILE
         # exit_strategy = GettingIsGoodFactory().create_strategy(ohlcv)                # GETTING IS GOOD
-        # exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                     # END OF BAR
+        exit_strategy = EndOfBarFactory().create_strategy(ohlcv)                     # END OF BAR
         # exit_strategy = ContractGainLossFactory().create_strategy(ohlcv)             # CONTRACT GAIN AND LOSS
         # exit_strategy = DontGiveItAllBackFactory().create_strategy(ohlcv)            # DON'T GIVE IT ALL BACK
         # exit_strategy = ProfitProtectorFactory().create_strategy(ohlcv)              # PROFIT PROTECTOR
@@ -359,6 +359,8 @@ def optimization_exit(symbol, ashi, start_date, end_date, asset_values, rough=Tr
     logger.info("backtest bruteforce exit end")
 
 
+
+
 if __name__ == '__main__':
     # symbol
     # from lii3ra.symbol.bollingerband_newvalue import Symbol
@@ -367,15 +369,16 @@ if __name__ == '__main__':
     # symbol_list = ["1570.T"]
     # symbol_list = ["6141.T"]
     # symbol_list = ["9107.T"]
-    symbol_list = ["9104.T"]
+    # symbol_list = ["9104.T"]
+    symbol_list = ["9104.T", "9107.T"]
 
     # ashi
     ashi = "1d"
     # ashi = "15m"
 
     # range
-    # start_date = "2010-01-01"
-    start_date = "2004-01-01"
+    # start_date = "2004-01-01"
+    start_date = "2012-01-01"
     end_date = "2020-12-31"
 
     # その他

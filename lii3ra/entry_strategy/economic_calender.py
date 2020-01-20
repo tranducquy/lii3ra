@@ -11,43 +11,41 @@ class EconomicCalenderFactory(EntryStrategyFactory):
         "default": [[2], "093000", [3], "093000"]
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_dayofweek = self.params[s][0]
-            long_time = self.params[s][1]
-            short_dayofweek = self.params[s][2]
-            short_time = self.params[s][3]
-        else:
-            long_dayofweek = self.params["default"][0]
-            long_time = self.params["default"][1]
-            short_dayofweek = self.params["default"][2]
-            short_time = self.params["default"][3]
-        return EconomicCalender(ohlcv, long_dayofweek, long_time, short_dayofweek, short_time)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        long_dayofweek_list = [i for i in range(7)]
-        long_time_list = [f"{i:02.0f}0000" for i in range(25)]
-        short_dayofweek_list = [i for i in range(7)]
-        short_time_list = [f"{i:02.0f}0000" for i in range(25)]
-        for long_dayofweek in long_dayofweek_list:
-            for long_time in long_time_list:
-                strategies.append(EconomicCalender(ohlcv
-                                                   , long_dayofweek
-                                                   , long_time
-                                                   , self.params["default"][2]
-                                                   , self.params["default"][3]))
-        for short_dayofweek in short_dayofweek_list:
-            for short_time in short_time_list:
-                strategies.append(EconomicCalender(ohlcv
-                                                   , self.params["default"][0]
-                                                   , self.params["default"][1]
-                                                   , short_dayofweek
-                                                   , short_time))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                long_dayofweek = self.params[s][0]
+                long_time = self.params[s][1]
+                short_dayofweek = self.params[s][2]
+                short_time = self.params[s][3]
+            else:
+                long_dayofweek = self.params["default"][0]
+                long_time = self.params["default"][1]
+                short_dayofweek = self.params["default"][2]
+                short_time = self.params["default"][3]
+            strategies.append(EconomicCalender(ohlcv, long_dayofweek, long_time, short_dayofweek, short_time))
+        else:
+            long_dayofweek_list = [i for i in range(7)]
+            long_time_list = [f"{i:02.0f}0000" for i in range(25)]
+            short_dayofweek_list = [i for i in range(7)]
+            short_time_list = [f"{i:02.0f}0000" for i in range(25)]
+            for long_dayofweek in long_dayofweek_list:
+                for long_time in long_time_list:
+                    strategies.append(EconomicCalender(ohlcv
+                                                       , long_dayofweek
+                                                       , long_time
+                                                       , self.params["default"][2]
+                                                       , self.params["default"][3]))
+            for short_dayofweek in short_dayofweek_list:
+                for short_time in short_time_list:
+                    strategies.append(EconomicCalender(ohlcv
+                                                       , self.params["default"][0]
+                                                       , self.params["default"][1]
+                                                       , short_dayofweek
+                                                       , short_time))
         return strategies
 
 
@@ -58,6 +56,7 @@ class EconomicCalender(EntryStrategy):
 If time=935 and dayofweek(date)= 3 then Buy next bar at highd(1) stop;
 If time=935 and dayofweek(date)= 4 then SellShort next bar at lowd(1) stop;
     """
+
     def __init__(self
                  , ohlcv
                  , long_dayofweek
@@ -67,7 +66,7 @@ If time=935 and dayofweek(date)= 4 then SellShort next bar at lowd(1) stop;
                  , order_vol_ratio=0.01):
         long_entry_dayofweek_title = ",".join(map(str, long_dayofweek))
         short_entry_dayofweek_title = ",".join(map(str, short_dayofweek))
-        self.title = f"EconomicCalender[{long_entry_dayofweek_title},{long_time}]"\
+        self.title = f"EconomicCalender[{long_entry_dayofweek_title},{long_time}]" \
                      f"[{short_entry_dayofweek_title},{short_time}]"
         self.ohlcv = ohlcv
         self.long_dayofweek = long_dayofweek
@@ -201,4 +200,3 @@ If time=935 and dayofweek(date)= 4 then SellShort next bar at lowd(1) stop;
         past_lows1 = self.ohlcv.values['low'][self.ohlcv.values['time'].dt.date == before_day1]
         lowest_low1 = past_lows1.min()
         return lowest_low1
-

@@ -5,10 +5,7 @@ from lii3ra.unit import Unit
 
 class EntryStrategyFactory:
 
-    def create_strategy(self, ohlcv):
-        raise NotImplementedError
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization):
         raise NotImplementedError
 
 

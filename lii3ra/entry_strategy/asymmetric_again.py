@@ -32,29 +32,18 @@ class AsymmetricAgainFactory(EntryStrategyFactory):
         # , "9007.T": [20, 1.1]
     }
 
-    rough_params = [
-        [10, 0.5]
-        , [15, 0.5]
-        , [20, 0.5]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            atr_span = self.params[s][0]
-            atr_mult = self.params[s][1]
-        else:
-            atr_span = self.params["default"][0]
-            atr_mult = self.params["default"][1]
-        return AsymmetricAgain(ohlcv, atr_span, atr_mult)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(AsymmetricAgain(ohlcv
-                                                  , p[0]
-                                                  , p[1]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                atr_span = self.params[s][0]
+                atr_mult = self.params[s][1]
+            else:
+                atr_span = self.params["default"][0]
+                atr_mult = self.params["default"][1]
+            strategies.append(AsymmetricAgain(ohlcv, atr_span, atr_mult))
         else:
             atr_spans = [i for i in range(5, 25, 5)]
             atr_mults = [i for i in np.arange(0.3, 1.5, 0.2)]

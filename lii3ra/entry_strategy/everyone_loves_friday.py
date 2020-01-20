@@ -10,34 +10,23 @@ class EveryoneLovesFridayFactory(EntryStrategyFactory):
         # , "^N225": [3, 1.0, 3, 1.0]
     }
 
-    rough_params = [
-        [25, [4], [4]]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            lookback_span = self.params[s][0]
-            long_weekday = self.params[s][1]
-            short_weekday = self.params[s][2]
-        else:
-            lookback_span = self.params["default"][0]
-            long_weekday = self.params["default"][1]
-            short_weekday = self.params["default"][2]
-        return EveryoneLovesFriday(ohlcv
-                                   , lookback_span
-                                   , long_weekday
-                                   , short_weekday)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(EveryoneLovesFriday(ohlcv
-                                                      , p[0]
-                                                      , p[1]
-                                                      , p[2]
-                                                      ))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                lookback_span = self.params[s][0]
+                long_weekday = self.params[s][1]
+                short_weekday = self.params[s][2]
+            else:
+                lookback_span = self.params["default"][0]
+                long_weekday = self.params["default"][1]
+                short_weekday = self.params["default"][2]
+            strategies.append(EveryoneLovesFriday(ohlcv
+                                                  , lookback_span
+                                                  , long_weekday
+                                                  , short_weekday))
         else:
             lookback_spans = [i for i in range(5, 30, 5)]
             long_weekdays = [[0], [1], [2], [3], [4], [5], [6]]

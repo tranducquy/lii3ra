@@ -11,30 +11,20 @@ class BreakdownDeadAheadFactory(EntryStrategyFactory):
         "default": [3, 10, 2.0]
     }
 
-    rough_params = [
-        [3, 10, 2.0]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            atr_span = self.params[s][0]
-            length_of_trend = self.params[s][1]
-            atr_mult = self.params[s][2]
-        else:
-            atr_span = self.params["default"][0]
-            length_of_trend = self.params["default"][1]
-            atr_mult = self.params["default"][2]
-        return BreakdownDeadAhead(ohlcv, atr_span, length_of_trend, atr_mult)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(BreakdownDeadAhead(ohlcv
-                                                     , p[0]
-                                                     , p[1]
-                                                     , p[2]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                atr_span = self.params[s][0]
+                length_of_trend = self.params[s][1]
+                atr_mult = self.params[s][2]
+            else:
+                atr_span = self.params["default"][0]
+                length_of_trend = self.params["default"][1]
+                atr_mult = self.params["default"][2]
+            strategies.append(BreakdownDeadAhead(ohlcv, atr_span, length_of_trend, atr_mult))
         else:
             atr_span_ary = [i for i in range(1, 5, 1)]
             length_of_trend_ary = [i for i in range(5, 20, 3)]

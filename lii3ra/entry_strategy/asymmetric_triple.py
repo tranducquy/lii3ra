@@ -20,38 +20,22 @@ class AsymmetricTripleFactory(EntryStrategyFactory):
         , "9007.T": [15, 0.5, 10, 10]
     }
 
-    rough_params = [
-        [5, 0.3, 10, 5]
-        , [10, 0.3, 20, 10]
-        , [10, 0.3, 25, 10]
-        , [15, 0.5, 10, 10]
-        , [20, 0.3, 10, 10]
-        , [25, 0.3, 5, 15]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            atr_span = self.params[s][0]
-            atr_mult = self.params[s][1]
-            trima_span = self.params[s][2]
-            lookback_span = self.params[s][3]
-        else:
-            atr_span = self.params["default"][0]
-            atr_mult = self.params["default"][1]
-            trima_span = self.params["default"][2]
-            lookback_span = self.params["default"][3]
-        return AsymmetricTriple(ohlcv, atr_span, atr_mult, trima_span, lookback_span)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(AsymmetricTriple(ohlcv
-                                                   , p[0]
-                                                   , p[1]
-                                                   , p[2]
-                                                   , p[3]))
+        if optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                atr_span = self.params[s][0]
+                atr_mult = self.params[s][1]
+                trima_span = self.params[s][2]
+                lookback_span = self.params[s][3]
+            else:
+                atr_span = self.params["default"][0]
+                atr_mult = self.params["default"][1]
+                trima_span = self.params["default"][2]
+                lookback_span = self.params["default"][3]
+            strategies.append(AsymmetricTriple(ohlcv, atr_span, atr_mult, trima_span, lookback_span))
         else:
             atr_spans = [i for i in range(5, 21, 5)]
             atr_mults = [i for i in np.arange(0.3, 1.6, 0.3)]

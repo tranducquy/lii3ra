@@ -6,10 +6,7 @@ from lii3ra.exit_strategy.exit_strategy import ExitStrategy
 
 class NewvalueFactory(ExitStrategyFactory):
 
-    def create_strategy(self, ohlcv):
-        return Newvalue(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = [Newvalue(ohlcv)]
         return strategies
 

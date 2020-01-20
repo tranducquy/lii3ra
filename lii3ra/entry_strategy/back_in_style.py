@@ -7,13 +7,7 @@ class BackInStyleFactory(EntryStrategyFactory):
     params = {
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        return BackInStyle(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         return [BackInStyle(ohlcv)]
 
 

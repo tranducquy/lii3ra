@@ -9,27 +9,24 @@ class DayOfWeekFactory(EntryStrategyFactory):
         "default": [3, 4]
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_dayofweek = self.params[s][0]
-            short_dayofweek = self.params[s][1]
-        else:
-            long_dayofweek = self.params["default"][0]
-            short_dayofweek = self.params["default"][1]
-        return DayOfWeek(ohlcv, long_dayofweek, short_dayofweek)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        long_dayofweek_list = [i for i in range(7)]
-        short_dayofweek_list = [i for i in range(7)]
-        for long_dayofweek in long_dayofweek_list:
-            strategies.append(DayOfWeek(ohlcv, long_dayofweek, self.params["default"][1]))
-        for short_dayofweek in short_dayofweek_list:
-            strategies.append(DayOfWeek(ohlcv, self.params["default"][0], short_dayofweek))
+        if not optimization:
+            s = ohlcv.symbol
+            if s in self.params:
+                long_dayofweek = self.params[s][0]
+                short_dayofweek = self.params[s][1]
+            else:
+                long_dayofweek = self.params["default"][0]
+                short_dayofweek = self.params["default"][1]
+            strategies.append(DayOfWeek(ohlcv, long_dayofweek, short_dayofweek))
+        else:
+            long_dayofweek_list = [i for i in range(7)]
+            short_dayofweek_list = [i for i in range(7)]
+            for long_dayofweek in long_dayofweek_list:
+                strategies.append(DayOfWeek(ohlcv, long_dayofweek, self.params["default"][1]))
+            for short_dayofweek in short_dayofweek_list:
+                strategies.append(DayOfWeek(ohlcv, self.params["default"][0], short_dayofweek))
         return strategies
 
 
