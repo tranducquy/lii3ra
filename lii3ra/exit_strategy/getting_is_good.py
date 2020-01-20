@@ -16,40 +16,23 @@ class GettingIsGoodFactory(ExitStrategyFactory):
         , "3088.T": [3, 3, 0.05]
     }
 
-    rough_params = [
-        [1, 1, 0.05]
-        , [2, 2, 0.05]
-        , [3, 3, 0.05]
-        , [4, 4, 0.05]
-        , [5, 5, 0.05]
-        , [1, 1, 0.03]
-        , [2, 2, 0.03]
-        , [3, 3, 0.03]
-        , [4, 4, 0.03]
-        , [5, 5, 0.03]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            num_of_bars_long = self.params[s][0]
-            num_of_bars_short = self.params[s][1]
-            losscut_ratio = self.params[s][2]
-        else:
-            num_of_bars_long = self.params["default"][0]
-            num_of_bars_short = self.params["default"][1]
-            losscut_ratio = self.params["default"][2]
-        return GettingIsGood(ohlcv
-                             , num_of_bars_long
-                             , num_of_bars_short
-                             , losscut_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(GettingIsGood(ohlcv, p[0], p[1], p[2]))
+            s = ohlcv.symbol
+            if s in self.params:
+                num_of_bars_long = self.params[s][0]
+                num_of_bars_short = self.params[s][1]
+                losscut_ratio = self.params[s][2]
+            else:
+                num_of_bars_long = self.params["default"][0]
+                num_of_bars_short = self.params["default"][1]
+                losscut_ratio = self.params["default"][2]
+            strategies.append(GettingIsGood(ohlcv
+                                            , num_of_bars_long
+                                            , num_of_bars_short
+                                            , losscut_ratio))
         else:
             num_of_bars_list = [i for i in range(1, 5)]
             losscut_ratio_list = [0.03, 0.05]

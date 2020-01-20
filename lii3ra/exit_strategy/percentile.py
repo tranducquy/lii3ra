@@ -14,39 +14,29 @@ class PercentileFactory(ExitStrategyFactory):
         , "6479": [5, 50, 5, 50, 0.05]
     }
 
-    rough_params = [
-        [5, 50, 5, 50, 0.05]
-        , [10, 50, 10, 50, 0.05]
-        , [15, 50, 15, 50, 0.05]
-        , [20, 50, 20, 50, 0.05]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_span = self.params[s][0]
-            long_ratio = self.params[s][1]
-            short_span = self.params[s][2]
-            short_ratio = self.params[s][3]
-            losscut_ratio = self.params[s][4]
-        else:
-            long_span = self.params["default"][0]
-            long_ratio = self.params["default"][1]
-            short_span = self.params["default"][2]
-            short_ratio = self.params["default"][3]
-            losscut_ratio = self.params["default"][4]
-        return Percentile(ohlcv
-                          , long_span
-                          , long_ratio
-                          , short_span
-                          , short_ratio
-                          , losscut_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(Percentile(ohlcv, p[0], p[1], p[2], p[3], p[4]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                long_span = self.params[s][0]
+                long_ratio = self.params[s][1]
+                short_span = self.params[s][2]
+                short_ratio = self.params[s][3]
+                losscut_ratio = self.params[s][4]
+            else:
+                long_span = self.params["default"][0]
+                long_ratio = self.params["default"][1]
+                short_span = self.params["default"][2]
+                short_ratio = self.params["default"][3]
+                losscut_ratio = self.params["default"][4]
+            strategies.append(Percentile(ohlcv
+                                         , long_span
+                                         , long_ratio
+                                         , short_span
+                                         , short_ratio
+                                         , losscut_ratio))
         else:
             long_span_list = [5, 10, 15, 20]
             long_ratio_list = [30, 40, 50, 60, 70]

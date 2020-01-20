@@ -12,30 +12,22 @@ class IntradayBreakoutFactory(EntryStrategyFactory):
         "default": [10, 0.2, "090000", "190000"]
     }
 
-    rough_params = [
-        [10, 0.2, "090000", "190000"]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            adx_span = self.params[s][0]
-            adx_threshold = self.params[s][1]
-            begin_time = self.params[s][2]
-            end_time = self.params[s][3]
-        else:
-            adx_span = self.params["default"][0]
-            adx_threshold = self.params["default"][1]
-            begin_time = self.params["default"][2]
-            end_time = self.params["default"][3]
-        return IntradayBreakout(ohlcv, adx_span, adx_threshold, begin_time, end_time)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(IntradayBreakout(ohlcv, p[0], p[1], p[2], p[3]))
+            s = ohlcv.symbol
+            if s in self.params:
+                adx_span = self.params[s][0]
+                adx_threshold = self.params[s][1]
+                begin_time = self.params[s][2]
+                end_time = self.params[s][3]
+            else:
+                adx_span = self.params["default"][0]
+                adx_threshold = self.params["default"][1]
+                begin_time = self.params["default"][2]
+                end_time = self.params["default"][3]
+            strategies.append(IntradayBreakout(ohlcv, adx_span, adx_threshold, begin_time, end_time))
         else:
             adx_span_list = [i for i in range(4, 15, 2)]
             adx_threshold_list = [f"{i:02.0f}0000" for i in range(25)]

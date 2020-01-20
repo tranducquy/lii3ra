@@ -10,27 +10,17 @@ class SecondVerseSameAsTheFirstFactory(EntryStrategyFactory):
         "default": [0.5, 10]
     }
 
-    rough_params = [
-        [0.5, 10]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            threshold = self.params[s][0]
-            lookback = self.params[s][1]
-        else:
-            threshold = self.params["default"][0]
-            lookback = self.params["default"][1]
-        return SecondVerseSameAsTheFirst(ohlcv, threshold, lookback)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(SecondVerseSameAsTheFirst(ohlcv
-                                                            , p[0]
-                                                            , p[1]))
+        if not optimization:
+            s = ohlcv.symbol
+            if s in self.params:
+                threshold = self.params[s][0]
+                lookback = self.params[s][1]
+            else:
+                threshold = self.params["default"][0]
+                lookback = self.params["default"][1]
+            strategies.append(SecondVerseSameAsTheFirst(ohlcv, threshold, lookback))
         else:
             threshold_list = [i for i in np.arange(0.3, 1.0, 0.2)]
             lookback_list = [i for i in range(5, 20, 3)]

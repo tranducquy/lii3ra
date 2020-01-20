@@ -12,30 +12,20 @@ class StochasticCrossFactory(EntryStrategyFactory):
         , "6473.T": [8, 22, 23]
     }
 
-    rough_params = [
-        [8, 22, 23]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            stoch_period = self.params[s][0]
-            stoch_smoothing1 = self.params[s][1]
-            stoch_smoothing2 = self.params[s][2]
-        else:
-            stoch_period = self.params["default"][0]
-            stoch_smoothing1 = self.params["default"][1]
-            stoch_smoothing2 = self.params["default"][2]
-        return StochasticCross(ohlcv, stoch_period, stoch_smoothing1, stoch_smoothing2)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(StochasticCross(ohlcv
-                                                  , p[0]
-                                                  , p[1]
-                                                  , p[2]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                stoch_period = self.params[s][0]
+                stoch_smoothing1 = self.params[s][1]
+                stoch_smoothing2 = self.params[s][2]
+            else:
+                stoch_period = self.params["default"][0]
+                stoch_smoothing1 = self.params["default"][1]
+                stoch_smoothing2 = self.params["default"][2]
+            strategies.append(StochasticCross(ohlcv, stoch_period, stoch_smoothing1, stoch_smoothing2))
         else:
             period_list = [i for i in range(5, 25, 5)]
             smoothing1_list = [3, 6, 12, 18, 22]

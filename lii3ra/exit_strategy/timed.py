@@ -21,33 +21,22 @@ class TimedFactory(ExitStrategyFactory):
         , "9007.T": [1, 3, 3, 0.03]
     }
 
-    rough_params = [
-        # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
-        [1, 3, 3, 0.03]
-        , [2, 3, 3, 0.03]
-        , [1, 5, 5, 0.03]
-        , [2, 5, 5, 0.03]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            imethod = self.params[s][0]
-            long_span = self.params[s][1]
-            short_span = self.params[s][2]
-            losscut_ratio = self.params[s][3]
-        else:
-            imethod = self.params["default"][0]
-            long_span = self.params["default"][1]
-            short_span = self.params["default"][2]
-            losscut_ratio = self.params["default"][3]
-        return Timed(ohlcv, imethod, long_span, short_span, losscut_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(Timed(ohlcv, p[0], p[1], p[2], p[3]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                imethod = self.params[s][0]
+                long_span = self.params[s][1]
+                short_span = self.params[s][2]
+                losscut_ratio = self.params[s][3]
+            else:
+                imethod = self.params["default"][0]
+                long_span = self.params["default"][1]
+                short_span = self.params["default"][2]
+                losscut_ratio = self.params["default"][3]
+            strategies.append(Timed(ohlcv, imethod, long_span, short_span, losscut_ratio))
         else:
             imethods = [1, 2, 3]
             long_spans = [i for i in range(1, 5, 1)]

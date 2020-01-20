@@ -13,33 +13,22 @@ class MAWithTwistFactory(EntryStrategyFactory):
         # , "^N225": [3, 1.0, 3, 1.0]
     }
 
-    rough_params = [
-        [1, 10, 20, 0.005]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            imethod = self.params[s][0]
-            fast_ma_span = self.params[s][1]
-            slow_ma_span = self.params[s][2]
-            threshold = self.params[s][3]
-        else:
-            imethod = self.params["default"][0]
-            fast_ma_span = self.params["default"][1]
-            slow_ma_span = self.params["default"][2]
-            threshold = self.params["default"][3]
-        return MAWithTwist(ohlcv, imethod, fast_ma_span, slow_ma_span, threshold)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(MAWithTwist(ohlcv
-                                              , p[0]
-                                              , p[1]
-                                              , p[2]
-                                              , p[3]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                imethod = self.params[s][0]
+                fast_ma_span = self.params[s][1]
+                slow_ma_span = self.params[s][2]
+                threshold = self.params[s][3]
+            else:
+                imethod = self.params["default"][0]
+                fast_ma_span = self.params["default"][1]
+                slow_ma_span = self.params["default"][2]
+                threshold = self.params["default"][3]
+            strategies.append(MAWithTwist(ohlcv, imethod, fast_ma_span, slow_ma_span, threshold))
         else:
             imethods = [1, 2]
             fast_spans = [i for i in range(3, 10, 2)]

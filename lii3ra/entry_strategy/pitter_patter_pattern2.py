@@ -7,13 +7,7 @@ class PitterPatterPattern2Factory(EntryStrategyFactory):
     params = {
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        return PitterPatterPattern2(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = [PitterPatterPattern2(ohlcv)]
         return strategies
 

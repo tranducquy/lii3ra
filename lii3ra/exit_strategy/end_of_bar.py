@@ -7,13 +7,7 @@ class EndOfBarFactory(ExitStrategyFactory):
     params = {
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        return EndOfBar(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         return [EndOfBar(ohlcv)]
 
 

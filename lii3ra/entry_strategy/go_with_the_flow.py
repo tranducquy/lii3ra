@@ -8,14 +8,7 @@ class GoWithTheFlowFactory(EntryStrategyFactory):
         # NOTHING
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        return GoWithTheFlow(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = [GoWithTheFlow(ohlcv)]
         return strategies
 

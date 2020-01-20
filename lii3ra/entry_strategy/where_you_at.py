@@ -10,38 +10,22 @@ class WhereYouAtFactory(EntryStrategyFactory):
         "default": ["090000", "143000", 0.50, 0.50]
     }
 
-    rough_params = [
-        ["090000", "143000", 0.40, 0.40]
-        , ["090000", "143000", 0.50, 0.50]
-        , ["090000", "143000", 0.60, 0.60]
-        , ["090000", "113000", 0.40, 0.40]
-        , ["090000", "113000", 0.50, 0.50]
-        , ["090000", "113000", 0.60, 0.60]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            start_time = self.params[s][0]
-            end_time = self.params[s][1]
-            long_threshold = self.params[s][2]
-            short_threshold = self.params[s][3]
-        else:
-            start_time = self.params["default"][0]
-            end_time = self.params["default"][1]
-            long_threshold = self.params["default"][2]
-            short_threshold = self.params["default"][3]
-        return WhereYouAt(ohlcv, start_time, end_time, long_threshold, short_threshold)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(WhereYouAt(ohlcv
-                                             , p[0]
-                                             , p[1]
-                                             , p[2]
-                                             , p[3]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                start_time = self.params[s][0]
+                end_time = self.params[s][1]
+                long_threshold = self.params[s][2]
+                short_threshold = self.params[s][3]
+            else:
+                start_time = self.params["default"][0]
+                end_time = self.params["default"][1]
+                long_threshold = self.params["default"][2]
+                short_threshold = self.params["default"][3]
+            return WhereYouAt(ohlcv, start_time, end_time, long_threshold, short_threshold)
         else:
             long_values = [i for i in np.arange(0.1, 1.0, 0.2)]
             short_values = [i for i in np.arange(0.1, 1.0, 0.2)]

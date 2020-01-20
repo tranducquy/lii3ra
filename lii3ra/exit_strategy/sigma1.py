@@ -11,46 +11,31 @@ class Sigma1Factory(ExitStrategyFactory):
         "default": [3, 1.0]
     }
 
-    rough_params = [
-        [3, 1.0]
-        , [6, 1.0]
-        , [9, 1.0]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            span = self.params[s][0]
-            sigma1_ratio = self.params[s][1]
-        else:
-            span = self.params["default"][0]
-            sigma1_ratio = self.params["default"][1]
-        return Sigma1(ohlcv
-                      , span
-                      , sigma1_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(Sigma1(ohlcv, p[0], p[1], p[2], p[3], p[4]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                span = self.params[s][0]
+                sigma1_ratio = self.params[s][1]
+            else:
+                span = self.params["default"][0]
+                sigma1_ratio = self.params["default"][1]
+            strategies.append(Sigma1(ohlcv
+                                     , span
+                                     , sigma1_ratio))
         else:
-            long_span_list = [5, 10, 15, 20]
-            long_ratio_list = [30, 40, 50, 60, 70]
-            short_span_list = [5, 10, 15, 20]
-            short_ratio_list = [30, 40, 50, 60, 70]
-            losscut_ratio_list = [0.05]
-            for long_span in long_span_list:
-                for long_ratio in long_ratio_list:
-                    for short_span in short_span_list:
-                        for short_ratio in short_ratio_list:
-                            for losscut_ratio in losscut_ratio_list:
-                                strategies.append(Sigma1(ohlcv
-                                                         , long_span
-                                                         , long_ratio
-                                                         , short_span
-                                                         , short_ratio
-                                                         , losscut_ratio))
+            span_list = [i for i in range(3, 25, 5)]
+            sigma1_ratio_list = [0.1, 0.2, 0.3, 0.6, 0.9, 1.2, 1.5]
+            losscut_ratio_list = [0.03, 0.05]
+            for span in span_list:
+                for sigma1_ratio in sigma1_ratio_list:
+                    for losscut_ratio in losscut_ratio_list:
+                        strategies.append(Sigma1(ohlcv
+                                                 , span
+                                                 , sigma1_ratio
+                                                 , losscut_ratio))
         return strategies
 
 

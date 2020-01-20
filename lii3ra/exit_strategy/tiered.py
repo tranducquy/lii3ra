@@ -14,56 +14,45 @@ class TieredFactory(ExitStrategyFactory):
         "default": [30000, 50000, 100000, 0.60, 0.75, 0.90, 30000, 50000, 100000, 0.60, 0.75, 0.90, 0.05]
     }
 
-    rough_params = [
-        [10000, 30000, 50000, 0.60, 0.75, 0.90, 10000, 30000, 50000, 0.60, 0.75, 0.90, 0.05]
-        , [30000, 50000, 100000, 0.60, 0.75, 0.90, 30000, 50000, 100000, 0.60, 0.75, 0.90, 0.05]
-        , [100000, 300000, 500000, 0.60, 0.75, 0.90, 100000, 300000, 500000, 0.60, 0.75, 0.90, 0.05]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_profit_floor1 = self.params[s][0]
-            long_profit_floor2 = self.params[s][1]
-            long_profit_floor3 = self.params[s][2]
-            long_profit_ratio1 = self.params[s][3]
-            long_profit_ratio2 = self.params[s][4]
-            long_profit_ratio3 = self.params[s][5]
-            short_profit_floor1 = self.params[s][6]
-            short_profit_floor2 = self.params[s][7]
-            short_profit_floor3 = self.params[s][8]
-            short_profit_ratio1 = self.params[s][9]
-            short_profit_ratio2 = self.params[s][10]
-            short_profit_ratio3 = self.params[s][11]
-            losscut_ratio = self.params[s][12]
-        else:
-            long_profit_floor1 = self.params["default"][0]
-            long_profit_floor2 = self.params["default"][1]
-            long_profit_floor3 = self.params["default"][2]
-            long_profit_ratio1 = self.params["default"][3]
-            long_profit_ratio2 = self.params["default"][4]
-            long_profit_ratio3 = self.params["default"][5]
-            short_profit_floor1 = self.params["default"][6]
-            short_profit_floor2 = self.params["default"][7]
-            short_profit_floor3 = self.params["default"][8]
-            short_profit_ratio1 = self.params["default"][9]
-            short_profit_ratio2 = self.params["default"][10]
-            short_profit_ratio3 = self.params["default"][11]
-            losscut_ratio = self.params["default"][12]
-        return Tiered(ohlcv
-                      , long_profit_floor1, long_profit_floor2, long_profit_floor3
-                      , long_profit_ratio1, long_profit_ratio2, long_profit_ratio3
-                      , short_profit_floor1, short_profit_floor2, short_profit_floor3
-                      , short_profit_ratio1, short_profit_ratio2, short_profit_ratio3
-                      , losscut_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(Tiered(ohlcv, p[0], p[1], p[2], p[3], p[4], p[5]
-                                         , p[6], p[7], p[8], p[9], p[10], p[11], p[12]))
+            s = ohlcv.symbol
+            if s in self.params:
+                long_profit_floor1 = self.params[s][0]
+                long_profit_floor2 = self.params[s][1]
+                long_profit_floor3 = self.params[s][2]
+                long_profit_ratio1 = self.params[s][3]
+                long_profit_ratio2 = self.params[s][4]
+                long_profit_ratio3 = self.params[s][5]
+                short_profit_floor1 = self.params[s][6]
+                short_profit_floor2 = self.params[s][7]
+                short_profit_floor3 = self.params[s][8]
+                short_profit_ratio1 = self.params[s][9]
+                short_profit_ratio2 = self.params[s][10]
+                short_profit_ratio3 = self.params[s][11]
+                losscut_ratio = self.params[s][12]
+            else:
+                long_profit_floor1 = self.params["default"][0]
+                long_profit_floor2 = self.params["default"][1]
+                long_profit_floor3 = self.params["default"][2]
+                long_profit_ratio1 = self.params["default"][3]
+                long_profit_ratio2 = self.params["default"][4]
+                long_profit_ratio3 = self.params["default"][5]
+                short_profit_floor1 = self.params["default"][6]
+                short_profit_floor2 = self.params["default"][7]
+                short_profit_floor3 = self.params["default"][8]
+                short_profit_ratio1 = self.params["default"][9]
+                short_profit_ratio2 = self.params["default"][10]
+                short_profit_ratio3 = self.params["default"][11]
+                losscut_ratio = self.params["default"][12]
+            strategies.append(Tiered(ohlcv
+                                     , long_profit_floor1, long_profit_floor2, long_profit_floor3
+                                     , long_profit_ratio1, long_profit_ratio2, long_profit_ratio3
+                                     , short_profit_floor1, short_profit_floor2, short_profit_floor3
+                                     , short_profit_ratio1, short_profit_ratio2, short_profit_ratio3
+                                     , losscut_ratio))
         else:
             profit_floor1_list = [10000, 30000, 50000, 100000]
             profit_floor2_list = [30000, 50000, 100000, 200000]

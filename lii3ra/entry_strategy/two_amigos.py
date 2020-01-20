@@ -13,31 +13,20 @@ class TwoAmigosFactory(EntryStrategyFactory):
         , "6047.T": [14, 0.20, 20]
     }
 
-    rough_params = [
-        [14, 0.20, 20]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            adx_span = self.params[s][0]
-            adx_threshold = self.params[s][1]
-            lookback = self.params[s][2]
-        else:
-            adx_span = self.params["default"][0]
-            adx_threshold = self.params["default"][1]
-            lookback = self.params["default"][2]
-        return TwoAmigos(ohlcv, adx_span, adx_threshold, lookback)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(TwoAmigos(ohlcv
-                                            , p[0]
-                                            , p[1]
-                                            , p[2]))
+            s = ohlcv.symbol
+            if s in self.params:
+                adx_span = self.params[s][0]
+                adx_threshold = self.params[s][1]
+                lookback = self.params[s][2]
+            else:
+                adx_span = self.params["default"][0]
+                adx_threshold = self.params["default"][1]
+                lookback = self.params["default"][2]
+            return TwoAmigos(ohlcv, adx_span, adx_threshold, lookback)
         else:
             adx_span_list = [i for i in range(5, 26, 5)]
             adx_threshold_list = [i for i in np.arange(0.10, 0.9, 0.1)]

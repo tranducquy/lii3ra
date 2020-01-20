@@ -9,36 +9,26 @@ class ExitWhereYouLikeFactory(ExitStrategyFactory):
         "default": [10, 7, 10, 7]
     }
 
-    rough_params = [
-        [5, 3, 5, 3]
-        , [10, 7, 10, 7]
-        , [15, 10, 15, 10]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_prof_exit = self.params[s][0]
-            long_loss_exit = self.params[s][1]
-            short_prof_exit = self.params[s][2]
-            short_loss_exit = self.params[s][3]
-        else:
-            long_prof_exit = self.params["default"][0]
-            long_loss_exit = self.params["default"][1]
-            short_prof_exit = self.params["default"][2]
-            short_loss_exit = self.params["default"][3]
-        return ExitWhereYouLike(ohlcv
-                                , long_prof_exit
-                                , long_loss_exit
-                                , short_prof_exit
-                                , short_loss_exit)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(ExitWhereYouLike(ohlcv, p[0], p[1], p[2], p[3]))
+            s = ohlcv.symbol
+            if s in self.params:
+                long_prof_exit = self.params[s][0]
+                long_loss_exit = self.params[s][1]
+                short_prof_exit = self.params[s][2]
+                short_loss_exit = self.params[s][3]
+            else:
+                long_prof_exit = self.params["default"][0]
+                long_loss_exit = self.params["default"][1]
+                short_prof_exit = self.params["default"][2]
+                short_loss_exit = self.params["default"][3]
+            strategies.append(ExitWhereYouLike(ohlcv
+                                               , long_prof_exit
+                                               , long_loss_exit
+                                               , short_prof_exit
+                                               , short_loss_exit))
         else:
             long_prof_exit_list = [i for i in range(3, 16, 3)]
             long_loss_exit_list = [i for i in range(3, 16, 3)]
@@ -74,7 +64,7 @@ class ExitWhereYouLike(ExitStrategy):
                  , long_loss_exit
                  , short_prof_exit
                  , short_loss_exit):
-        self.title = f"ExitWhereYouLike[{long_prof_exit:.0f},{long_loss_exit:.0f}]"\
+        self.title = f"ExitWhereYouLike[{long_prof_exit:.0f},{long_loss_exit:.0f}]" \
                      f"[{short_prof_exit:.0f},{short_loss_exit:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = ohlcv.symbol

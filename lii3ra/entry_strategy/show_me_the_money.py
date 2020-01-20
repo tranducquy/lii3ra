@@ -14,26 +14,20 @@ class ShowMeTheMoneyFactory(EntryStrategyFactory):
         [15, 20, 80]
     ]
 
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            mfi_length = self.params[s][0]
-            oversold = self.params[s][1]
-            overbought = self.params[s][2]
-        else:
-            mfi_length = self.params["default"][0]
-            oversold = self.params["default"][1]
-            overbought = self.params["default"][2]
-        return ShowMeTheMoney(ohlcv, mfi_length, oversold, overbought)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(ShowMeTheMoney(ohlcv
-                                                 , p[0]
-                                                 , p[1]
-                                                 , p[2]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                mfi_length = self.params[s][0]
+                oversold = self.params[s][1]
+                overbought = self.params[s][2]
+            else:
+                mfi_length = self.params["default"][0]
+                oversold = self.params["default"][1]
+                overbought = self.params["default"][2]
+            strategies.append(ShowMeTheMoney(ohlcv, mfi_length, oversold, overbought))
         else:
             mfi_list = [i for i in range(5, 25, 5)]
             oversold_list = [i for i in range(10, 100, 10)]

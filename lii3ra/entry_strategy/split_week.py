@@ -11,36 +11,24 @@ class SplitWeekFactory(EntryStrategyFactory):
         # , "^N225": [3, 1.0, 3, 1.0]
     }
 
-    rough_params = [
-        [5, 14, 0.5, 15, [0, 1, 2]]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            fast_atr_span = self.params[s][0]
-            slow_atr_span = self.params[s][1]
-            slow_atr_ratio = self.params[s][2]
-            lookback = self.params[s][3]
-            entry_weekday = self.params[s][4]
-        else:
-            fast_atr_span = self.params["default"][0]
-            slow_atr_span = self.params["default"][1]
-            slow_atr_ratio = self.params["default"][2]
-            lookback = self.params["default"][3]
-            entry_weekday= self.params["default"][4]
-        return SplitWeek(ohlcv, fast_atr_span, slow_atr_span, slow_atr_ratio, lookback, entry_weekday)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(SplitWeek(ohlcv
-                                            , p[0]
-                                            , p[1]
-                                            , p[2]
-                                            , p[3]
-                                            , p[4]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                fast_atr_span = self.params[s][0]
+                slow_atr_span = self.params[s][1]
+                slow_atr_ratio = self.params[s][2]
+                lookback = self.params[s][3]
+                entry_weekday = self.params[s][4]
+            else:
+                fast_atr_span = self.params["default"][0]
+                slow_atr_span = self.params["default"][1]
+                slow_atr_ratio = self.params["default"][2]
+                lookback = self.params["default"][3]
+                entry_weekday = self.params["default"][4]
+            strategies.append(SplitWeek(ohlcv, fast_atr_span, slow_atr_span, slow_atr_ratio, lookback, entry_weekday))
         else:
             fast_atr_spans = [i for i in range(3, 6, 1)]
             slow_atr_spans = [i for i in range(10, 16, 2)]

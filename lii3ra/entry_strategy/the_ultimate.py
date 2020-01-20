@@ -13,35 +13,22 @@ class TheUltimateFactory(EntryStrategyFactory):
         , "6619.T": [15, 7, 16, 28]
     }
 
-    rough_params = [
-        [5, 3, 6, 12]
-        , [10, 7, 14, 28]
-        , [15, 10, 20, 40]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            lookback = self.params[s][0]
-            ultimate_avg1 = self.params[s][1]
-            ultimate_avg2 = self.params[s][2]
-            ultimate_avg3 = self.params[s][3]
-        else:
-            lookback = self.params["default"][0]
-            ultimate_avg1 = self.params["default"][1]
-            ultimate_avg2 = self.params["default"][2]
-            ultimate_avg3 = self.params["default"][3]
-        return TheUltimate(ohlcv, lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(TheUltimate(ohlcv
-                                              , p[0]
-                                              , p[1]
-                                              , p[2]
-                                              , p[3]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                lookback = self.params[s][0]
+                ultimate_avg1 = self.params[s][1]
+                ultimate_avg2 = self.params[s][2]
+                ultimate_avg3 = self.params[s][3]
+            else:
+                lookback = self.params["default"][0]
+                ultimate_avg1 = self.params["default"][1]
+                ultimate_avg2 = self.params["default"][2]
+                ultimate_avg3 = self.params["default"][3]
+            strategies.append(TheUltimate(ohlcv, lookback, ultimate_avg1, ultimate_avg2, ultimate_avg3))
         else:
             lookback_list = [i for i in range(5, 25, 5)]
             ultimate_avg1_list = [i for i in range(7, 8, 2)]

@@ -9,30 +9,19 @@ class IntroducingSerialCorrelationFactory(EntryStrategyFactory):
         "default": [15, 5, 20]
     }
 
-    rough_params = [
-        [15, 5, 20]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            lookback = self.params[s][0]
-            winner_waiting_period = self.params[s][1]
-            loser_waiting_period = self.params[s][2]
-        else:
-            lookback = self.params["default"][0]
-            winner_waiting_period = self.params["default"][1]
-            loser_waiting_period = self.params["default"][2]
-        return IntroducingSerialCorrelation(ohlcv, lookback, winner_waiting_period, loser_waiting_period)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(IntroducingSerialCorrelation(ohlcv
-                                                               , p[0]
-                                                               , p[1]
-                                                               , p[2]))
+        if not optimization:
+            s = ohlcv.symbol
+            if s in self.params:
+                lookback = self.params[s][0]
+                winner_waiting_period = self.params[s][1]
+                loser_waiting_period = self.params[s][2]
+            else:
+                lookback = self.params["default"][0]
+                winner_waiting_period = self.params["default"][1]
+                loser_waiting_period = self.params["default"][2]
+            strategies.append(IntroducingSerialCorrelation(ohlcv, lookback, winner_waiting_period, loser_waiting_period))
         else:
             lookback_list = [i for i in range(3, 25, 2)]
             winner_wait = [i for i in range(2, 20, 2)]

@@ -11,36 +11,23 @@ class StartWithAwesomeOscillatorFactory(EntryStrategyFactory):
         "default": [7, 5, 5, 7, 0.5]
     }
 
-    rough_params = [
-        [7, 5, 5, 7, 0.5]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            slow_period = self.params[s][0]
-            fast_period = self.params[s][1]
-            aback = self.params[s][2]
-            bback = self.params[s][3]
-            fatr = self.params[s][4]
-        else:
-            slow_period = self.params["default"][0]
-            fast_period = self.params["default"][1]
-            aback = self.params["default"][2]
-            bback = self.params["default"][3]
-            fatr = self.params["default"][4]
-        return StartWithAwesomeOscillator(ohlcv, slow_period, fast_period, aback, bback, fatr)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(StartWithAwesomeOscillator(ohlcv
-                                                             , p[0]
-                                                             , p[1]
-                                                             , p[2]
-                                                             , p[3]
-                                                             , p[4]))
+        if not optimization:
+            s = ohlcv.symbol
+            if s in self.params:
+                slow_period = self.params[s][0]
+                fast_period = self.params[s][1]
+                aback = self.params[s][2]
+                bback = self.params[s][3]
+                fatr = self.params[s][4]
+            else:
+                slow_period = self.params["default"][0]
+                fast_period = self.params["default"][1]
+                aback = self.params["default"][2]
+                bback = self.params["default"][3]
+                fatr = self.params["default"][4]
+            strategies.append(StartWithAwesomeOscillator(ohlcv, slow_period, fast_period, aback, bback, fatr))
         else:
             slow_list = [i for i in range(7, 12, 2)]
             fast_list = [i for i in range(3, 6, 1)]

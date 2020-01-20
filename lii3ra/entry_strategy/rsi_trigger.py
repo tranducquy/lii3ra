@@ -13,30 +13,20 @@ class RSITriggerFactory(EntryStrategyFactory):
         , "2427.T": [15, 80, 5]
     }
 
-    rough_params = [
-        [5, 80, 5]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            rsi_span = self.params[s][0]
-            rsi_threshold = self.params[s][1]
-            ema_span = self.params[s][2]
-        else:
-            rsi_span = self.params["default"][0]
-            rsi_threshold = self.params["default"][1]
-            ema_span = self.params["default"][2]
-        return RSITrigger(ohlcv, rsi_span, rsi_threshold, ema_span)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(RSITrigger(ohlcv
-                                             , p[0]
-                                             , p[1]
-                                             , p[2]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                rsi_span = self.params[s][0]
+                rsi_threshold = self.params[s][1]
+                ema_span = self.params[s][2]
+            else:
+                rsi_span = self.params["default"][0]
+                rsi_threshold = self.params["default"][1]
+                ema_span = self.params["default"][2]
+            strategies.append(RSITrigger(ohlcv, rsi_span, rsi_threshold, ema_span))
         else:
             rsi_spans = [i for i in range(3, 16, 3)]
             rsi_thresholds = [i for i in range(20, 90, 10)]

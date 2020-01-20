@@ -9,34 +9,23 @@ class NewHighWithConsecutiveHighsFactory(EntryStrategyFactory):
         "default": [10, 3, 10, 3]
     }
 
-    rough_params = [
-        [10, 3, 10, 3]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_lookback_period = self.params[s][0]
-            long_consecutive_cnt = self.params[s][1]
-            short_lookback_period = self.params[s][2]
-            short_consecutive_cnt = self.params[s][3]
-        else:
-            long_lookback_period = self.params["default"][0]
-            long_consecutive_cnt = self.params["default"][1]
-            short_lookback_period = self.params["default"][2]
-            short_consecutive_cnt = self.params["default"][3]
-        return NewHighWithConsecutiveHighs(ohlcv, long_lookback_period, long_consecutive_cnt
-                                           , short_lookback_period, short_consecutive_cnt)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(NewHighWithConsecutiveHighs(ohlcv
-                                                              , p[0]
-                                                              , p[1]
-                                                              , p[2]
-                                                              , p[3]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                long_lookback_period = self.params[s][0]
+                long_consecutive_cnt = self.params[s][1]
+                short_lookback_period = self.params[s][2]
+                short_consecutive_cnt = self.params[s][3]
+            else:
+                long_lookback_period = self.params["default"][0]
+                long_consecutive_cnt = self.params["default"][1]
+                short_lookback_period = self.params["default"][2]
+                short_consecutive_cnt = self.params["default"][3]
+            strategies.append(NewHighWithConsecutiveHighs(ohlcv, long_lookback_period, long_consecutive_cnt
+                                               , short_lookback_period, short_consecutive_cnt))
         else:
             long_lookback_period_ary = [i for i in range(5, 20, 5)]
             long_consecutive_cnt_ary = [i for i in range(2, 7, 2)]

@@ -7,13 +7,7 @@ class QuickPullbackPatternFactory(EntryStrategyFactory):
     params = {
     }
 
-    rough_params = [
-    ]
-
-    def create_strategy(self, ohlcv):
-        return QuickPullbackPattern(ohlcv)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = [QuickPullbackPattern(ohlcv)]
         return strategies
 

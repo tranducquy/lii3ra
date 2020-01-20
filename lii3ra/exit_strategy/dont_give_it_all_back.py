@@ -15,38 +15,26 @@ class DontGiveItAllBackFactory(ExitStrategyFactory):
         , "1802.T": [3, 0.20, 3, 0.20]
     }
 
-    rough_params = [
-        [3, 0.20, 3, 0.20]
-        , [5, 0.20, 5, 0.20]
-        , [8, 0.20, 8, 0.20]
-        , [10, 0.20, 10, 0.20]
-        , [15, 0.20, 15, 0.20]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_atr_span = self.params[s][0]
-            long_xatr = self.params[s][1]
-            short_atr_span = self.params[s][2]
-            short_xatr = self.params[s][3]
-        else:
-            long_atr_span = self.params["default"][0]
-            long_xatr = self.params["default"][1]
-            short_atr_span = self.params["default"][2]
-            short_xatr = self.params["default"][3]
-        return DontGiveItAllBack(ohlcv
-                                 , long_atr_span
-                                 , long_xatr
-                                 , short_atr_span
-                                 , short_xatr)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(DontGiveItAllBack(ohlcv, p[0], p[1], p[2], p[3]))
+            s = ohlcv.symbol
+            if s in self.params:
+                long_atr_span = self.params[s][0]
+                long_xatr = self.params[s][1]
+                short_atr_span = self.params[s][2]
+                short_xatr = self.params[s][3]
+            else:
+                long_atr_span = self.params["default"][0]
+                long_xatr = self.params["default"][1]
+                short_atr_span = self.params["default"][2]
+                short_xatr = self.params["default"][3]
+            return DontGiveItAllBack(ohlcv
+                                     , long_atr_span
+                                     , long_xatr
+                                     , short_atr_span
+                                     , short_xatr)
         else:
             atr_span_list = [i for i in range(3, 20, 3)]
             xatr_list = [0.10, 0.15, 0.20, 0.25, 0.30]

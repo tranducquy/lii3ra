@@ -9,41 +9,29 @@ class ProfitProtectorFactory(ExitStrategyFactory):
         "default": [80000, 0.80, 80000, 0.80, 0.05]
     }
 
-    rough_params = [
-        [10000, 0.60, 10000, 0.60, 0.05]
-        , [30000, 0.60, 30000, 0.60, 0.05]
-        , [50000, 0.60, 50000, 0.60, 0.05]
-        , [100000, 0.60, 100000, 0.60, 0.05]
-        , [300000, 0.60, 300000, 0.60, 0.05]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            long_profit_floor = self.params[s][0]
-            long_pp_ratio = self.params[s][1]
-            short_profit_floor = self.params[s][2]
-            short_pp_ratio = self.params[s][3]
-            losscut_ratio = self.params[s][4]
-        else:
-            long_profit_floor = self.params["default"][0]
-            long_pp_ratio = self.params["default"][1]
-            short_profit_floor = self.params["default"][2]
-            short_pp_ratio = self.params["default"][3]
-            losscut_ratio = self.params["default"][4]
-        return ProfitProtector(ohlcv
-                               , long_profit_floor
-                               , long_pp_ratio
-                               , short_profit_floor
-                               , short_pp_ratio
-                               , losscut_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(ProfitProtector(ohlcv, p[0], p[1], p[2], p[3]))
+            s = ohlcv.symbol
+            if s in self.params:
+                long_profit_floor = self.params[s][0]
+                long_pp_ratio = self.params[s][1]
+                short_profit_floor = self.params[s][2]
+                short_pp_ratio = self.params[s][3]
+                losscut_ratio = self.params[s][4]
+            else:
+                long_profit_floor = self.params["default"][0]
+                long_pp_ratio = self.params["default"][1]
+                short_profit_floor = self.params["default"][2]
+                short_pp_ratio = self.params["default"][3]
+                losscut_ratio = self.params["default"][4]
+            strategies.append(ProfitProtector(ohlcv
+                                              , long_profit_floor
+                                              , long_pp_ratio
+                                              , short_profit_floor
+                                              , short_pp_ratio
+                                              , losscut_ratio))
         else:
             long_profit_floor_list = [i for i in range(3, 16, 3)]
             long_pp_ratio_list = [0.05, 0.10, 0.20, 0.30]
@@ -111,7 +99,7 @@ class ProfitProtector(ExitStrategy):
             return OrderType.CLOSE_LONG_MARKET
         return OrderType.NONE_ORDER
 
-    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx ):
+    def check_exit_short(self, pos_price, pos_vol, idx, entry_idx):
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
         if idx == entry_idx:

@@ -12,37 +12,24 @@ class RangeBreakoutFactory(EntryStrategyFactory):
         "default": ["084500", "100000", 10, 1.0, 1.0]
     }
 
-    rough_params = [
-        ["084500", "100000", 10, 1.0, 1.0]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            begin_time = self.params[s][0]
-            end_time = self.params[s][1]
-            atr_span_1d = self.params[s][2]
-            xfl = self.params[s][3]
-            xfs = self.params[s][4]
-        else:
-            begin_time = self.params["default"][0]
-            end_time = self.params["default"][1]
-            atr_span_1d = self.params["default"][2]
-            xfl = self.params["default"][3]
-            xfs = self.params["default"][4]
-        return RangeBreakout(ohlcv, begin_time, end_time, atr_span_1d, xfl, xfs)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(RangeBreakout(ohlcv
-                                                , p[0]
-                                                , p[1]
-                                                , p[2]
-                                                , p[3]
-                                                , p[4]))
+            s = ohlcv.symbol
+            if s in self.params:
+                begin_time = self.params[s][0]
+                end_time = self.params[s][1]
+                atr_span_1d = self.params[s][2]
+                xfl = self.params[s][3]
+                xfs = self.params[s][4]
+            else:
+                begin_time = self.params["default"][0]
+                end_time = self.params["default"][1]
+                atr_span_1d = self.params["default"][2]
+                xfl = self.params["default"][3]
+                xfs = self.params["default"][4]
+            strategies.append(RangeBreakout(ohlcv, begin_time, end_time, atr_span_1d, xfl, xfs))
         else:
             time_list = [
                 ["080000", "090000"]

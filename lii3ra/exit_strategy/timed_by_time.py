@@ -9,47 +9,16 @@ class TimedByTimeFactory(ExitStrategyFactory):
         "default": ["113000"]
     }
 
-    rough_params = [
-        ["003000"]
-        , ["013000"]
-        , ["023000"]
-        , ["033000"]
-        , ["043000"]
-        , ["053000"]
-        , ["063000"]
-        , ["073000"]
-        , ["083000"]
-        , ["093000"]
-        , ["103000"]
-        , ["113000"]
-        , ["123000"]
-        , ["133000"]
-        , ["143000"]
-        , ["153000"]
-        , ["163000"]
-        , ["173000"]
-        , ["183000"]
-        , ["193000"]
-        , ["203000"]
-        , ["213000"]
-        , ["223000"]
-        , ["233000"]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            exit_time = self.params[s][0]
-        else:
-            exit_time = self.params["default"][0]
-        return TimedByTime(ohlcv, exit_time)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(TimedByTime(ohlcv, p[0]))
+            s = ohlcv.symbol
+            if s in self.params:
+                exit_time = self.params[s][0]
+            else:
+                exit_time = self.params["default"][0]
+            strategies.append(TimedByTime(ohlcv, exit_time))
         else:
             hour_list = [f"{i:02.0f}" for i in range(24)]
             min_list = ["00", "15", "30", "45"]

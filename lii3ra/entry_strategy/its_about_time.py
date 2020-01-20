@@ -9,29 +9,20 @@ class ItsAboutTimeFactory(EntryStrategyFactory):
         "default": [12, "100000", "110000"]
     }
 
-    rough_params = [
-        [12, "100000", "100000"]
-        , [12, "110000", "110000"]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            lookback = self.params[s][0]
-            long_time = self.params[s][1]
-            short_time = self.params[s][2]
-        else:
-            lookback = self.params["default"][0]
-            long_time = self.params["default"][1]
-            short_time = self.params["default"][2]
-        return ItsAboutTime(ohlcv, lookback, long_time, short_time)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            # strategies = self._optimization_rough(ohlcv)
-            for p in self.rough_params:
-                strategies.append(ItsAboutTime(ohlcv, p[0], p[1], p[2]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                lookback = self.params[s][0]
+                long_time = self.params[s][1]
+                short_time = self.params[s][2]
+            else:
+                lookback = self.params["default"][0]
+                long_time = self.params["default"][1]
+                short_time = self.params["default"][2]
+            strategies.append(ItsAboutTime(ohlcv, lookback, long_time, short_time))
         else:
             lookback_list = [i for i in range(4, 15, 2)]
             long_time_list = [f"{i:02.0f}0000" for i in range(25)]

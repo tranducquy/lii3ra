@@ -15,37 +15,24 @@ class PeelingStopFactory(EntryStrategyFactory):
         , "^N225": [2, 10, -0.15, 0.15, 0.25]
     }
 
-    rough_params = [
-        [1, 25, 1.0, -1.0]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            imethod = self.params[s][0]
-            span = self.params[s][1]
-            long_peeling_ratio = self.params[s][2]
-            short_peeling_ratio = self.params[s][3]
-            atr_ratio = self.params[s][4]
-        else:
-            imethod = self.params["default"][0]
-            span = self.params["default"][1]
-            long_peeling_ratio = self.params["default"][2]
-            short_peeling_ratio = self.params["default"][3]
-            atr_ratio = self.params["default"][4]
-        return PeelingStop(ohlcv, imethod, span, long_peeling_ratio, short_peeling_ratio, atr_ratio)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
+        if not optimization:
             #
-            for p in self.rough_params:
-                strategies.append(PeelingStop(ohlcv
-                                              , p[0]
-                                              , p[1]
-                                              , p[2]
-                                              , p[3]
-                                              , p[4]))
+            s = ohlcv.symbol
+            if s in self.params:
+                imethod = self.params[s][0]
+                span = self.params[s][1]
+                long_peeling_ratio = self.params[s][2]
+                short_peeling_ratio = self.params[s][3]
+                atr_ratio = self.params[s][4]
+            else:
+                imethod = self.params["default"][0]
+                span = self.params["default"][1]
+                long_peeling_ratio = self.params["default"][2]
+                short_peeling_ratio = self.params["default"][3]
+                atr_ratio = self.params["default"][4]
+            strategies.append(PeelingStop(ohlcv, imethod, span, long_peeling_ratio, short_peeling_ratio, atr_ratio))
         else:
             imethods = [1, 2, 3]
             span_list = [i for i in range(5, 31, 5)]

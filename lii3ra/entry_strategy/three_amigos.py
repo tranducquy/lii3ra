@@ -11,39 +11,26 @@ class ThreeAmigosFactory(EntryStrategyFactory):
         "default": [14, 0.25, 14, 50, 20, 10]
     }
 
-    rough_params = [
-        [14, 0.25, 14, 50, 20, 10]
-    ]
-
-    def create_strategy(self, ohlcv):
-        s = ohlcv.symbol
-        if s in self.params:
-            adx_span = self.params[s][0]
-            adx_threshold = self.params[s][1]
-            rsi_span = self.params[s][2]
-            rsi_threshold = self.params[s][3]
-            lookback1 = self.params[s][4]
-            lookback2 = self.params[s][5]
-        else:
-            adx_span = self.params["default"][0]
-            adx_threshold = self.params["default"][1]
-            rsi_span = self.params["default"][2]
-            rsi_threshold = self.params["default"][3]
-            lookback1 = self.params["default"][4]
-            lookback2 = self.params["default"][5]
-        return ThreeAmigos(ohlcv, adx_span, adx_threshold, rsi_span, rsi_threshold, lookback1, lookback2)
-
-    def optimization(self, ohlcv, rough=True):
+    def create(self, ohlcv, optimization=False):
         strategies = []
-        if rough:
-            for p in self.rough_params:
-                strategies.append(ThreeAmigos(ohlcv
-                                              , p[0]
-                                              , p[1]
-                                              , p[2]
-                                              , p[3]
-                                              , p[4]
-                                              , p[5]))
+        if not optimization:
+            #
+            s = ohlcv.symbol
+            if s in self.params:
+                adx_span = self.params[s][0]
+                adx_threshold = self.params[s][1]
+                rsi_span = self.params[s][2]
+                rsi_threshold = self.params[s][3]
+                lookback1 = self.params[s][4]
+                lookback2 = self.params[s][5]
+            else:
+                adx_span = self.params["default"][0]
+                adx_threshold = self.params["default"][1]
+                rsi_span = self.params["default"][2]
+                rsi_threshold = self.params["default"][3]
+                lookback1 = self.params["default"][4]
+                lookback2 = self.params["default"][5]
+            strategies.append(ThreeAmigos(ohlcv, adx_span, adx_threshold, rsi_span, rsi_threshold, lookback1, lookback2))
         else:
             adx_span_ary = [i for i in range(5, 25, 5)]
             adx_threshold_ary = [i for i in np.arange(0.10, 0.9, 0.1)]
