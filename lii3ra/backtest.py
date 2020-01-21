@@ -55,6 +55,8 @@ from lii3ra.entry_strategy.peeling import PeelingFactory
 from lii3ra.entry_strategy.peeling_stop import PeelingStopFactory
 from lii3ra.entry_strategy.asymmetric_two_amigos import AsymmetricTwoAmigosFactory
 from lii3ra.entry_strategy.breakout_kc import BreakoutKCFactory
+from lii3ra.entry_strategy.asymmetric_again_with_flow import AsymmetricAgainWithFlowFactory
+from lii3ra.entry_strategy.asymmetric_again_introserial import AsymmetricAgainIntroSerialFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.lastvalue import LastValueFactory
@@ -133,6 +135,8 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(PeelingStopFactory().create(ohlcv, entry_optimization))                      # PEELING STOP
         # entry_strategies.extend(AsymmetricTwoAmigosFactory().create(ohlcv, entry_optimization))            # ASYMMETRIC TWO AMIGOS
         # entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
+        # entry_strategies.extend(AsymmetricAgainWithFlowFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN WITH FLOW
+        # entry_strategies.extend(AsymmetricAgainIntroSerialFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN INTRO SERIAL
 
         # EXIT
         # 分足
@@ -197,12 +201,14 @@ if __name__ == '__main__':
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1623 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1624 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1625 import Symbol
-    from lii3ra.symbol.topix17etf.volume10b.topix17etf_1626 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1626 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1627 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1628 import Symbol
     # from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
-    symbol_list = Symbol.symbols
+    # symbol_list = Symbol.symbols
     # symbol_list = ["^N225"]
+    # symbol_list = ["JPX400"]
+    symbol_list = ["4042.T"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
     # symbol_list = ["6753.T"]
