@@ -89,9 +89,6 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "3288.T" == symbol:  # 不動産
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = TimedFactory().create(ohlcv)
-            elif "4043.T" == symbol:  # 素材・化学
-                entry_list = AsymmetricAgainFactory().create(ohlcv)
-                exit_list = TimedFactory().create(ohlcv)
             elif "3038.T" == symbol:  # 商社・卸
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = GettingIsGoodFactory().create(ohlcv)
@@ -200,6 +197,15 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "JPX400" == symbol:
                 entry_list = ATRBasedBreakoutFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
+            elif "4043.T" == symbol:
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "3064.T" == symbol:
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "2267.T" == symbol:
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
             for entry_strategy in entry_list:
                 for exit_strategy in exit_list:
                     asset = Asset(symbol
@@ -238,13 +244,12 @@ if __name__ == '__main__':
                     , "^N225"
                     , "Topix"
                     , "Mothers"
-                    , "JPX400"
     ]
     symbol_list.extend(temp_list)
     # ashi
     ashi = "1d"
     # range
-    start_date = "2012-10-01"
+    start_date = "2012-01-01"
     end_date = "2020-12-31"
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
