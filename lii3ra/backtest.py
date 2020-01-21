@@ -204,15 +204,13 @@ if __name__ == '__main__':
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1626 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1627 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1628 import Symbol
-    # from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
+    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1630 import Symbol
     # symbol_list = Symbol.symbols
+    symbol_list = ["8830.T"]
     # symbol_list = ["^N225"]
     # symbol_list = ["JPX400"]
-    symbol_list = ["4042.T"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
-    # symbol_list = ["6753.T"]
-    # symbol_list = ["6981.T"]
 
     # ashi
     ashi = "1d"
