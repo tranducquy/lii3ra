@@ -244,13 +244,12 @@ if __name__ == '__main__':
                     , "^N225"
                     , "Topix"
                     , "Mothers"
-                    , "JPX400"
     ]
     symbol_list.extend(temp_list)
     # ashi
     ashi = "1d"
     # range
-    start_date = "2012-10-01"
+    start_date = "2012-01-01"
     end_date = "2020-12-31"
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
