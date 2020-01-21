@@ -22,12 +22,12 @@ where symbol in ({})
 order by symbol
 """
 
-b01 = "2014"
-b02 = "2015"
-b03 = "2016"
-b04 = "2017"
-b05 = "2018"
-b06 = "2019"
+b01 = "2015"
+b02 = "2016"
+b03 = "2017"
+b04 = "2018"
+b05 = "2019"
+b06 = "2020"
 backtest_profit_query = """
 select
 b04.symbol
@@ -144,11 +144,11 @@ and round((b01.profit
 order by sum desc, 8 desc, 7 desc
 """
 
-b01m = '2019-08'
-b02m = '2019-09'
-b03m = '2019-10'
-b04m = '2019-11'
-b05m = '2019-12'
+b01m = '2019-09'
+b02m = '2019-10'
+b03m = '2019-11'
+b04m = '2019-12'
+b05m = '2020-01'
 backtest_profit_monthry_query = """
 select
  b01.symbol
@@ -259,6 +259,7 @@ select
 ,entry_strategy
 ,exit_strategy
 ,mp.positiontype_name
+,pos_price
 ,open
 ,high
 ,low
