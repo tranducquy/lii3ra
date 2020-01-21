@@ -89,9 +89,6 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "3288.T" == symbol:  # 不動産
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = TimedFactory().create(ohlcv)
-            elif "4043.T" == symbol:  # 素材・化学
-                entry_list = AsymmetricAgainFactory().create(ohlcv)
-                exit_list = TimedFactory().create(ohlcv)
             elif "3038.T" == symbol:  # 商社・卸
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = GettingIsGoodFactory().create(ohlcv)
@@ -198,6 +195,15 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = ATRBasedBreakoutFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
             elif "JPX400" == symbol:
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "4043.T" == symbol:
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "3064.T" == symbol:
+                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "2267.T" == symbol:
                 entry_list = ATRBasedBreakoutFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
             for entry_strategy in entry_list:
