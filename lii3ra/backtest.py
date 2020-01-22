@@ -57,6 +57,7 @@ from lii3ra.entry_strategy.asymmetric_two_amigos import AsymmetricTwoAmigosFacto
 from lii3ra.entry_strategy.breakout_kc import BreakoutKCFactory
 from lii3ra.entry_strategy.asymmetric_again_with_flow import AsymmetricAgainWithFlowFactory
 from lii3ra.entry_strategy.asymmetric_again_introserial import AsymmetricAgainIntroSerialFactory
+from lii3ra.entry_strategy.atr_based_breakout_oneside import ATRBasedBreakoutOneSideFactory
 # EXIT
 from lii3ra.exit_strategy.newvalue import NewvalueFactory
 from lii3ra.exit_strategy.lastvalue import LastValueFactory
@@ -98,7 +99,7 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(SplitWeekFactory().create(ohlcv, entry_optimization))  # SPLIT WEEK
         # entry_strategies.extend(DayOfWeekFactory().create(ohlcv, entry_optimization))  # DAY OF WEEK
         # any
-        entry_strategies.extend(ATRBasedBreakoutFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT
+        # entry_strategies.extend(ATRBasedBreakoutFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT
         # entry_strategies.extend(AsymmetricAgainFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN
         # entry_strategies.extend(AsymmetricTripleFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC TRIPLE
         # entry_strategies.extend(BackInStyleFactory().create(ohlcv, entry_optimization))  # BACK IN STYLE
@@ -134,9 +135,10 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(PeelingFactory().create(ohlcv, entry_optimization))                      # PEELING
         # entry_strategies.extend(PeelingStopFactory().create(ohlcv, entry_optimization))                      # PEELING STOP
         # entry_strategies.extend(AsymmetricTwoAmigosFactory().create(ohlcv, entry_optimization))            # ASYMMETRIC TWO AMIGOS
-        # entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
+        entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
         # entry_strategies.extend(AsymmetricAgainWithFlowFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN WITH FLOW
         # entry_strategies.extend(AsymmetricAgainIntroSerialFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN INTRO SERIAL
+        # entry_strategies.extend(ATRBasedBreakoutOneSideFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT ONE SIDE
 
         # EXIT
         # 分足
@@ -206,8 +208,9 @@ if __name__ == '__main__':
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1628 import Symbol
     # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1630 import Symbol
     # symbol_list = Symbol.symbols
-    symbol_list = ["8830.T"]
+    # symbol_list = ["4043.T"]
     # symbol_list = ["^N225"]
+    symbol_list = ["Mothers"]
     # symbol_list = ["JPX400"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
@@ -223,7 +226,7 @@ if __name__ == '__main__':
 
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
-    entry_optimization = True
+    entry_optimization = False
     exit_optimization = False
 
     for symbol in symbol_list:
