@@ -194,23 +194,26 @@ if __name__ == '__main__':
     # from lii3ra.symbol.n225 import Symbol
     # from lii3ra.symbol.n225_topix import Symbol
     # from lii3ra.symbol.yuusha_volume10b import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1617 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1618 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1619 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1620 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1621 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1622 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1623 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1624 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1625 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1626 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1627 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1628 import Symbol
-    # from lii3ra.symbol.topix17etf.volume10b.topix17etf_1630 import Symbol
-    # symbol_list = Symbol.symbols
+    from lii3ra.symbol.volume_100m import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1617 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1618 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1619 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1620 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1621 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1622 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1623 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1624 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1625 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1626 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1627 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1628 import Symbol
+    # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1630 import Symbol
+    # from lii3ra.symbol.opt.atr2kc_20200122 import Symbol
+    # from lii3ra.symbol.opt.average_day_range_2017_2019 import Symbol
+    symbol_list = Symbol.symbols
     # symbol_list = ["4043.T"]
     # symbol_list = ["^N225"]
-    symbol_list = ["Mothers"]
+    # symbol_list = ["Mothers"]
     # symbol_list = ["JPX400"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
@@ -226,7 +229,7 @@ if __name__ == '__main__':
 
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
-    entry_optimization = False
+    entry_optimization = True
     exit_optimization = False
 
     for symbol in symbol_list:

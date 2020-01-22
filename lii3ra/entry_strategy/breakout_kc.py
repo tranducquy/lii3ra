@@ -46,13 +46,15 @@ class BreakoutKCFactory(EntryStrategyFactory):
                 severe = self.params["default"][5]
             strategies.append(BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio, stop_order, severe))
         else:
-            long_span_list = [i for i in range(3, 20, 5)]
-            long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            short_span_list = [i for i in range(3, 20, 5)]
-            short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            stop_order_list = [1, 2]
+            long_span_list = [i for i in range(3, 15, 5)]
+            # long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
+            long_ratio_list = [0.3, 0.7]
+            short_span_list = [i for i in range(3, 15, 5)]
+            # short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
+            short_ratio_list = [0.3, 0.7]
+            # stop_order_list = [1, 2]
+            stop_order_list = [2]
             severe = True
-            # stop_order_list = [2]
             for long_span in long_span_list:
                 for long_ratio in long_ratio_list:
                     for stop_order in stop_order_list:

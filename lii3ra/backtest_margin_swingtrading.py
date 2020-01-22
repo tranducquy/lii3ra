@@ -201,8 +201,9 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_list = EndOfBarFactory().create(ohlcv)
             elif "4043.T" == symbol:
                 # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                # exit_list = EndOfBarFactory().create(ohlcv)
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
-                exit_list = EndOfBarFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
             # elif "3064.T" == symbol:
             #     entry_list = ATRBasedBreakoutFactory().create(ohlcv)
             #     exit_list = EndOfBarFactory().create(ohlcv)

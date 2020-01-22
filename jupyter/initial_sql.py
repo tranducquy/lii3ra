@@ -139,7 +139,7 @@ and round((b01.profit
 + b03.profit
 + b04.profit
 + b05.profit
-+ b06.profit)::numeric, 2) > 1.0
++ b06.profit)::numeric, 2) > 0.5
 
 order by sum desc, 8 desc, 7 desc
 """
