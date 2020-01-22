@@ -6,7 +6,7 @@ select
  *
 from backtest_result
 where symbol in ('{}')
-and rate_of_return > 100
+and rate_of_return > 5000
 order by rate_of_return desc
 """
 
@@ -121,8 +121,15 @@ and b04.entry_strategy = b06.entry_strategy
 and b04.exit_strategy = b06.exit_strategy
 
 where b04.symbol = '{}'
-and b04.entry_strategy like 'BreakoutTwist%'
+and b04.entry_strategy like 'ATRBasedBreakout%'
 and b04.exit_strategy like 'EndOfBar'
+
+and round((b01.profit
++ b02.profit
++ b03.profit
++ b04.profit
++ b05.profit
++ b06.profit)::numeric, 2) > 1.0
 
 order by sum desc, 8 desc, 7 desc
 """
@@ -222,8 +229,16 @@ and b01.entry_strategy = b05.entry_strategy
 and b01.exit_strategy = b05.exit_strategy
 
 where b01.symbol = '{}'
-and b01.entry_strategy like 'BreakoutTwist%'
+and b01.entry_strategy like 'ATRBasedBreakout%'
 and b01.exit_strategy like 'EndOfBar'
+
+and round((
+b01.profit
++ b02.profit
++ b03.profit
++ b04.profit
++ b05.profit
+)::numeric, 2) > 0.0
 
 order by sum desc
 """
