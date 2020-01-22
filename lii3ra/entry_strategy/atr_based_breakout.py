@@ -54,11 +54,11 @@ class ATRBasedBreakoutFactory(EntryStrategyFactory):
             for short_span in short_spans:
                 for short_ratio in short_ratios:
                     strategies.append(ATRBasedBreakout(ohlcv, 3, 100.0, short_span, short_ratio))
-            for long_span in long_spans:
-                for long_ratio in long_ratios:
-                    for short_span in short_spans:
-                        for short_ratio in short_ratios:
-                            strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, short_span, short_ratio))
+            # for long_span in long_spans:
+            #     for long_ratio in long_ratios:
+            #         for short_span in short_spans:
+            #             for short_ratio in short_ratios:
+            #                 strategies.append(ATRBasedBreakout(ohlcv, long_span, long_ratio, short_span, short_ratio))
         return strategies
 
 

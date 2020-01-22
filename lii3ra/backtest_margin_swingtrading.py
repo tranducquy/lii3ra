@@ -177,35 +177,40 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = TheUltimateFactory().create(ohlcv)
                 exit_list = GettingIsGoodFactory().create(ohlcv)
             elif "1570.T" == symbol:  # ETF
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
+                # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                # exit_list = NewvalueFactory().create(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = GettingIsGoodFactory().create(ohlcv)
             elif '9104.T' == symbol:  # 海運
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif '9107.T' == symbol:  # 海運
                 entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                # entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "^N225" == symbol:
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
             elif "Topix" == symbol:
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "Mothers" == symbol:
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                exit_list = EndOfBarFactory().create(ohlcv)
-            elif "JPX400" == symbol:
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                entry_list = BreakoutKCFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
             elif "4043.T" == symbol:
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
-            elif "3064.T" == symbol:
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                exit_list = EndOfBarFactory().create(ohlcv)
-            elif "2267.T" == symbol:
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                exit_list = EndOfBarFactory().create(ohlcv)
+            # elif "3064.T" == symbol:
+            #     entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+            #     exit_list = EndOfBarFactory().create(ohlcv)
+            # elif "2267.T" == symbol:
+            #     entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+            #     exit_list = EndOfBarFactory().create(ohlcv)
+            else:
+                logger.info(f"unknown symbol:[{symbol}]")
             for entry_strategy in entry_list:
                 for exit_strategy in exit_list:
                     asset = Asset(symbol
