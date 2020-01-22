@@ -65,7 +65,6 @@ from lii3ra.symbol.yuusha_volume10b import Symbol
 symbol_list = Symbol.symbols
 temp_list = [
     "9107.T"
-    , "9104.T"
     , "^N225"
 ]
 symbol_list.extend(temp_list)
