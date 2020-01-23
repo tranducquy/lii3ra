@@ -14,8 +14,13 @@ class YfinanceCrawler:
             self.logger = lii3ra.mylogger.Logger().myLogger()
         else:
             self.logger = logger
+        self.symbols = None
+        self.start_date = None
 
     def download(self, symbols, start_date, end_date):
+        self.symbols = symbols
+        self.start_date = start_date
+        self.end_date = end_date
         for symbol in symbols:
             data = yf.download(symbol, start=start_date, end=end_date)
             idx = data.index.size
@@ -41,6 +46,32 @@ class YfinanceCrawler:
             dba = DbAccess()
             dba.insert_ohlcv(quotes)
             self.logger.info("downloaded:[%s][%s-%s] [%s-%s]" % (symbol, start_date, end_date, min_date, max_date))
+
+    def _exe(self, symbol):
+        data = yf.download(symbol, start=start_date, end=end_date)
+        idx = data.index.size
+        max_date = ''
+        min_date = ''
+        quotes = list()
+        for i in range(idx):
+            business_date = (data.index[i]).strftime("%Y-%m-%d")
+            volume = int((data['Volume'][i]).astype('int64'))
+            open_price = data['Open'][i]
+            high_price = data['High'][i]
+            low_price = data['Low'][i]
+            close_price = data['Close'][i]
+            quotes.append((symbol, "1d", business_date, open_price, high_price, low_price, close_price, volume))
+            if max_date == '':
+                max_date = business_date
+            elif business_date > max_date:
+                max_date = business_date
+            if min_date == '':
+                min_date = business_date
+            elif business_date < min_date:
+                min_date = business_date
+        dba = DbAccess()
+        dba.insert_ohlcv(quotes)
+        self.logger.info("downloaded:[%s][%s-%s] [%s-%s]" % (symbol, start_date, end_date, min_date, max_date))
 
 
 def get_option():

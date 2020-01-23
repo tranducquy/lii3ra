@@ -191,8 +191,8 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "^N225" == symbol:
                 # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
                 # exit_list = EndOfBarFactory().create(ohlcv)
-                entry_list = AsymmetricAgainFactory().create(ohlcv)
-                exit_list = GettingIsGoodFactory().create(ohlcv)
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = PercentileFactory().create(ohlcv)
             elif "Topix" == symbol:
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)

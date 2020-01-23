@@ -10,7 +10,8 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class BreakoutKCFactory(EntryStrategyFactory):
     params = {
         # long_atr_span, long_kc_ratio, short_atr_span, short_kc_ratio
-        "default": [15, 0.5, 15, 0.5, 1, False]
+        # "default": [15, 0.5, 15, 0.5, 1, False]
+        "default": [3, 0.3, 3, 0.3, 2, True]
         , "^N225": [3, 0.3, 8, 0.3, 1, False]
         , "7717.T": [18, 1.2, 8, 0.6, 1, False]
         , "4043.T": [15, 0.5, 15, 0.5, 1, False]
@@ -48,10 +49,10 @@ class BreakoutKCFactory(EntryStrategyFactory):
         else:
             long_span_list = [i for i in range(3, 15, 5)]
             # long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            long_ratio_list = [0.3, 0.7]
+            long_ratio_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2]
             short_span_list = [i for i in range(3, 15, 5)]
             # short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            short_ratio_list = [0.3, 0.7]
+            short_ratio_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2]
             # stop_order_list = [1, 2]
             stop_order_list = [2]
             severe = True
