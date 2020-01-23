@@ -48,18 +48,18 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
                                              , stop_order))
         else:
             long_spans = [i for i in range(3, 25, 5)]
-            long_ratios = [i for i in np.arange(0.4, 1.7, 0.2)]
+            long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
             short_spans = [i for i in range(3, 25, 5)]
-            short_ratios = [i for i in np.arange(0.4, 1.7, 0.2)]
+            short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
             stop_order_list = [1, 2]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
                     for stop_order in stop_order_list:
-                        strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 0, 0.0, stop_order))
+                        strategies.append(BreakoutSigma1(ohlcv, long_span, long_ratio, 1, 0.0, stop_order))
             for short_span in short_spans:
                 for short_ratio in short_ratios:
                     for stop_order in stop_order_list:
-                        strategies.append(BreakoutSigma1(ohlcv, 0, 0, short_span, short_ratio, stop_order))
+                        strategies.append(BreakoutSigma1(ohlcv, 1, 0.0, short_span, short_ratio, stop_order))
             for long_span in long_spans:
                 for long_ratio in long_ratios:
                     for short_span in short_spans:
@@ -110,6 +110,10 @@ class BreakoutSigma1(EntryStrategy):
             return OrderType.NONE_ORDER
         if not self._is_indicator_valid(idx):
             return OrderType.NONE_ORDER
+        if idx <= self.long_bb.span:
+            return OrderType.NONE_ORDER
+        if self.long_bb.sigma1_ratio == 0:
+            return OrderType.NONE_ORDER
         long_flg = self.ohlcv.values['high'][idx] >= self.long_bb.upper_sigma1[idx]
         short_flg = self.ohlcv.values['low'][idx] <= self.long_bb.lower_sigma1[idx]
         if long_flg and not short_flg:
@@ -120,6 +124,10 @@ class BreakoutSigma1(EntryStrategy):
     def check_entry_short(self, idx, last_exit_idx):
         # 当日安値がsigma1以下
         if not self._is_valid(idx):
+            return OrderType.NONE_ORDER
+        if idx <= self.short_bb.span:
+            return OrderType.NONE_ORDER
+        if self.short_bb.sigma1_ratio == 0:
             return OrderType.NONE_ORDER
         long_flg = self.ohlcv.values['high'][idx] >= self.short_bb.upper_sigma1[idx]
         short_flg = self.ohlcv.values['low'][idx] <= self.short_bb.lower_sigma1[idx]
