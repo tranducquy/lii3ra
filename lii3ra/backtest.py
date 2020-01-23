@@ -188,13 +188,19 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
 
 if __name__ == '__main__':
     # symbol
-    # from lii3ra.symbol.test import Symbol
+    # from lii3ra.symbol.tse1 import Symbol
+    # from lii3ra.symbol.tse2 import Symbol
+    # from lii3ra.symbol.tse2_100m import Symbol
+    # from lii3ra.symbol.jasdaq import Symbol
+    from lii3ra.symbol.jasdaq_100m import Symbol
+    # from lii3ra.symbol.mothers import Symbol
+    # from lii3ra.symbol.mothers_100m import Symbol
     # from lii3ra.symbol.bollingerband_newvalue import Symbol
     # from lii3ra.symbol.topix17etf.topix17etf_nomura import Symbol
     # from lii3ra.symbol.n225 import Symbol
     # from lii3ra.symbol.n225_topix import Symbol
     # from lii3ra.symbol.yuusha_volume10b import Symbol
-    from lii3ra.symbol.volume_100m import Symbol
+    # from lii3ra.symbol.volume_100m import Symbol
     # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1617 import Symbol
     # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1618 import Symbol
     # from lii3ra.symbol.topix17etf.volume1b.topix17etf_1619 import Symbol

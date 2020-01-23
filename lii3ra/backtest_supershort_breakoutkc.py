@@ -3,6 +3,7 @@
 
 import threading
 import numpy as np
+import datetime
 from lii3ra.mylogger import Logger
 from lii3ra.market import Market
 from lii3ra.asset import Asset
@@ -242,21 +243,19 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
 
 if __name__ == '__main__':
     # symbol
-    from lii3ra.symbol.yuusha_volume1b import Symbol
-    symbol_list = Symbol.symbols
-    temp_list = [
-                    "1570.T"
-                    , "9107.T"
-                    , "^N225"
-                    , "Topix"
-                    , "Mothers"
-    ]
-    symbol_list.extend(temp_list)
+    import lii3ra.symbol.tse1
+    import lii3ra.symbol.tse2
+    import lii3ra.symbol.mothers
+    import lii3ra.symbol.jasdaq
+    symbol_list = lii3ra.symbol.tse1.Symbol.symbols
+    symbol_list.extend(lii3ra.symbol.tse2.Symbol.symbols)
+    symbol_list.extend(lii3ra.symbol.mothers.Symbol.symbols)
+    symbol_list.extend(lii3ra.symbol.jasdaq.Symbol.symbols)
     # ashi
     ashi = "1d"
     # range
-    start_date = "2012-01-01"
-    end_date = "2020-12-31"
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=60)).strftime("%Y-%m-%d")
+    end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
     swing_trading(symbol_list, ashi, start_date, end_date, asset_values)
