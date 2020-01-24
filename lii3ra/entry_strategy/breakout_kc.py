@@ -23,7 +23,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "9616.T": [3, 0.3, 23, 0.3, 1, False]
         # , "6479.T": [10, 0.5, 10, 0.7, 1]
         , "6479.T": [15, 0.5, 15, 0.5, 1, False]
-        , "Mothers": [3, 0.3, 3, 0.3, 2, True]
+        , "Mothers": [3, 0.4, 3, 0.4, 2, True]
     }
 
     def create(self, ohlcv, optimization=False):
@@ -49,10 +49,10 @@ class BreakoutKCFactory(EntryStrategyFactory):
         else:
             long_span_list = [i for i in range(3, 15, 5)]
             # long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            long_ratio_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2]
+            long_ratio_list = [0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
             short_span_list = [i for i in range(3, 15, 5)]
             # short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            short_ratio_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2]
+            short_ratio_list = [0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
             # stop_order_list = [1, 2]
             stop_order_list = [2]
             severe = True
