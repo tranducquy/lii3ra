@@ -79,7 +79,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
         for symbol in symbol_list:
             logger.info(f"parameter symbol={symbol}, ashi={ashi}, start_date={start_date}, end_date={end_date}")
             ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
-            entry_list = BreakoutKCFactory().create(ohlcv)
+            entry_list = BreakoutSigma1Factory().create(ohlcv)
             exit_list = EndOfBarFactory().create(ohlcv)
             for entry_strategy in entry_list:
                 for exit_strategy in exit_list:
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     symbol_list.extend(lii3ra.symbol.tse2.Symbol.symbols)
     symbol_list.extend(lii3ra.symbol.mothers.Symbol.symbols)
     symbol_list.extend(lii3ra.symbol.jasdaq.Symbol.symbols)
-    symbol_list.extend(['Mothers'])
+    symbol_list.extend(['^N225', 'Topix', 'JPX400', 'Mothers'])
     # ashi
     ashi = "1d"
     # range
