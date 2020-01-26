@@ -150,8 +150,8 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # exit_strategies.extend(TimedFactory().create(ohlcv, exit_optimization))                 # TIMED
         # exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
-        # exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
-        exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
+        exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
+        # exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().create(ohlcv, exit_optimization))     # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().create(ohlcv, exit_optimization))       # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().create(ohlcv, exit_optimization))      # EXIT WHERE YOU LIKE
@@ -224,12 +224,13 @@ if __name__ == '__main__':
     # symbol_list = lii3ra.symbol.tse2_100m.Symbol.symbols
     # symbol_list.extend(lii3ra.symbol.mothers_100m.Symbol.symbols)
     # symbol_list.extend(lii3ra.symbol.jasdaq_100m.Symbol.symbols)
-    # symbol_list = ["^N225"]
-    symbol_list = ["Mothers"]
+    symbol_list = ["^N225"]
+    # symbol_list = ["Topix"]
+    # symbol_list = ["Mothers"]
     # symbol_list = ["JPX400"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
-    # symbol_list = ["6502.T"]
+    # symbol_list = ["6920.T"]
 
     # ashi
     ashi = "1d"
@@ -237,12 +238,12 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2004-01-01"
-    start_date = "2001-01-01"
+    start_date = "2012-01-01"
     end_date = "2020-12-31"
 
     # その他
-    asset_values = {"initial_cash": 1000000, "leverage": 10.0, "losscut_ratio": 0.05}
-    entry_optimization = False
+    asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
+    entry_optimization = True
     exit_optimization = False
 
     for symbol in symbol_list:
