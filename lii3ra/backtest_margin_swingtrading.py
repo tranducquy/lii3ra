@@ -201,16 +201,27 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = BreakoutKCFactory().create(ohlcv)
                 exit_list = EndOfBarFactory().create(ohlcv)
             elif "4043.T" == symbol:
-                # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                # exit_list = EndOfBarFactory().create(ohlcv)
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = TimedFactory().create(ohlcv)
-            # elif "3064.T" == symbol:
-            #     entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-            #     exit_list = EndOfBarFactory().create(ohlcv)
-            # elif "2267.T" == symbol:
-            #     entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-            #     exit_list = EndOfBarFactory().create(ohlcv)
+            elif "9263.T" == symbol:
+                entry_list = TwoAmigosFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
+            elif "6166.T" == symbol:
+                entry_list = GoWithTheFlowFactory().create(ohlcv)
+                # exit_list = LastValueFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
+            elif "3622.T" == symbol:
+                entry_list = GoWithTheFlowFactory().create(ohlcv)
+                exit_list = LastValueFactory().create(ohlcv)
+            elif "6997.T" == symbol:
+                entry_list = TwoAmigosFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
+            elif "3793.T" == symbol:
+                entry_list = TheUltimateFactory().create(ohlcv)
+                exit_list = TimedFactory().create(ohlcv)
+            elif "6778.T" == symbol:
+                entry_list = GoWithTheFlowFactory().create(ohlcv)
+                exit_list = LastValueFactory().create(ohlcv)
             else:
                 logger.info(f"unknown symbol:[{symbol}]")
             for entry_strategy in entry_list:
@@ -242,7 +253,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
 
 if __name__ == '__main__':
     # symbol
-    from lii3ra.symbol.yuusha_volume1b import Symbol
+    from lii3ra.symbol.margin_swing_trading import Symbol
     symbol_list = Symbol.symbols
     temp_list = [
                     "1570.T"
