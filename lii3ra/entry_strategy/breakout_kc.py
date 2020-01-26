@@ -25,6 +25,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
         # , "6479.T": [10, 0.5, 10, 0.7, 1]
         , "6479.T": [15, 0.5, 15, 0.5, 1, False]
         , "Mothers": [3, 0.4, 3, 0.4, 2, True]
+        , "Topix": [3, 0.3, 3, 0.5, 2, False]
     }
 
     def create(self, ohlcv, optimization=False):
