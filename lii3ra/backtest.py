@@ -106,7 +106,7 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(BigTailBarsFactory().create(ohlcv, entry_optimization))  # BIG TAIL BARS
         # entry_strategies.extend(BooksCanBeGreatFactory().create(ohlcv, entry_optimization))  # BOOKS CAN BE GREAT
         # entry_strategies.extend(BreakoutWithTwistFactory().create(ohlcv, entry_optimization))  # BREAKOUT WITH A TWIST
-        # entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
         # entry_strategies.extend(TheUltimateFactory().create(ohlcv, entry_optimization))  # THE ULTIMATE
         # entry_strategies.extend(BreakdownDeadAheadFactory().create(ohlcv, entry_optimization))  # BREAKDOWN DEAD A HEAD
         # entry_strategies.extend(ClassicBollingerbandsFactory().create(ohlcv, entry_optimization))  # CLASSIC BOLLINGERBANDS
@@ -135,7 +135,7 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(PeelingFactory().create(ohlcv, entry_optimization))                      # PEELING
         # entry_strategies.extend(PeelingStopFactory().create(ohlcv, entry_optimization))                      # PEELING STOP
         # entry_strategies.extend(AsymmetricTwoAmigosFactory().create(ohlcv, entry_optimization))            # ASYMMETRIC TWO AMIGOS
-        entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
+        # entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
         # entry_strategies.extend(AsymmetricAgainWithFlowFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN WITH FLOW
         # entry_strategies.extend(AsymmetricAgainIntroSerialFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN INTRO SERIAL
         # entry_strategies.extend(ATRBasedBreakoutOneSideFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT ONE SIDE
@@ -145,13 +145,13 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                       # TIMED BY TIME
         # 日足
         # any
-        # exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
+        exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
         # exit_strategies.extend(LastValueFactory().create(ohlcv, exit_optimization))             # LASTVALUE
         # exit_strategies.extend(TimedFactory().create(ohlcv, exit_optimization))                 # TIMED
         # exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
         exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
-        # exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
+        exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().create(ohlcv, exit_optimization))     # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().create(ohlcv, exit_optimization))       # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().create(ohlcv, exit_optimization))      # EXIT WHERE YOU LIKE
@@ -224,8 +224,8 @@ if __name__ == '__main__':
     # symbol_list = lii3ra.symbol.tse2_100m.Symbol.symbols
     # symbol_list.extend(lii3ra.symbol.mothers_100m.Symbol.symbols)
     # symbol_list.extend(lii3ra.symbol.jasdaq_100m.Symbol.symbols)
-    symbol_list = ["^N225"]
-    # symbol_list = ["Topix"]
+    # symbol_list = ["^N225"]
+    symbol_list = ["Topix"]
     # symbol_list = ["Mothers"]
     # symbol_list = ["JPX400"]
     # symbol_list = ["N225minif"]
