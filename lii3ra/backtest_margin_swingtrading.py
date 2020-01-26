@@ -164,7 +164,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif '6762.T' == symbol:  # [x] 電機・精密
                 entry_list = PercentRankerFactory().create(ohlcv)
                 exit_list = TimedFactory().create(ohlcv)
-            elif '6920.T' == symbol:  # [x] 電機・精密
+            elif "6920.T" == symbol:  # [x] 電機・精密
                 entry_list = BreakoutKCFactory().create(ohlcv)
                 exit_list = ContractGainLossFactory().create(ohlcv)
             elif '8306.T' == symbol:  # [x] 銀行
