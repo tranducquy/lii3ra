@@ -53,8 +53,8 @@ class BreakoutKCFactory(EntryStrategyFactory):
             short_span_list = [i for i in range(3, 15, 5)]
             # short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
             short_ratio_list = [0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
-            # stop_order_list = [1, 2]
-            stop_order_list = [2]
+            stop_order_list = [1, 2]
+            # stop_order_list = [2]
             severe = True
             for long_span in long_span_list:
                 for long_ratio in long_ratio_list:
