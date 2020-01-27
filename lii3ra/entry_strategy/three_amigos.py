@@ -1,3 +1,4 @@
+import numpy as np
 from lii3ra.ordertype import OrderType
 from lii3ra.technical_indicator.relative_strength_index import RelativeStrengthIndex
 from lii3ra.technical_indicator.average_directional_index import AverageDirectionalIndex
