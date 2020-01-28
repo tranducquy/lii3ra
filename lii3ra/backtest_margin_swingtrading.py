@@ -178,8 +178,6 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = TheUltimateFactory().create(ohlcv)
                 exit_list = GettingIsGoodFactory().create(ohlcv)
             elif "1570.T" == symbol:  # ETF
-                # entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                # exit_list = NewvalueFactory().create(ohlcv)
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = GettingIsGoodFactory().create(ohlcv)
             elif '9104.T' == symbol:  # 海運
@@ -187,7 +185,6 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_list = NewvalueFactory().create(ohlcv)
             elif '9107.T' == symbol:  # 海運
                 entry_list = ATRBasedBreakoutFactory().create(ohlcv)
-                # entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "^N225" == symbol:
                 entry_list = BreakoutKCFactory().create(ohlcv)
@@ -219,6 +216,9 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif "6778.T" == symbol:
                 entry_list = GoWithTheFlowFactory().create(ohlcv)
                 exit_list = LastValueFactory().create(ohlcv)
+            elif "9790.T" == symbol:
+                entry_list = TwoAmigosFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             else:
                 logger.info(f"unknown symbol:[{symbol}]")
             for entry_strategy in entry_list:
