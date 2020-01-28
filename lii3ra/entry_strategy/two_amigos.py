@@ -9,8 +9,9 @@ class TwoAmigosFactory(EntryStrategyFactory):
     params = {
         # adx_span, adx_threshold, lookback
         "default": [14, 0.20, 20]
-        , "9616.T": [5, 0.10, 25]
         , "6047.T": [14, 0.20, 20]
+        , "9616.T": [5, 0.10, 25]
+        , "9790.T": [15, 0.20, 15]
     }
 
     def create(self, ohlcv, optimization=False):
