@@ -150,8 +150,9 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = TwoAmigosFactory().create(ohlcv)
                 exit_list = LastValueFactory().create(ohlcv)
             elif '6141.T' == symbol:  # [x] 機械
+                # entry_list = PercentRankerFactory().create(ohlcv)
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
+                exit_list = PercentileFactory().create(ohlcv)
             elif '6473.T' == symbol:  # [x] 機械
                 entry_list = StochasticCrossFactory().create(ohlcv)
                 exit_list = ContractGainLossFactory().create(ohlcv)
@@ -204,8 +205,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = TwoAmigosFactory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "6166.T" == symbol:
-                entry_list = GoWithTheFlowFactory().create(ohlcv)
-                # exit_list = LastValueFactory().create(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "3622.T" == symbol:
                 entry_list = GoWithTheFlowFactory().create(ohlcv)
