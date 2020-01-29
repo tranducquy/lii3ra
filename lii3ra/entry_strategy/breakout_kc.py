@@ -12,8 +12,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
         # long_atr_span, long_kc_ratio, short_atr_span, short_kc_ratio
         # "default": [15, 0.5, 15, 0.5, 1, False]
         "default": [3, 0.3, 3, 0.3, 2, True]
-        # , "^N225": [3, 0.3, 8, 0.3, 1, False]
-        , "^N225": [3, 0.3, 3, 0.5, 2, False]
+        , "1419.T": [13, 0.6, 3, 0.4, 1, True]
         , "7717.T": [18, 1.2, 8, 0.6, 1, False]
         , "3990.T": [3, 1.0, 13, 1.0, 2, True]
         , "4043.T": [15, 0.5, 15, 0.5, 1, False]
@@ -27,6 +26,8 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "6479.T": [15, 0.5, 15, 0.5, 1, False]
         , "Mothers": [3, 0.4, 3, 0.4, 2, True]
         , "Topix": [3, 0.3, 3, 0.5, 2, False]
+        # , "^N225": [3, 0.3, 8, 0.3, 1, False]
+        , "^N225": [3, 0.3, 3, 0.5, 2, False]
     }
 
     def create(self, ohlcv, optimization=False):

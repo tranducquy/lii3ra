@@ -250,7 +250,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
 
 if __name__ == '__main__':
     # symbol
-    from lii3ra.symbol.margin_swing_trading import Symbol
+    from lii3ra.symbol.swing_trading import Symbol
     symbol_list = Symbol.symbols
     temp_list = [
                     "1570.T"
