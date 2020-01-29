@@ -8,10 +8,10 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class TwoAmigosFactory(EntryStrategyFactory):
     params = {
         # adx_span, adx_threshold, lookback
-        "default": [14, 0.20, 20]
-        , "6047.T": [14, 0.20, 20]
-        , "9616.T": [5, 0.10, 25]
-        , "9790.T": [15, 0.20, 15]
+        "default": [14, 0.20, 20, False]
+        , "6047.T": [14, 0.20, 20, False]
+        , "9616.T": [5, 0.10, 25, False]
+        , "9790.T": [15, 0.20, 15, False]
     }
 
     def create(self, ohlcv, optimization=False):
@@ -23,19 +23,23 @@ class TwoAmigosFactory(EntryStrategyFactory):
                 adx_span = self.params[s][0]
                 adx_threshold = self.params[s][1]
                 lookback = self.params[s][2]
+                stop_order = self.params[s][3]
             else:
                 adx_span = self.params["default"][0]
                 adx_threshold = self.params["default"][1]
                 lookback = self.params["default"][2]
-            strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback))
+                stop_order = self.params["default"][3]
+            strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback, stop_order))
         else:
             adx_span_list = [i for i in range(5, 26, 5)]
             adx_threshold_list = [i for i in np.arange(0.10, 0.9, 0.1)]
             lookback_list = [i for i in range(5, 26, 5)]
+            stop_order_list = [False, True]
             for adx_span in adx_span_list:
                 for adx_threshold in adx_threshold_list:
                     for lookback in lookback_list:
-                        strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback))
+                        for stop_order in stop_order_list:
+                            strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback, stop_order))
         return strategies
 
 
@@ -50,6 +54,7 @@ class TwoAmigos(EntryStrategy):
                  , adx_span
                  , adx_threshold
                  , lookback
+                 , stop_order=False
                  , order_vol_ratio=0.01):
         self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.2f},{lookback:.0f}]"
         self.ohlcv = ohlcv
@@ -57,6 +62,7 @@ class TwoAmigos(EntryStrategy):
         self.adx = AverageDirectionalIndex(ohlcv, adx_span)
         self.adx_threshold = adx_threshold
         self.lookback = lookback
+        self.stop_order = stop_order
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):
@@ -69,7 +75,7 @@ class TwoAmigos(EntryStrategy):
 
     def check_entry_long(self, idx, last_exit_idx):
         """
-        ADXが閾値を上回っており、モメンタムが上昇トレンドであれば次で成行ロング
+        ADXが閾値を上回っており、モメンタムが上昇トレンドであればロング
 vars: ADXLength(14), lookback(20);
 If ADX(ADXLength)>20 then begin
     If close>close[lookback] then buy next bar at market;
@@ -88,13 +94,16 @@ end;
             close_lookback = self.ohlcv.values['close'][idx-self.lookback]
             lookback_condition = close > close_lookback
             if lookback_condition:
-                return OrderType.MARKET_LONG
+                if self.stop_order:
+                    return OrderType.STOP_MARKET_LONG
+                else:
+                    return OrderType.MARKET_LONG
         else:
             return OrderType.NONE_ORDER
 
     def check_entry_short(self, idx, last_exit_idx):
         """
-        ADXが閾値を上回っており、モメンタムが下降トレンドであれば次で成行ショート
+        ADXが閾値を上回っており、モメンタムが下降トレンドであればショート
         """
         if not self._is_valid(idx):
             return OrderType.NONE_ORDER
@@ -108,7 +117,10 @@ end;
             close_lookback = self.ohlcv.values['close'][idx-self.lookback]
             lookback_condition = close < close_lookback
             if lookback_condition:
-                return OrderType.MARKET_SHORT
+                if self.stop_order:
+                    return OrderType.STOP_MARKET_SHORT
+                else:
+                    return OrderType.MARKET_SHORT
         else:
             return OrderType.NONE_ORDER
 
@@ -129,12 +141,14 @@ end;
     def create_order_entry_long_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
-        return 0.00
+        stop_order  = self.ohlcv.values["low"][idx]
+        return stop_order
 
     def create_order_entry_short_stop_market(self, idx, last_exit_idx):
         if not self._is_valid(idx):
             return -1
-        return 0.00
+        stop_order = self.ohlcv.values["high"][idx]
+        return stop_order
 
     def create_order_entry_long_market_for_all_cash(self, cash, idx, last_exit_idx):
         if not self._is_valid(idx) or cash <= 0:

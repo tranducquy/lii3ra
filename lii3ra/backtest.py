@@ -231,7 +231,8 @@ if __name__ == '__main__':
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
     # symbol_list = ["6580.T", "6788.T"]
-    symbol_list = ["3908.T", "9790.T"]
+    # symbol_list = ["3908.T", "9790.T"]
+    symbol_list = ["4428.T", "7936.T"]
 
     # ashi
     ashi = "1d"
@@ -239,7 +240,7 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2004-01-01"
-    start_date = "2012-01-01"
+    start_date = "2018-01-01"
     end_date = "2020-12-31"
 
     # その他
