@@ -252,11 +252,6 @@ if __name__ == '__main__':
     # symbol
     from lii3ra.symbol.swing_trading import Symbol
     symbol_list = Symbol.symbols
-    temp_list = [
-                    "1570.T"
-                    , "9107.T"
-    ]
-    symbol_list.extend(temp_list)
     # ashi
     ashi = "1d"
     # range
