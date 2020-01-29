@@ -255,9 +255,6 @@ if __name__ == '__main__':
     temp_list = [
                     "1570.T"
                     , "9107.T"
-                    , "^N225"
-                    , "Topix"
-                    , "Mothers"
     ]
     symbol_list.extend(temp_list)
     # ashi
