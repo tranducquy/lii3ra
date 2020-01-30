@@ -3,6 +3,7 @@
 
 import threading
 import numpy as np
+import datetime
 from lii3ra.mylogger import Logger
 from lii3ra.market import Market
 from lii3ra.asset import Asset
@@ -248,6 +249,42 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
     logger.info("backtest end")
 
 
+def day_trading(symbol_list, ashi, start_date, end_date, asset_values):
+    logger.info("backtest start")
+    try:
+        thread_pool = list()
+        for symbol in symbol_list:
+            logger.info(f"parameter symbol={symbol}, ashi={ashi}, start_date={start_date}, end_date={end_date}")
+            ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
+            entry_list = BreakoutKCFactory().create(ohlcv)
+            exit_list = EndOfBarFactory().create(ohlcv)
+            for entry_strategy in entry_list:
+                for exit_strategy in exit_list:
+                    asset = Asset(symbol
+                                  , asset_values["initial_cash"]
+                                  , asset_values["leverage"]
+                                  , asset_values["losscut_ratio"])
+                    thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
+                                                                                             , entry_strategy
+                                                                                             , exit_strategy
+                                                                                             , asset
+                                                                                             )))
+        thread_join_cnt = 0
+        thread_pool_cnt = len(thread_pool)
+        split_num = (thread_pool_cnt / 16) + 1
+        thread_pools = list(np.array_split(thread_pool, split_num))
+        for p in thread_pools:
+            for t in p:
+                t.start()
+            for t in p:
+                t.join()
+                thread_join_cnt += 1
+                logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
+    except Exception as err:
+        print(err)
+    logger.info("backtest end")
+
+
 if __name__ == '__main__':
     # symbol
     from lii3ra.symbol.swing_trading import Symbol
@@ -256,8 +293,15 @@ if __name__ == '__main__':
     ashi = "1d"
     # range
     start_date = "2012-01-01"
-    end_date = "2020-12-31"
+    end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
     swing_trading(symbol_list, ashi, start_date, end_date, asset_values)
 
+    from lii3ra.symbol.day_trading import Symbol
+    symbol_list = Symbol.symbols
+    # range
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=365*3)).strftime("%Y-%m-%d")
+    end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
+    day_trading(symbol_list, ashi, start_date, end_date, asset_values)
