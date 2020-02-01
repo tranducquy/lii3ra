@@ -10,6 +10,7 @@ class TwoAmigosFactory(EntryStrategyFactory):
         # adx_span, adx_threshold, lookback
         "default": [14, 0.20, 20, False]
         , "6047.T": [14, 0.20, 20, False]
+        , "6997.T": [5, 0.40, 15, False]
         , "9263.T": [5, 0.10, 15, False]
         , "9616.T": [5, 0.10, 25, False]
         , "9790.T": [15, 0.20, 15, False]
