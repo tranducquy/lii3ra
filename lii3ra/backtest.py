@@ -100,13 +100,13 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # entry_strategies.extend(DayOfWeekFactory().create(ohlcv, entry_optimization))  # DAY OF WEEK
         # any
         # entry_strategies.extend(ATRBasedBreakoutFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT
-        # entry_strategies.extend(AsymmetricAgainFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN
-        # entry_strategies.extend(AsymmetricTripleFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC TRIPLE
+        entry_strategies.extend(AsymmetricAgainFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN
+        entry_strategies.extend(AsymmetricTripleFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC TRIPLE
         # entry_strategies.extend(BackInStyleFactory().create(ohlcv, entry_optimization))  # BACK IN STYLE
         # entry_strategies.extend(BigTailBarsFactory().create(ohlcv, entry_optimization))  # BIG TAIL BARS
         # entry_strategies.extend(BooksCanBeGreatFactory().create(ohlcv, entry_optimization))  # BOOKS CAN BE GREAT
         # entry_strategies.extend(BreakoutWithTwistFactory().create(ohlcv, entry_optimization))  # BREAKOUT WITH A TWIST
-        # entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
         # entry_strategies.extend(TheUltimateFactory().create(ohlcv, entry_optimization))  # THE ULTIMATE
         # entry_strategies.extend(BreakdownDeadAheadFactory().create(ohlcv, entry_optimization))  # BREAKDOWN DEAD A HEAD
         # entry_strategies.extend(ClassicBollingerbandsFactory().create(ohlcv, entry_optimization))  # CLASSIC BOLLINGERBANDS
@@ -146,12 +146,12 @@ def backtest(symbol, ashi, start_date, end_date, asset_values, entry_optimizatio
         # 日足
         # any
         exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
-        # exit_strategies.extend(LastValueFactory().create(ohlcv, exit_optimization))             # LASTVALUE
-        # exit_strategies.extend(TimedFactory().create(ohlcv, exit_optimization))                 # TIMED
-        # exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
-        # exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
-        # exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
-        # exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
+        exit_strategies.extend(LastValueFactory().create(ohlcv, exit_optimization))             # LASTVALUE
+        exit_strategies.extend(TimedFactory().create(ohlcv, exit_optimization))                 # TIMED
+        exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
+        exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
+        exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
+        exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().create(ohlcv, exit_optimization))     # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().create(ohlcv, exit_optimization))       # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().create(ohlcv, exit_optimization))      # EXIT WHERE YOU LIKE
@@ -233,7 +233,7 @@ if __name__ == '__main__':
     # symbol_list = ["6580.T", "6788.T"]
     # symbol_list = ["3908.T", "9790.T"]
     # symbol_list = ["4428.T", "7936.T"]
-    symbol_list = ["1419.T"]
+    symbol_list = ["9107.T"]
 
     # ashi
     ashi = "1d"
@@ -241,7 +241,7 @@ if __name__ == '__main__':
 
     # range
     # start_date = "2004-01-01"
-    start_date = "2015-01-01"
+    start_date = "2012-01-01"
     end_date = "2020-12-31"
 
     # その他

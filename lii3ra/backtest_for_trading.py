@@ -170,7 +170,7 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif '9107.T' == symbol:  # 海運
-                entry_list = ATRBasedBreakoutFactory().create(ohlcv)
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "9263.T" == symbol:
                 entry_list = TwoAmigosFactory().create(ohlcv)
