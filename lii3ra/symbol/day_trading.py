@@ -10,5 +10,4 @@ class Symbol:
         # , '3990.T'  # kuyashii
         # , '7518.T'  # kuyashii
         , '7936.T' # アシックス
-        , 'Mothers'
     ]
