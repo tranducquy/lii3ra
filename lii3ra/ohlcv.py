@@ -1,4 +1,4 @@
-
+import pandas as pd
 from lii3ra.mylogger import Logger
 from lii3ra.dbaccess import DbAccess
 
@@ -25,7 +25,8 @@ class Ohlcv:
                 ohlcv_cnt = len(self.values)
             else:
                 self.values = None
-            logger.info(f"ohlcv.get_ohlcv() [{self.symbol},{self.ashi},{self.start_date},{self.end_date}] count=[{ohlcv_cnt}]")
+            logger.info(
+                f"ohlcv.get_ohlcv() [{self.symbol},{self.ashi},{self.start_date},{self.end_date}] count=[{ohlcv_cnt}]")
         except Exception as err:
             print(err)
         finally:
@@ -43,3 +44,13 @@ class Ohlcv:
             return self.values.iloc[-1]['time']
         else:
             return ""
+
+    def resample(self, resample):
+        self.values.index = pd.DatetimeIndex(self.values['time'])
+        self.values = self.values.resample(resample).agg({"open": "first"
+                                                          , "high": "max"
+                                                          , "low": "min"
+                                                          , "close": "last"
+                                                          , "volume": "sum"
+                                                          , "time": "min"})
+        self.ashi = resample
