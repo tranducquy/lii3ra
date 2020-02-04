@@ -118,7 +118,7 @@ def backtest(symbol
         # entry_strategies.extend(BigTailBarsFactory().create(ohlcv, entry_optimization))  # BIG TAIL BARS
         # entry_strategies.extend(BooksCanBeGreatFactory().create(ohlcv, entry_optimization))  # BOOKS CAN BE GREAT
         # entry_strategies.extend(BreakoutWithTwistFactory().create(ohlcv, entry_optimization))  # BREAKOUT WITH A TWIST
-        # entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
+        entry_strategies.extend(BreakoutSigma1Factory().create(ohlcv, entry_optimization))  # BREAKOUT SIGMA1
         # entry_strategies.extend(TheUltimateFactory().create(ohlcv, entry_optimization))  # THE ULTIMATE
         # entry_strategies.extend(BreakdownDeadAheadFactory().create(ohlcv, entry_optimization))  # BREAKDOWN DEAD A HEAD
         # entry_strategies.extend(ClassicBollingerbandsFactory().create(ohlcv, entry_optimization))  # CLASSIC BOLLINGERBANDS
@@ -138,7 +138,7 @@ def backtest(symbol
         # entry_strategies.extend(PitterPatterPattern2Factory().create(ohlcv, entry_optimization))  # PITTER PATTER PATTERN2
         # entry_strategies.extend(QuickPullbackPatternFactory().create(ohlcv, entry_optimization))  # QUICK PULLBACK PATTERN
         # entry_strategies.extend(ThreeAmigosFactory().create(ohlcv, entry_optimization))  # THREE AMIGOS
-        entry_strategies.extend(TwoAmigosFactory().create(ohlcv, entry_optimization))  # TWO AMIGOS
+        # entry_strategies.extend(TwoAmigosFactory().create(ohlcv, entry_optimization))  # TWO AMIGOS
         # entry_strategies.extend(NewHighWithConsecutiveHighsFactory().create(ohlcv, entry_optimization))  # NEW HIGH
         # entry_strategies.extend(StartWithAwesomeOscillatorFactory().create(ohlcv, entry_optimization))  # START AWESOME
         # entry_strategies.extend(SecondVerseSameAsTheFirstFactory().create(ohlcv, entry_optimization))  # SECOND VERSE
@@ -147,7 +147,7 @@ def backtest(symbol
         # entry_strategies.extend(PeelingFactory().create(ohlcv, entry_optimization))                      # PEELING
         # entry_strategies.extend(PeelingStopFactory().create(ohlcv, entry_optimization))                      # PEELING STOP
         # entry_strategies.extend(AsymmetricTwoAmigosFactory().create(ohlcv, entry_optimization))            # ASYMMETRIC TWO AMIGOS
-        # entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
+        entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
         # entry_strategies.extend(AsymmetricAgainWithFlowFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN WITH FLOW
         # entry_strategies.extend(AsymmetricAgainIntroSerialFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN INTRO SERIAL
         # entry_strategies.extend(ATRBasedBreakoutOneSideFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT ONE SIDE
@@ -157,13 +157,13 @@ def backtest(symbol
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                       # TIMED BY TIME
         # 日足
         # any
-        exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
+        # exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
         # exit_strategies.extend(LastValueFactory().create(ohlcv, exit_optimization))             # LASTVALUE
         # exit_strategies.extend(TimedFactory().create(ohlcv, exit_optimization))                 # TIMED
         # exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
         # exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
-        # exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
+        exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().create(ohlcv, exit_optimization))     # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().create(ohlcv, exit_optimization))       # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().create(ohlcv, exit_optimization))      # EXIT WHERE YOU LIKE
@@ -240,9 +240,11 @@ if __name__ == '__main__':
     # symbol_list = ["Topix"]
     # symbol_list = ["Mothers"]
     # symbol_list = ["JPX400"]
+    # symbol_list = ["DJI"]
+    symbol_list = ["TREIT"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
-    symbol_list = ["9263.T"]
+    # symbol_list = ["9263.T"]
 
     # ashi
     ashi = "1d"
@@ -253,7 +255,7 @@ if __name__ == '__main__':
     # 資産
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
     # 最適化
-    entry_optimization = False
+    entry_optimization = True
     exit_optimization = False
 
     for symbol in symbol_list:

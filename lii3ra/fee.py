@@ -14,6 +14,10 @@ class Fee:
             fee = 1500  # 仮
         elif 'Mothers' in symbol:
             fee = 1500  # 仮
+        elif 'DJI' in symbol:
+            fee = 1500  # 仮
+        elif 'TREIT' in symbol:
+            fee = 1500  # 仮
         elif ('USD' in symbol
                 or 'JPY' in symbol):
             fee = 0

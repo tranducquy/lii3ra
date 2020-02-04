@@ -53,10 +53,12 @@ class BreakoutKCFactory(EntryStrategyFactory):
         else:
             long_span_list = [i for i in range(3, 15, 5)]
             # long_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            long_ratio_list = [0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
+            long_ratio_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
+            # long_ratio_list = [i for i in np.arange(0.01, 0.3, 0.03)]
             short_span_list = [i for i in range(3, 15, 5)]
             # short_ratio_list = [i for i in np.arange(0.3, 1.6, 0.2)]
-            short_ratio_list = [0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
+            short_ratio_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
+            # short_ratio_list = [i for i in np.arange(0.01, 0.3, 0.03)]
             stop_order_list = [1, 2]
             # stop_order_list = [2]
             severe = True
@@ -93,7 +95,7 @@ class BreakoutKC(EntryStrategy):
                  , severe=False
                  , order_vol_ratio=0.01):
         severe_title = 1 if severe else 0
-        self.title = f"BreakoutKC[{stop_order:.0f}][{long_atr_span:.0f},{long_kc_ratio:.1f}][{short_atr_span:.0f},{short_kc_ratio:.1f}][{severe_title:.0f}]"
+        self.title = f"BreakoutKC[{stop_order:.0f}][{long_atr_span:.0f},{long_kc_ratio:.2f}][{short_atr_span:.0f},{short_kc_ratio:.2f}][{severe_title:.0f}]"
         self.ohlcv = ohlcv
         self.long_kc = KeltnerChannels(ohlcv, long_atr_span, long_kc_ratio)
         self.short_kc = KeltnerChannels(ohlcv, short_atr_span, short_kc_ratio)

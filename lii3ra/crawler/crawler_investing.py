@@ -89,6 +89,8 @@ symbol_list = [
     , ["Topix", "TOPIX", "japan", "index"]
     , ["JPX400", "JPX-Nikkei 400", "japan", "index"]
     , ["Mothers", "Topix Mother Market", "japan", "index"]
+    , ["DJI", "Dow 30", "united states", "index"]
+    , ["TREIT", "Topix REIT Market", "japan", "index"]
     , ["1321.T", "Nomura Nikkei 225 Listed", "japan", "etf"]
     , ["1570.T", "NEXT FUNDS Nikkei 225 Leveraged", "japan", "etf"]
     , ["1357.T", "NEXT FUNDS Nikkei 225 Double Inverse", "japan", "etf"]

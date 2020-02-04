@@ -18,7 +18,9 @@ class Symbol:
         , '9790.T'
         , '1570.T'
         , '9107.T'
-        , 'Topix'
         , '^N225'
+        , 'DJI'
+        , 'Topix'
+        , 'TREIT'
         , 'Mothers'
     ]

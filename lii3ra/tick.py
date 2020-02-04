@@ -14,6 +14,10 @@ class Tick:
             tick = 5
         elif "N225f" in symbol:  # 日経225先物
             tick = 10
+        elif "DJI" in symbol:  # Dow 30
+            tick = 1
+        elif "TREIT" in symbol:  # Topix REIT
+            tick = 1
         else:  # 未知
             tick = 0.01
         return tick

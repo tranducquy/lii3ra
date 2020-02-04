@@ -12,6 +12,7 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         # long_bb_span, long_bb_ratio, short_bb_span, short_bb_ratio
         "default": [3, 1.0, 3, 1.0, 1]
         , "^N225": [10, 0.9, 3, 1.4, 1]
+        , "DJI": [8, 0.6, 13, 0.6, 1]
         , "6753.T": [8, 0.5, 7, 1.1, 1]
         # , "6753.T": [4, 0.8, 8, 1.4, 1]
         , "5706.T": [23, 0.5, 21, 0.2, 1]
@@ -50,8 +51,10 @@ class BreakoutSigma1Factory(EntryStrategyFactory):
         else:
             long_spans = [i for i in range(3, 25, 5)]
             long_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
+            # long_ratios = [i for i in np.arange(0.05, 1.0, 0.15)]
             short_spans = [i for i in range(3, 25, 5)]
             short_ratios = [i for i in np.arange(0.3, 1.5, 0.3)]
+            # short_ratios = [i for i in np.arange(0.05, 1.0, 0.15)]
             stop_order_list = [1, 2]
             for long_span in long_spans:
                 for long_ratio in long_ratios:
@@ -84,7 +87,7 @@ class BreakoutSigma1(EntryStrategy):
                  , short_bb_ratio
                  , stop_order=1
                  , order_vol_ratio=0.01):
-        self.title = f"BreakOutSigma1[{stop_order:.0f}][{long_bb_span:.0f},{long_bb_ratio:.1f}][{short_bb_span:.0f},{short_bb_ratio:.1f}]"
+        self.title = f"BreakOutSigma1[{stop_order:.0f}][{long_bb_span:.0f},{long_bb_ratio:.2f}][{short_bb_span:.0f},{short_bb_ratio:.2f}]"
         self.ohlcv = ohlcv
         self.long_bb = Bollingerband(ohlcv, long_bb_span, long_bb_ratio)
         self.short_bb = Bollingerband(ohlcv, short_bb_span, short_bb_ratio)

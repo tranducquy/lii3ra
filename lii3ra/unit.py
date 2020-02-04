@@ -29,6 +29,10 @@ class Unit:
             unit = 100
         elif 'N225minif' in symbol:
             unit = 100
+        elif 'DJI' in symbol:
+            unit = 100
+        elif 'TREIT' in symbol:
+            unit = 100
         elif 'N225f' in symbol:
             unit = 1000
         elif 'JPX400f' in symbol:
@@ -63,7 +67,9 @@ class Unit:
                 or '1591.T' == symbol
                 or 'Mothersf' == symbol
                 or 'Mothers' == symbol
-                or '2516.T' == symbol):
+                or '2516.T' == symbol
+                or 'DJI' == symbol
+                or 'TREIT' == symbol):
             return True
         else:
             return False
