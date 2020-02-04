@@ -8,12 +8,12 @@ from lii3ra.entry_strategy.entry_strategy import EntryStrategy
 class TwoAmigosFactory(EntryStrategyFactory):
     params = {
         # adx_span, adx_threshold, lookback
-        "default": [14, 0.20, 20, False]
-        , "6047.T": [14, 0.20, 20, False]
-        , "6997.T": [5, 0.40, 15, False]
-        , "9263.T": [5, 0.10, 15, False]
-        , "9616.T": [5, 0.10, 25, False]
-        , "9790.T": [15, 0.20, 15, False]
+        "default": [14, 0.20, 20, False, 0, 0]
+        , "6047.T": [14, 0.20, 20, False, 0, 0]
+        , "6997.T": [5, 0.40, 15, False, 0, 0]
+        , "9263.T": [5, 0.10, 15, False, 0, 0]
+        , "9616.T": [5, 0.10, 25, False, 0, 0]
+        , "9790.T": [15, 0.20, 15, False, 0, 0]
     }
 
     def create(self, ohlcv, optimization=False):
@@ -26,12 +26,22 @@ class TwoAmigosFactory(EntryStrategyFactory):
                 adx_threshold = self.params[s][1]
                 lookback = self.params[s][2]
                 stop_order = self.params[s][3]
+                winner_waiting_period = self.params[s][4]
+                loser_waiting_period = self.params[s][5]
             else:
                 adx_span = self.params["default"][0]
                 adx_threshold = self.params["default"][1]
                 lookback = self.params["default"][2]
                 stop_order = self.params["default"][3]
-            strategies.append(TwoAmigos(ohlcv, adx_span, adx_threshold, lookback, stop_order))
+                winner_waiting_period = self.params["default"][4]
+                loser_waiting_period = self.params["default"][5]
+            strategies.append(TwoAmigos(ohlcv
+                                        , adx_span
+                                        , adx_threshold
+                                        , lookback
+                                        , stop_order
+                                        , winner_waiting_period
+                                        , loser_waiting_period))
         else:
             adx_span_list = [i for i in range(5, 26, 5)]
             adx_threshold_list = [i for i in np.arange(0.10, 0.9, 0.1)]
@@ -57,14 +67,19 @@ class TwoAmigos(EntryStrategy):
                  , adx_threshold
                  , lookback
                  , stop_order=False
+                 , winner_waiting_period=0
+                 , loser_waiting_period=0
                  , order_vol_ratio=0.01):
-        self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.2f},{lookback:.0f}]"
+        self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.2f},{lookback:.0f}]" \
+                     f"[{winner_waiting_period,loser_waiting_period}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.adx = AverageDirectionalIndex(ohlcv, adx_span)
         self.adx_threshold = adx_threshold
         self.lookback = lookback
         self.stop_order = stop_order
+        self.winner_waiting_period = winner_waiting_period
+        self.loser_waiting_period = loser_waiting_period
         self.order_vol_ratio = order_vol_ratio
 
     def _is_indicator_valid(self, idx):
@@ -91,15 +106,33 @@ end;
         if idx <= self.adx.adx_span \
                 or idx <= self.lookback:
             return OrderType.NONE_ORDER
+        if len(self.position.exit_positions_profit) == 0:
+            initial_trade = True
+            last_exit_profit = 0
+        else:
+            initial_trade = False
+            last_exit_profit = self.position.exit_positions_profit[-1]
         if self.adx.adx[idx] > self.adx_threshold:
             close = self.ohlcv.values['close'][idx]
             close_lookback = self.ohlcv.values['close'][idx-self.lookback]
             lookback_condition = close > close_lookback
-            if lookback_condition:
-                if self.stop_order:
-                    return OrderType.STOP_MARKET_LONG
-                else:
-                    return OrderType.MARKET_LONG
+            waiting_condition = not (self.winner_waiting_period == 0 and self.loser_waiting_period == 0)
+            trade_condition = initial_trade \
+                        or (last_exit_profit > 0 and idx - last_exit_idx >= self.winner_waiting_period) \
+                        or (last_exit_profit <= 0 and idx - last_exit_idx >= self.loser_waiting_period)
+            if waiting_condition:
+                if lookback_condition and trade_condition:
+                    if self.stop_order:
+                        return OrderType.STOP_MARKET_LONG
+                    else:
+                        return OrderType.MARKET_LONG
+            else:
+                if lookback_condition:
+                    if self.stop_order:
+                        return OrderType.STOP_MARKET_LONG
+                    else:
+                        return OrderType.MARKET_LONG
+            return OrderType.NONE_ORDER
         else:
             return OrderType.NONE_ORDER
 
@@ -114,15 +147,33 @@ end;
         if idx <= self.adx.adx_span \
                 or idx <= self.lookback:
             return OrderType.NONE_ORDER
+        if len(self.position.exit_positions_profit) == 0:
+            initial_trade = True
+            last_exit_profit = 0
+        else:
+            initial_trade = False
+            last_exit_profit = self.position.exit_positions_profit[-1]
         if self.adx.adx[idx] > self.adx_threshold:
             close = self.ohlcv.values['close'][idx]
             close_lookback = self.ohlcv.values['close'][idx-self.lookback]
             lookback_condition = close < close_lookback
-            if lookback_condition:
-                if self.stop_order:
-                    return OrderType.STOP_MARKET_SHORT
-                else:
-                    return OrderType.MARKET_SHORT
+            waiting_condition = not (self.winner_waiting_period == 0 and self.loser_waiting_period == 0)
+            trade_condition = initial_trade \
+                             or (last_exit_profit > 0 and idx - last_exit_idx >= self.winner_waiting_period) \
+                             or (last_exit_profit <= 0 and idx - last_exit_idx >= self.loser_waiting_period)
+            if waiting_condition:
+                if lookback_condition and trade_condition:
+                    if self.stop_order:
+                        return OrderType.STOP_MARKET_SHORT
+                    else:
+                        return OrderType.MARKET_SHORT
+            else:
+                if lookback_condition:
+                    if self.stop_order:
+                        return OrderType.STOP_MARKET_SHORT
+                    else:
+                        return OrderType.MARKET_SHORT
+            return OrderType.NONE_ORDER
         else:
             return OrderType.NONE_ORDER
 

@@ -138,7 +138,7 @@ def backtest(symbol
         # entry_strategies.extend(PitterPatterPattern2Factory().create(ohlcv, entry_optimization))  # PITTER PATTER PATTERN2
         # entry_strategies.extend(QuickPullbackPatternFactory().create(ohlcv, entry_optimization))  # QUICK PULLBACK PATTERN
         # entry_strategies.extend(ThreeAmigosFactory().create(ohlcv, entry_optimization))  # THREE AMIGOS
-        # entry_strategies.extend(TwoAmigosFactory().create(ohlcv, entry_optimization))  # TWO AMIGOS
+        entry_strategies.extend(TwoAmigosFactory().create(ohlcv, entry_optimization))  # TWO AMIGOS
         # entry_strategies.extend(NewHighWithConsecutiveHighsFactory().create(ohlcv, entry_optimization))  # NEW HIGH
         # entry_strategies.extend(StartWithAwesomeOscillatorFactory().create(ohlcv, entry_optimization))  # START AWESOME
         # entry_strategies.extend(SecondVerseSameAsTheFirstFactory().create(ohlcv, entry_optimization))  # SECOND VERSE
@@ -147,7 +147,7 @@ def backtest(symbol
         # entry_strategies.extend(PeelingFactory().create(ohlcv, entry_optimization))                      # PEELING
         # entry_strategies.extend(PeelingStopFactory().create(ohlcv, entry_optimization))                      # PEELING STOP
         # entry_strategies.extend(AsymmetricTwoAmigosFactory().create(ohlcv, entry_optimization))            # ASYMMETRIC TWO AMIGOS
-        entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
+        # entry_strategies.extend(BreakoutKCFactory().create(ohlcv, entry_optimization))          # BREAKOUT KC
         # entry_strategies.extend(AsymmetricAgainWithFlowFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN WITH FLOW
         # entry_strategies.extend(AsymmetricAgainIntroSerialFactory().create(ohlcv, entry_optimization))  # ASYMMETRIC AGAIN INTRO SERIAL
         # entry_strategies.extend(ATRBasedBreakoutOneSideFactory().create(ohlcv, entry_optimization))  # ATR BASED BREAKOUT ONE SIDE
@@ -242,21 +242,18 @@ if __name__ == '__main__':
     # symbol_list = ["JPX400"]
     # symbol_list = ["N225minif"]
     # symbol_list = ["USDJPY", "GBPJPY", "EURJPY", "EURUSD", "EURUSD", "GBPUSD"]
-    # symbol_list = ["6580.T", "6788.T"]
-    # symbol_list = ["3908.T", "9790.T"]
-    # symbol_list = ["4428.T", "7936.T"]
-    symbol_list = ["9107.T"]
+    symbol_list = ["9263.T"]
 
     # ashi
     ashi = "1d"
-    resample = "w"
+    resample = ""
     # range
     start_date = "2012-01-01"
     end_date = "2020-12-31"
     # 資産
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
     # 最適化
-    entry_optimization = True
+    entry_optimization = False
     exit_optimization = False
 
     for symbol in symbol_list:
