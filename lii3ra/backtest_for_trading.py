@@ -73,7 +73,7 @@ logger = s.myLogger()
 
 
 def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
-    logger.info("backtest start")
+    logger.info("swing_trading() start")
     try:
         thread_pool = list()
         for symbol in symbol_list:
@@ -181,15 +181,6 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif '9983.T' == symbol:  # [x] 小売
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = PercentileFactory().create(ohlcv)
-            elif "^N225" == symbol:
-                entry_list = BreakoutKCFactory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
-            elif "Topix" == symbol:
-                entry_list = BreakoutKCFactory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
-            elif "Mothers" == symbol:
-                entry_list = BreakoutKCFactory().create(ohlcv)
-                exit_list = EndOfBarFactory().create(ohlcv)
             else:
                 logger.info(f"unknown symbol:[{symbol}]")
             for entry_strategy in entry_list:
@@ -216,11 +207,11 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
     except Exception as err:
         print(err)
-    logger.info("backtest end")
+    logger.info("swing_trading() end")
 
 
 def day_trading(symbol_list, ashi, start_date, end_date, asset_values):
-    logger.info("backtest start")
+    logger.info("day_trading() start")
     try:
         thread_pool = list()
         for symbol in symbol_list:
@@ -252,7 +243,58 @@ def day_trading(symbol_list, ashi, start_date, end_date, asset_values):
                 logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
     except Exception as err:
         print(err)
-    logger.info("backtest end")
+    logger.info("day_trading() end")
+
+
+def index_for_mirror(symbol_list, ashi, start_date, end_date, asset_values):
+    logger.info("index_for_mirror() start")
+    try:
+        thread_pool = list()
+        for symbol in symbol_list:
+            logger.info(f"parameter symbol={symbol}, ashi={ashi}, start_date={start_date}, end_date={end_date}")
+            ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
+            if "^N225" == symbol:
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
+            elif "DJI" == symbol:
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "Mothers" == symbol:
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            elif "Topix" == symbol:
+                entry_list = BreakoutKCFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
+            elif "TREIT" == symbol:
+                entry_list = BreakoutSigma1Factory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
+            else:
+                logger.info(f"unknown symbol:[{symbol}]")
+            for entry_strategy in entry_list:
+                for exit_strategy in exit_list:
+                    asset = Asset(symbol
+                                  , asset_values["initial_cash"]
+                                  , asset_values["leverage"]
+                                  , asset_values["losscut_ratio"])
+                    thread_pool.append(threading.Thread(target=Market().simulator_run, args=(ohlcv
+                                                                                             , entry_strategy
+                                                                                             , exit_strategy
+                                                                                             , asset
+                                                                                             )))
+        thread_join_cnt = 0
+        thread_pool_cnt = len(thread_pool)
+        split_num = (thread_pool_cnt / 16) + 1
+        thread_pools = list(np.array_split(thread_pool, split_num))
+        for p in thread_pools:
+            for t in p:
+                t.start()
+            for t in p:
+                t.join()
+                thread_join_cnt += 1
+                logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
+    except Exception as err:
+        print(err)
+    logger.info("index_for_mirror() end")
 
 
 if __name__ == '__main__':
@@ -268,6 +310,12 @@ if __name__ == '__main__':
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
     swing_trading(symbol_list, ashi, start_date, end_date, asset_values)
 
+    from lii3ra.symbol.index_for_mirror import Symbol
+    symbol_list = Symbol.symbols
+    # その他
+    asset_values = {"initial_cash": 1000000, "leverage": 10.0, "losscut_ratio": 0.05}
+    index_for_mirror(symbol_list, ashi, start_date, end_date, asset_values)
+
     from lii3ra.symbol.day_trading import Symbol
     symbol_list = Symbol.symbols
     # range
@@ -276,3 +324,6 @@ if __name__ == '__main__':
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
     day_trading(symbol_list, ashi, start_date, end_date, asset_values)
+
+
+

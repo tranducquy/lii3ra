@@ -39,12 +39,12 @@ b04.symbol
 ,round(b04.profit::numeric, 2) as "{}"
 ,round(b05.profit::numeric, 2) as "{}"
 ,round(b06.profit::numeric, 2) as "{}"
-,round((b01.profit
-+ b02.profit
-+ b03.profit
-+ b04.profit
-+ b05.profit
-+ b06.profit)::numeric, 2) as sum
+,round((coalesce(b01.profit, 0)
++ coalesce(b02.profit, 0)
++ coalesce(b03.profit, 0)
++ coalesce(b04.profit, 0)
++ coalesce(b05.profit, 0)
++ coalesce(b06.profit, 0))::numeric, 2) as sum
 from 
 (
 select

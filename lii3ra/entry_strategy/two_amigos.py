@@ -71,7 +71,7 @@ class TwoAmigos(EntryStrategy):
                  , loser_waiting_period=0
                  , order_vol_ratio=0.01):
         self.title = f"TwoAmigos[{adx_span:.0f},{adx_threshold:.2f},{lookback:.0f}]" \
-                     f"[{winner_waiting_period,loser_waiting_period}]"
+                     f"[{winner_waiting_period:.0f},{loser_waiting_period:.0f}]"
         self.ohlcv = ohlcv
         self.symbol = self.ohlcv.symbol
         self.adx = AverageDirectionalIndex(ohlcv, adx_span)
