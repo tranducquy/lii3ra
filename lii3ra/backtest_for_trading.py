@@ -267,7 +267,7 @@ def index_for_mirror(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "TREIT" == symbol:
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
-                exit_list = EndOfBarFactory().create(ohlcv)
+                exit_list = NewvalueFactory().create(ohlcv)
             else:
                 logger.info(f"unknown symbol:[{symbol}]")
             for entry_strategy in entry_list:
