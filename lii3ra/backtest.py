@@ -157,13 +157,13 @@ def backtest(symbol
         # exit_strategies.extend(TimedFactory().optimization(ohlcv, rough))                       # TIMED BY TIME
         # 日足
         # any
-        # exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
+        exit_strategies.extend(NewvalueFactory().create(ohlcv, exit_optimization))              # NEWVALUE
         # exit_strategies.extend(LastValueFactory().create(ohlcv, exit_optimization))             # LASTVALUE
         # exit_strategies.extend(TimedFactory().create(ohlcv, exit_optimization))                 # TIMED
         # exit_strategies.extend(ContractGainLossFactory().create(ohlcv, exit_optimization))      # CONTRACT GAIN AND LOSS
         # exit_strategies.extend(PercentileFactory().create(ohlcv, exit_optimization))            # PERCENTILE
         # exit_strategies.extend(GettingIsGoodFactory().create(ohlcv, exit_optimization))         # GETTING IS GOOD
-        exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
+        # exit_strategies.extend(EndOfBarFactory().create(ohlcv, exit_optimization))              # END OF BAR
         # exit_strategies.extend(DontGiveItAllBackFactory().create(ohlcv, exit_optimization))     # DON'T GIVE IT ALL BACK
         # exit_strategies.extend(ProfitProtectorFactory().create(ohlcv, exit_optimization))       # PROFIT PROTECTOR
         # exit_strategies.extend(ExitWhereYouLikeFactory().create(ohlcv, exit_optimization))      # EXIT WHERE YOU LIKE
