@@ -316,14 +316,12 @@ if __name__ == '__main__':
     asset_values = {"initial_cash": 1000000, "leverage": 10.0, "losscut_ratio": 0.05}
     index_for_mirror(symbol_list, ashi, start_date, end_date, asset_values)
 
-    from lii3ra.symbol.day_trading import Symbol
-    symbol_list = Symbol.symbols
-    # range
-    start_date = (datetime.datetime.now() - datetime.timedelta(days=365*3)).strftime("%Y-%m-%d")
-    end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-    # その他
-    asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
-    day_trading(symbol_list, ashi, start_date, end_date, asset_values)
-
-
+    # from lii3ra.symbol.day_trading import Symbol
+    # symbol_list = Symbol.symbols
+    ## range
+    # start_date = (datetime.datetime.now() - datetime.timedelta(days=365*3)).strftime("%Y-%m-%d")
+    # end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    ## その他
+    # asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
+    # day_trading(symbol_list, ashi, start_date, end_date, asset_values)
 
