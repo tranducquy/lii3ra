@@ -2,7 +2,7 @@ class Unit:
 
     @staticmethod
     def get_unit(symbol):
-        if ('^N225'
+        if ('^N225' in symbol
                 or '1570.T' in symbol
                 or '1357.T' in symbol
                 or '1568.T' in symbol

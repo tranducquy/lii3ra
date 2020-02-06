@@ -156,7 +156,11 @@ class Market:
                         p.order.fail_order()
                     else:
                         # 最大volまで購入
-                        order_vol = asset.get_max_vol(open_price)
+                        max_vol_from_cash = asset.get_max_vol(open_price)
+                        if p.order.vol > max_vol_from_cash:
+                            order_vol = max_vol_from_cash
+                        else:
+                            order_vol = p.order.vol
                         p.entry_long(idx, candle_time, open_price, order_vol)
                     self.set_order_info(execution_order_info, p.order)
                 elif p.order.order_type == OrderType.MARKET_SHORT:
@@ -166,7 +170,11 @@ class Market:
                         p.order.fail_order()
                     else:
                         # 最大volまで売却
-                        order_vol = asset.get_max_vol(open_price) * -1
+                        max_vol_from_cash = asset.get_max_vol(open_price) * -1
+                        if abs(p.order.vol) > abs(max_vol_from_cash):
+                            order_vol = max_vol_from_cash
+                        else:
+                            order_vol = p.order.vol
                         p.entry_short(idx, candle_time, open_price, order_vol)
                     self.set_order_info(execution_order_info, p.order)
                 elif p.order.order_type == OrderType.OCO:

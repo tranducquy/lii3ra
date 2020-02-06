@@ -31,9 +31,11 @@ class Asset:
         return math.floor(self.cash * leverage), leverage
 
     def get_max_vol(self, price, factor=1):
-        # TODO:最小単元
+        unit = Unit.get_unit(self.symbol)
         (margin_cash, _) = self.get_margin_cash(factor)
-        return math.floor(margin_cash / price)
+        temp_vol = math.floor(margin_cash / price)
+        max_vol = math.floor(temp_vol / unit) * unit
+        return max_vol
 
     def entry_long(self, price, vol):
         self.last_fee = 0

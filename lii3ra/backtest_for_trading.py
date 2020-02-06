@@ -172,12 +172,6 @@ def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
             elif '9107.T' == symbol:  # 海運
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
                 exit_list = NewvalueFactory().create(ohlcv)
-            elif "9263.T" == symbol:
-                entry_list = TwoAmigosFactory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
-            elif "9790.T" == symbol:
-                entry_list = TwoAmigosFactory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
             elif '9983.T' == symbol:  # [x] 小売
                 entry_list = AsymmetricAgainFactory().create(ohlcv)
                 exit_list = PercentileFactory().create(ohlcv)
@@ -267,7 +261,7 @@ def index_for_mirror(symbol_list, ashi, start_date, end_date, asset_values):
                 exit_list = NewvalueFactory().create(ohlcv)
             elif "TREIT" == symbol:
                 entry_list = BreakoutSigma1Factory().create(ohlcv)
-                exit_list = NewvalueFactory().create(ohlcv)
+                exit_list = EndOfBarFactory().create(ohlcv)
             else:
                 logger.info(f"unknown symbol:[{symbol}]")
             for entry_strategy in entry_list:
