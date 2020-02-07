@@ -142,6 +142,7 @@ b02m = '2019-10'
 b03m = '2019-11'
 b04m = '2019-12'
 b05m = '2020-01'
+b06m = '2020-02'
 backtest_profit_monthry_query = """
 select
  b01.symbol
@@ -152,12 +153,14 @@ select
 ,round(b03.profit::numeric, 2) as "{}"
 ,round(b04.profit::numeric, 2) as "{}"
 ,round(b05.profit::numeric, 2) as "{}"
+,round(b06.profit::numeric, 2) as "{}"
 ,round((
 b01.profit
 + b02.profit
 + b03.profit
 + b04.profit
 + b05.profit
++ b06.profit
 )::numeric, 2) as sum
 from 
 (
@@ -231,7 +234,22 @@ on b01.symbol = b05.symbol
 and b01.entry_strategy = b05.entry_strategy
 and b01.exit_strategy = b05.exit_strategy
 
-where b01.symbol  in ({})
+left outer join 
+(
+select
+ symbol
+,entry_strategy
+,exit_strategy
+,sum(profit_rate) as profit
+from backtest_history
+where substr(text(time), 0, 8) = '{}'
+group by symbol, entry_strategy, exit_strategy
+) as b06
+on b01.symbol = b06.symbol
+and b01.entry_strategy = b06.entry_strategy
+and b01.exit_strategy = b06.exit_strategy
+
+where b05.symbol  in ({})
 
 order by sum desc
 """
