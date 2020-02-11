@@ -5,6 +5,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 import pandas as pd
 import numpy as np
+import threading
 import investpy
 import lii3ra.mylogger
 from lii3ra.crawler.dbaccess import DbAccess
@@ -82,14 +83,27 @@ def crawler_country(country_list, start_date, end_date):
     s = lii3ra.mylogger.Logger()
     logger = s.myLogger('test')
     logger.info('crawler_investing.crawler_country() start.')
+    thread_pools = []
     # STOCKS
-    # cls = "stock"
-    # df = pd.read_csv("../symbol/stocks.csv")
-    # stocks_etfs(country_list, start_date, end_date, cls, df)
+    cls = "stock"
+    df = pd.read_csv("./lii3ra/symbol/stocks.csv")
+    thread_pool = stocks_etfs(country_list, start_date, end_date, cls, df)
     # ETF
     cls = "etf"
-    df = pd.read_csv("../symbol/etfs.csv")
-    stocks_etfs(country_list, start_date, end_date, cls, df)
+    df = pd.read_csv("./lii3ra/symbol/etfs.csv")
+    thread_pool2 = stocks_etfs(country_list, start_date, end_date, cls, df)
+    thread_pool.extend(thread_pool2)
+    thread_pool_cnt = len(thread_pool)
+    split_num = (thread_pool_cnt / 8) + 1
+    thread_pools = list(np.array_split(thread_pool, split_num))
+    thread_join_cnt = 0
+    for p in thread_pools:
+        for t in p:
+            t.start()
+        for t in p:
+            t.join()
+            thread_join_cnt += 1
+            logger.info("*** thread join[%d]/[%d] ***" % (thread_join_cnt, thread_pool_cnt))
     logger.info('crawler_investing.crawler_country() end.')
 
 
@@ -107,11 +121,17 @@ def stocks_etfs(country_list, start_date, end_date, cls, df):
             elif cls == "etf":
                 symbol_list.append([lii3ra_symbol, row.name, country, cls])
         symbol_lists = np.array_split(symbol_list, 8)
+        thread_pool = list()
         for symbol_list in symbol_lists:
-            InvestingCrawler().download_historycal_data(symbol_list, start_date, end_date)
+            thread_pool.append(threading.Thread(target=InvestingCrawler().download_historycal_data, args=(symbol_list
+                                                                                                          , start_date
+                                                                                                          , end_date
+                                                                                                          )))
+        return thread_pool
 
 
 country_list = [
+    # ["japan", ".T"]
     ["united states", ""]
     , ["hong kong", ".HK"]
 ]
