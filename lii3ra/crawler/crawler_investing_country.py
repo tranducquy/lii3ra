@@ -108,6 +108,7 @@ def crawler_country(country_list, start_date, end_date):
 
 
 def stocks_etfs(country_list, start_date, end_date, cls, df):
+    thread_pool = list()
     for c in country_list:
         country = c[0]
         suffix = c[1]
@@ -121,18 +122,17 @@ def stocks_etfs(country_list, start_date, end_date, cls, df):
             elif cls == "etf":
                 symbol_list.append([lii3ra_symbol, row.name, country, cls])
         symbol_lists = np.array_split(symbol_list, 8)
-        thread_pool = list()
         for symbol_list in symbol_lists:
             thread_pool.append(threading.Thread(target=InvestingCrawler().download_historycal_data, args=(symbol_list
                                                                                                           , start_date
                                                                                                           , end_date
                                                                                                           )))
-        return thread_pool
+    return thread_pool
 
 
 country_list = [
-    # ["japan", ".T"]
-    ["united states", ""]
+    ["japan", ".T"]
+    , ["united states", ""]
     , ["hong kong", ".HK"]
 ]
 
