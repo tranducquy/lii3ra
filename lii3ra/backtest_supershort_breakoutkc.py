@@ -72,14 +72,14 @@ s = Logger()
 logger = s.myLogger()
 
 
-def swing_trading(symbol_list, ashi, start_date, end_date, asset_values):
+def supershort_breakoutkc(symbol_list, ashi, start_date, end_date, asset_values, span=3):
     logger.info("backtest start")
     try:
         thread_pool = list()
         for symbol in symbol_list:
             logger.info(f"parameter symbol={symbol}, ashi={ashi}, start_date={start_date}, end_date={end_date}")
             ohlcv = Ohlcv(symbol, ashi, start_date, end_date)
-            entry_list = BreakoutKCFactory().create(ohlcv)
+            entry_list = BreakoutKCFactory().create_anyspan(ohlcv, span)
             exit_list = EndOfBarFactory().create(ohlcv)
             for entry_strategy in entry_list:
                 for exit_strategy in exit_list:
@@ -126,5 +126,7 @@ if __name__ == '__main__':
     end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     # その他
     asset_values = {"initial_cash": 1000000, "leverage": 3.0, "losscut_ratio": 0.05}
-    swing_trading(symbol_list, ashi, start_date, end_date, asset_values)
+    supershort_breakoutkc(symbol_list, ashi, start_date, end_date, asset_values, 3)
+    supershort_breakoutkc(symbol_list, ashi, start_date, end_date, asset_values, 8)
+    supershort_breakoutkc(symbol_list, ashi, start_date, end_date, asset_values, 13)
 

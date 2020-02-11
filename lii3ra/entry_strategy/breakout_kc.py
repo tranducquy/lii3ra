@@ -17,7 +17,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "Topix": [3, 0.3, 3, 0.5, 2, False]
         , "Mothers": [3, 0.4, 3, 0.4, 2, True]
         , "1419.T": [13, 0.6, 3, 0.4, 1, True]
-        , "3990.T": [3, 1.0, 13, 1.0, 2, True]
+        # , "3990.T": [3, 1.0, 13, 1.0, 2, True]
         , "4043.T": [15, 0.5, 15, 0.5, 1, False]
         , "5706.T": [15, 0.5, 15, 0.5, 1, False]
         , "6479.T": [15, 0.5, 15, 0.5, 1, False]
@@ -26,6 +26,16 @@ class BreakoutKCFactory(EntryStrategyFactory):
         , "7717.T": [18, 1.2, 8, 0.6, 1, False]
         , "9616.T": [3, 0.3, 23, 0.3, 1, False]
     }
+
+    def create_anyspan(self, ohlcv, span, optimization=False):
+        long_span = span
+        long_ratio = self.params["default"][1]
+        short_span = span
+        short_ratio = self.params["default"][3]
+        stop_order = self.params["default"][4]
+        severe = self.params["default"][5]
+        strategies = [BreakoutKC(ohlcv, long_span, long_ratio, short_span, short_ratio, stop_order, severe)]
+        return strategies
 
     def create(self, ohlcv, optimization=False):
         strategies = []

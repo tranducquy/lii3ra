@@ -7,7 +7,7 @@ class Symbol:
     """
     symbols = [
         '1419.T' # タマホーム
-        # , '3990.T'  # kuyashii
-        # , '7518.T'  # kuyashii
+        , '3990.T'  # UUUM
+        , '7518.T'  # net one
         , '7936.T' # アシックス
     ]
