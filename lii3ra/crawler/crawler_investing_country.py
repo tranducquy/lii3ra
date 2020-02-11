@@ -4,6 +4,7 @@ from argparse import ArgumentParser
 from datetime import datetime as dt
 from datetime import timedelta
 import pandas as pd
+import numpy as np
 import investpy
 import lii3ra.mylogger
 from lii3ra.crawler.dbaccess import DbAccess
@@ -82,9 +83,9 @@ def crawler_country(country_list, start_date, end_date):
     logger = s.myLogger('test')
     logger.info('crawler_investing.crawler_country() start.')
     # STOCKS
-    cls = "stock"
-    df = pd.read_csv("../symbol/stocks.csv")
-    stocks_etfs(country_list, start_date, end_date, cls, df)
+    # cls = "stock"
+    # df = pd.read_csv("../symbol/stocks.csv")
+    # stocks_etfs(country_list, start_date, end_date, cls, df)
     # ETF
     cls = "etf"
     df = pd.read_csv("../symbol/etfs.csv")
@@ -98,15 +99,20 @@ def stocks_etfs(country_list, start_date, end_date, cls, df):
         suffix = c[1]
         stocks_df = df[df["country"] == country]
         symbol_list = []
-        for investing_symbol in stocks_df["symbol"]:
+        for row in stocks_df.itertuples():
+            investing_symbol = row.symbol
             lii3ra_symbol = investing_symbol + suffix
-            symbol_list.append([lii3ra_symbol, investing_symbol, country, cls])
-        InvestingCrawler().download_historycal_data(symbol_list, start_date, end_date)
+            if cls == "stock":
+                symbol_list.append([lii3ra_symbol, investing_symbol, country, cls])
+            elif cls == "etf":
+                symbol_list.append([lii3ra_symbol, row.name, country, cls])
+        symbol_lists = np.array_split(symbol_list, 8)
+        for symbol_list in symbol_lists:
+            InvestingCrawler().download_historycal_data(symbol_list, start_date, end_date)
 
 
 country_list = [
-    ["japan", ".T"]
-    , ["united states", ""]
+    ["united states", ""]
     , ["hong kong", ".HK"]
 ]
 
@@ -121,4 +127,3 @@ if __name__ == '__main__':
     else:
         end_date = args.end_date
     crawler_country(country_list, start_date, end_date)
-
