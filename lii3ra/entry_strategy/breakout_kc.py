@@ -11,7 +11,7 @@ class BreakoutKCFactory(EntryStrategyFactory):
     params = {
         # long_atr_span, long_kc_ratio, short_atr_span, short_kc_ratio
         # "default": [15, 0.5, 15, 0.5, 1, False]
-        "default": [3, 0.3, 3, 0.3, 2, True]
+        "default": [8, 0.3, 8, 0.3, 2, True]
         , "^N225": [3, 0.3, 3, 0.5, 2, False]
         , "DJI": [8, 0.5, 8, 0.5, 1, True]
         , "Topix": [3, 0.3, 3, 0.5, 2, False]
