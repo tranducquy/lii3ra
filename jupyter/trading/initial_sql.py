@@ -293,20 +293,20 @@ select
     when order_type in (2,4,6,8) then order_price - (order_price * {})
 end as 逆指値指値
 
-,mo_oco1.ordertype_name as 注文方法oco1
-,order_vol_oco1 as 注文数量oco1
-,order_price_oco1 as 注文価格oco1
-,case 
-    when order_type_oco1 in (1,3,5,7) then order_price_oco1 + (order_price_oco1 * {})
-    when order_type_oco1 in (2,4,6,8) then order_price_oco1 - (order_price_oco1 * {})
-end as 逆指値指値oco1
-,mo_oco2.ordertype_name as 注文方法oco2
-,order_vol_oco2 as 注文数量oco2
-,order_price_oco2 as 注文価格oco2
-,case 
-    when order_type_oco2 in (1,3,5,7) then order_price_oco2 + (order_price_oco2 * {})
-    when order_type_oco2 in (2,4,6,8) then order_price_oco2 - (order_price_oco2 * {})
-end as 逆指値指値oco2
+--,mo_oco1.ordertype_name as 注文方法oco1
+--,order_vol_oco1 as 注文数量oco1
+--,order_price_oco1 as 注文価格oco1
+--,case 
+--    when order_type_oco1 in (1,3,5,7) then order_price_oco1 + (order_price_oco1 * {})
+--    when order_type_oco1 in (2,4,6,8) then order_price_oco1 - (order_price_oco1 * {})
+--end as 逆指値指値oco1
+--,mo_oco2.ordertype_name as 注文方法oco2
+--,order_vol_oco2 as 注文数量oco2
+--,order_price_oco2 as 注文価格oco2
+--,case 
+--    when order_type_oco2 in (1,3,5,7) then order_price_oco2 + (order_price_oco2 * {})
+--    when order_type_oco2 in (2,4,6,8) then order_price_oco2 - (order_price_oco2 * {})
+--end as 逆指値指値oco2
 
 ,open
 ,high
